@@ -13,10 +13,6 @@ const nextConfig: NextConfig = {
         source: "/api/regions/:path*",
         destination: `${process.env.API_BASE_URL}/api/regions/:path*`,
       },
-      {
-        source: "/api/animals/refresh",
-        destination: `${process.env.API_BASE_URL}/api/animals/refresh`,
-      },
     ];
   },
 };

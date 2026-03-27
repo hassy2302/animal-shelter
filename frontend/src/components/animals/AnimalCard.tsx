@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
@@ -22,6 +25,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
   const imgSrc = popfile1 || animal.popfile2;
   const emoji = getAnimalEmoji(kindNm, upkind);
+  const [imgError, setImgError] = useState(false);
 
   const detailUrl = source === "daejeon" && animalSeq
     ? `https://www.daejeon.go.kr/ani/AniStrayAnimalView.do?animalSeq=${animalSeq}`
@@ -33,7 +37,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
     <div className="bg-white border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm card-hover flex flex-col">
       {/* 이미지 */}
       <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6]">
-        {imgSrc ? (
+        {imgSrc && !imgError ? (
           <Image
             src={imgSrc}
             alt={kindNm}
@@ -41,10 +45,16 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             className="object-cover"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
             unoptimized
+            onError={() => setImgError(true)}
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-6xl">
-            {emoji}
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+            <span className="text-6xl">{emoji}</span>
+            {imgError && (
+              <span className="text-xs text-[var(--muted)] text-center px-4">
+                이미지를 불러오는데 실패했어요<br />새로고침 하면 됩니다
+              </span>
+            )}
           </div>
         )}
       </div>

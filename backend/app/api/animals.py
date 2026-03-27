@@ -30,18 +30,3 @@ async def list_animals(
         page=page,
         per_page=per_page,
     )
-
-
-@router.post("/refresh", response_model=AnimalListResponse)
-async def refresh_animals(
-    sido_code: str = Query(""),
-    sigungu_code: str = Query(""),
-    cache: CacheManager = Depends(get_cache),
-):
-    """캐시 강제 갱신"""
-    return await animal_service.get_animals(
-        cache=cache,
-        sido_code=sido_code,
-        sigungu_code=sigungu_code,
-        force_refresh=True,
-    )

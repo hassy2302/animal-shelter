@@ -23,7 +23,7 @@ export default function StatsBar({ total, page, totalPages, fetchedAt }: StatsBa
       </div>
       {fetchedStr && (
         <span className="text-sm text-[var(--muted)] sm:ml-auto">
-          🕐 {fetchedStr} 기준 · 매 정각 자동 업데이트
+          🕐 {fetchedStr} 기준 (정각 자동 업데이트)
         </span>
       )}
     </div>
