@@ -18,7 +18,7 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
     <div className="flex flex-wrap gap-2 items-end">
       {/* 시도 */}
       <div className="flex flex-col gap-1">
-        <label className="text-xs font-semibold text-[var(--muted)]">시도</label>
+        <label className="text-sm font-semibold text-[var(--muted)]">시도</label>
         <select
           value={filters.sido_code ?? ""}
           onChange={(e) => onChange({ sido_code: e.target.value, sigungu_code: "", page: 1 })}
@@ -33,7 +33,7 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
 
       {/* 시군구 */}
       <div className="flex flex-col gap-1">
-        <label className="text-xs font-semibold text-[var(--muted)]">시군구</label>
+        <label className="text-sm font-semibold text-[var(--muted)]">시군구</label>
         <select
           value={filters.sigungu_code ?? ""}
           onChange={(e) => onChange({ sigungu_code: e.target.value, page: 1 })}
@@ -49,7 +49,7 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
 
       {/* 상태 */}
       <div className="flex flex-col gap-1">
-        <label className="text-xs font-semibold text-[var(--muted)]">상태</label>
+        <label className="text-sm font-semibold text-[var(--muted)]">상태</label>
         <select
           value={filters.state ?? "protect"}
           onChange={(e) => onChange({ state: e.target.value as AnimalFilters["state"], page: 1 })}

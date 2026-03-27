@@ -26,13 +26,13 @@
 
 @layer components {
   .chip {
-    @apply text-[0.68rem] font-semibold bg-[#F5F4F2] text-[#57534E] px-2 py-0.5 rounded-full whitespace-nowrap;
+    @apply text-xs font-semibold bg-[#F5F4F2] text-[#57534E] px-2 py-0.5 rounded-full whitespace-nowrap;
   }
   .chip-color {
     @apply bg-[#FFF7ED] text-[#9A3412];
   }
   .select-field {
-    @apply text-sm bg-white border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)]
+    @apply text-base bg-white border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)]
       focus:outline-none focus:ring-1 focus:ring-brand-300 min-w-[120px] cursor-pointer;
   }
 }

@@ -33,19 +33,19 @@ export default function StatsBar({
 
   return (
     <div className="flex items-center gap-3 px-4 py-2.5 bg-white border border-[var(--border)] rounded-xl mb-4">
-      <span className="font-bold text-sm text-[var(--text)]">총 {total.toLocaleString()}건</span>
+      <span className="font-bold text-base text-[var(--text)]">총 {total.toLocaleString()}건</span>
       <span className="w-1 h-1 bg-[#D6D3D1] rounded-full" />
-      <span className="text-xs text-[var(--muted)]">{page} / {totalPages} 페이지</span>
+      <span className="text-sm text-[var(--muted)]">{page} / {totalPages} 페이지</span>
       {fetchedStr && (
         <>
-          <span className="text-xs text-[var(--muted)] ml-auto">
+          <span className="text-sm text-[var(--muted)] ml-auto">
             🕐 {fetchedStr} 기준 ({formatAgo(fetchedAt!)})
           </span>
           {showRefresh && (
             <button
               onClick={onRefresh}
               disabled={isRefreshing}
-              className="text-xs font-semibold px-3 py-1 bg-brand-100 text-brand-500 border border-brand-300 rounded-full hover:bg-brand-200 transition-colors disabled:opacity-50"
+              className="text-sm font-semibold px-3 py-1 bg-brand-100 text-brand-500 border border-brand-300 rounded-full hover:bg-brand-200 transition-colors disabled:opacity-50"
             >
               {isRefreshing ? "갱신 중..." : "🔄 갱신"}
             </button>

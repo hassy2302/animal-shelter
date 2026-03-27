@@ -7,10 +7,10 @@ const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상
 
 function StateBadge({ state }: { state: string }) {
   if (state.includes("보호"))
-    return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3]">보호중</span>;
+    return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3]">보호중</span>;
   if (state.includes("입양") || state.includes("종료"))
-    return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0]">입양완료</span>;
-  return <span className="text-xs font-bold px-2 py-0.5 rounded-full bg-[#F5F4F2] text-[var(--muted)] border border-[#E7E5E4]">{state || "기타"}</span>;
+    return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0]">입양완료</span>;
+  return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#F5F4F2] text-[var(--muted)] border border-[#E7E5E4]">{state || "기타"}</span>;
 }
 
 export default function AnimalCard({ animal }: { animal: Animal }) {
@@ -51,16 +51,16 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
       {/* 본문 */}
       <div className="p-3 flex flex-col flex-1">
-        <p className="text-[0.65rem] text-[#B8B4AF] mb-1">📋 {noticeNo}</p>
+        <p className="text-xs text-[#B8B4AF] mb-1">📋 {noticeNo}</p>
 
         {/* 제목 */}
         <div className="flex items-center gap-1.5 flex-wrap mb-2">
           {source === "daejeon" && (
-            <span className="text-[0.65rem] font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
+            <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
               대전시
             </span>
           )}
-          <span className="text-sm font-extrabold text-[var(--text)]">{kindNm}</span>
+          <span className="text-base font-extrabold text-[var(--text)]">{kindNm}</span>
           <StateBadge state={processState} />
         </div>
 
@@ -75,7 +75,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
         <hr className="border-t border-[#F5F0EB] my-1.5" />
 
         {/* 위치 */}
-        <div className="text-[0.72rem] text-[#57534E] leading-relaxed">
+        <div className="text-sm text-[#57534E] leading-relaxed">
           🏠 <b className="text-[var(--text)]">{careNm}</b>
           {careTel && <><br />📞 {careTel}</>}
           <br />📍 {orgNm}
@@ -86,7 +86,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
         {(happenDt || noticeEdt) && (
           <>
             <hr className="border-t border-[#F5F0EB] my-1.5" />
-            <div className="text-[0.7rem] text-[var(--muted)] leading-relaxed">
+            <div className="text-xs text-[var(--muted)] leading-relaxed">
               {happenDt && <>🚑 구조일: <b>{formatDate(happenDt)}</b><br /></>}
               {noticeEdt && <>📅 공고 기간: <b>{formatDate(noticeEdt)}</b></>}
             </div>
@@ -95,7 +95,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
         {/* 특이사항 */}
         {specialMark && (
-          <p className="text-[0.7rem] text-[var(--muted)] bg-[#FAFAF8] rounded-lg px-2.5 py-1.5 mt-1.5 line-clamp-3">
+          <p className="text-xs text-[var(--muted)] bg-[#FAFAF8] rounded-lg px-2.5 py-1.5 mt-1.5 line-clamp-3">
             💬 {specialMark}
           </p>
         )}
@@ -108,7 +108,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             href={detailUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 text-center text-xs font-bold px-3 py-1.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
+            className="flex-1 text-center text-sm font-bold px-3 py-1.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
           >
             🔍 상세보기
           </a>
@@ -128,7 +128,7 @@ function CopyButton({ url }: { url: string }) {
         btn.textContent = "✅ 복사됨";
         setTimeout(() => { btn.textContent = "🔗 링크 복사"; }, 2000);
       }}
-      className="flex-1 text-xs font-bold px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
+      className="flex-1 text-sm font-bold px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
     >
       🔗 링크 복사
     </button>

@@ -62,7 +62,7 @@ function PageBtn({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "min-w-[36px] h-9 px-2 rounded-lg text-sm font-semibold border transition-colors",
+        "min-w-[40px] h-10 px-2 rounded-lg text-base font-semibold border transition-colors",
         active
           ? "bg-brand-bg text-brand-500 border-brand-300"
           : "bg-white text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",

@@ -16,7 +16,7 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
           <button
             onClick={() => onChange(opt)}
             className={cn(
-              "text-sm font-semibold px-3 py-1 rounded-full border transition-colors",
+              "text-base font-semibold px-3 py-1 rounded-full border transition-colors",
               value === opt
                 ? "bg-brand-bg text-brand-500 border-brand-300"
                 : "bg-white text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",
@@ -25,7 +25,7 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
             {opt}
           </button>
           {opt === "기타" && (
-            <span className="text-xs text-[var(--muted)]">
+            <span className="text-sm text-[var(--muted)]">
               — 고양이·강아지를 제외한 동물은 기타에서 확인하는 게 더 정확해요
             </span>
           )}
