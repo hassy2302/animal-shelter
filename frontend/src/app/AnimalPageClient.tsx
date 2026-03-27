@@ -31,10 +31,13 @@ export default function AnimalPageClient({ initialData }: Props) {
     setFilters(DEFAULT_FILTERS);
   }, []);
 
+  const [manualFetchedAt, setManualFetchedAt] = useState<string | undefined>(undefined);
+
   const handleRefresh = async () => {
     setIsRefreshing(true);
     try {
-      await refreshAnimals(filters.sido_code ?? "", filters.sigungu_code ?? "");
+      const fresh = await refreshAnimals(filters.sido_code ?? "", filters.sigungu_code ?? "");
+      setManualFetchedAt(fresh.fetched_at);
       await refresh();
     } finally {
       setIsRefreshing(false);
@@ -44,7 +47,7 @@ export default function AnimalPageClient({ initialData }: Props) {
   const displayAnimals = data !== undefined ? animals : (initialData?.items ?? []);
   const displayTotal = data !== undefined ? total : (initialData?.total ?? 0);
   const displayTotalPages = data !== undefined ? totalPages : (initialData?.total_pages ?? 1);
-  const displayFetchedAt = data !== undefined ? fetchedAt : initialData?.fetched_at;
+  const displayFetchedAt = manualFetchedAt ?? (data !== undefined ? fetchedAt : initialData?.fetched_at);
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">

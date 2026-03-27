@@ -26,7 +26,7 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
           </button>
           {opt === "기타" && (
             <span className="text-xs text-[var(--muted)]">
-              — 고양이·강아지를 제외한 동물은 기타에서 확인하세요
+              — 고양이·강아지를 제외한 동물은 기타에서 확인하는 게 더 정확해요
             </span>
           )}
         </span>
