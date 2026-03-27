@@ -84,17 +84,17 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
         {/* 날짜 */}
         {(happenDt || noticeEdt) && (
-          <div className="flex gap-2 mt-2">
+          <div className="flex flex-col gap-1 mt-2">
             {happenDt && (
-              <div className="flex-1 bg-[#F8F7F5] rounded-lg px-2 py-1.5 text-center">
-                <div className="text-xs text-[var(--muted)] font-medium mb-0.5">🚑 구조일</div>
-                <div className="text-xs font-bold text-[var(--text)] whitespace-nowrap">{formatDate(happenDt)}</div>
+              <div className="flex items-center justify-between bg-[#F8F7F5] rounded-lg px-2.5 py-1.5">
+                <span className="text-xs text-[var(--muted)] font-medium">🚑 구조일</span>
+                <span className="text-xs font-bold text-[var(--text)]">{formatDate(happenDt)}</span>
               </div>
             )}
             {noticeEdt && (
-              <div className="flex-1 bg-[#FFF7ED] rounded-lg px-2 py-1.5 text-center">
-                <div className="text-xs text-[var(--muted)] font-medium mb-0.5">📅 공고 마감</div>
-                <div className="text-xs font-bold text-brand-500 whitespace-nowrap">{formatDate(noticeEdt)}</div>
+              <div className="flex items-center justify-between bg-[#FFF7ED] rounded-lg px-2.5 py-1.5">
+                <span className="text-xs text-[var(--muted)] font-medium">📅 공고 마감</span>
+                <span className="text-xs font-bold text-brand-500">{formatDate(noticeEdt)}</span>
               </div>
             )}
           </div>
