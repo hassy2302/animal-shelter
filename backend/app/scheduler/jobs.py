@@ -15,7 +15,7 @@ scheduler = AsyncIOScheduler(timezone="Asia/Seoul")
 
 
 def setup_scheduler(cache) -> None:
-    @scheduler.scheduled_job("interval", hours=1, id="cache_warming")
+    @scheduler.scheduled_job("cron", minute=0, id="cache_warming")
     async def refresh_popular_caches():
         logger.info("캐시 워밍 시작")
         for sido, sigungu in PRELOAD_COMBINATIONS:
