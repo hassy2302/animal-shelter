@@ -1,6 +1,8 @@
 import asyncio
 import logging
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+
+KST = timezone(timedelta(hours=9))
 from app.models.animal import Animal, AnimalListResponse
 from app.cache.manager import CacheManager
 from app.config import settings
@@ -78,7 +80,7 @@ async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], da
     all_raw = national_raw + unique_daejeon
     all_raw.sort(key=_sort_key)
 
-    return all_raw, datetime.now()
+    return all_raw, datetime.now(KST)
 
 
 async def get_animals(
@@ -92,7 +94,7 @@ async def get_animals(
     force_refresh: bool = False,
 ) -> AnimalListResponse:
     key = CacheManager.animals_key(sido_code, sigungu_code)
-    fetched_at = datetime.now()
+    fetched_at = datetime.now(KST)
 
     if not force_refresh:
         cached = await cache.get(key)
