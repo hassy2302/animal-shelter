@@ -21,7 +21,7 @@ export default function AnimalPageClient({ initialData }: Props) {
   const [filters, setFilters] = useState<AnimalFilters>(DEFAULT_FILTERS);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const { animals, total, totalPages, fetchedAt, isLoading, refresh } = useAnimals(filters);
+  const { data, animals, total, totalPages, fetchedAt, isLoading, refresh } = useAnimals(filters);
 
   const updateFilters = useCallback((patch: Partial<AnimalFilters>) => {
     setFilters((prev) => ({ ...prev, ...patch, page: patch.page ?? 1 }));
@@ -41,10 +41,10 @@ export default function AnimalPageClient({ initialData }: Props) {
     }
   };
 
-  const displayAnimals = animals.length > 0 ? animals : (initialData?.items ?? []);
-  const displayTotal = total || initialData?.total || 0;
-  const displayTotalPages = totalPages || initialData?.total_pages || 1;
-  const displayFetchedAt = fetchedAt || initialData?.fetched_at;
+  const displayAnimals = data !== undefined ? animals : (initialData?.items ?? []);
+  const displayTotal = data !== undefined ? total : (initialData?.total ?? 0);
+  const displayTotalPages = data !== undefined ? totalPages : (initialData?.total_pages ?? 1);
+  const displayFetchedAt = data !== undefined ? fetchedAt : initialData?.fetched_at;
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
