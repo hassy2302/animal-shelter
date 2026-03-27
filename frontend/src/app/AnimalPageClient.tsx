@@ -4,7 +4,6 @@ import { useState, useCallback } from "react";
 import type { AnimalListResponse } from "@/types/animal";
 import type { AnimalFilters } from "@/types/animal";
 import { useAnimals } from "@/hooks/useAnimals";
-import { refreshAnimals } from "@/lib/api";
 import { DEFAULT_FILTERS } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import StatsBar from "@/components/layout/StatsBar";
@@ -19,9 +18,7 @@ interface Props {
 
 export default function AnimalPageClient({ initialData }: Props) {
   const [filters, setFilters] = useState<AnimalFilters>(DEFAULT_FILTERS);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-
-  const { data, animals, total, totalPages, fetchedAt, isLoading, refresh } = useAnimals(filters);
+  const { data, animals, total, totalPages, fetchedAt, isLoading } = useAnimals(filters);
 
   const updateFilters = useCallback((patch: Partial<AnimalFilters>) => {
     setFilters((prev) => ({ ...prev, ...patch, page: patch.page ?? 1 }));
@@ -31,23 +28,10 @@ export default function AnimalPageClient({ initialData }: Props) {
     setFilters(DEFAULT_FILTERS);
   }, []);
 
-  const [manualFetchedAt, setManualFetchedAt] = useState<string | undefined>(undefined);
-
-  const handleRefresh = async () => {
-    setIsRefreshing(true);
-    try {
-      const fresh = await refreshAnimals(filters.sido_code ?? "", filters.sigungu_code ?? "");
-      setManualFetchedAt(fresh.fetched_at);
-      await refresh();
-    } finally {
-      setIsRefreshing(false);
-    }
-  };
-
   const displayAnimals = data !== undefined ? animals : (initialData?.items ?? []);
   const displayTotal = data !== undefined ? total : (initialData?.total ?? 0);
   const displayTotalPages = data !== undefined ? totalPages : (initialData?.total_pages ?? 1);
-  const displayFetchedAt = manualFetchedAt ?? (data !== undefined ? fetchedAt : initialData?.fetched_at);
+  const displayFetchedAt = data !== undefined ? fetchedAt : initialData?.fetched_at;
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
@@ -74,8 +58,6 @@ export default function AnimalPageClient({ initialData }: Props) {
         page={filters.page ?? 1}
         totalPages={displayTotalPages}
         fetchedAt={displayFetchedAt}
-        onRefresh={handleRefresh}
-        isRefreshing={isRefreshing}
       />
 
       {/* 카드 그리드 */}

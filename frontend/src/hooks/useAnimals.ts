@@ -17,6 +17,7 @@ export function useAnimals(filters: AnimalFilters) {
     keepPreviousData: true,  // 필터 변경 시 깜빡임 방지
     revalidateOnFocus: false,
     dedupingInterval: 60_000,
+    refreshInterval: 3_600_000,  // 1시간마다 자동 갱신
   });
 
   return {
