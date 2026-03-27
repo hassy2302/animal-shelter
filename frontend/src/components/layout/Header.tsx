@@ -1,7 +1,7 @@
 export default function Header() {
   return (
     <div className="bg-gradient-to-br from-brand-100 via-[#FFF8F4] to-[#EEF4FF] border border-brand-200 rounded-2xl px-8 py-6 mb-4">
-      <h1 className="text-3xl font-black text-[var(--text)] tracking-tight mb-1.5">
+      <h1 className="text-2xl sm:text-3xl font-black text-[var(--text)] tracking-tight mb-1.5">
         🐾 유기 동물 입양 공고
       </h1>
       <p className="text-base text-[var(--muted)] leading-relaxed">
