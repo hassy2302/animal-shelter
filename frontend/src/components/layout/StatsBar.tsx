@@ -28,9 +28,7 @@ export default function StatsBar({ total, page, totalPages, fetchedAt }: StatsBa
           </span>
         )}
       </div>
-      <div className="text-right mt-1">
-        <span className="text-xs text-[#C8C4BF]">출처: 농림축산식품부 공공동물보호시스템 · 대전광역시 유기동물</span>
-      </div>
+
     </div>
   );
 }
