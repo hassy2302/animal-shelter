@@ -12,18 +12,24 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {SPECIES_OPTIONS.map((opt) => (
-        <button
-          key={opt}
-          onClick={() => onChange(opt)}
-          className={cn(
-            "text-sm font-semibold px-3 py-1 rounded-full border transition-colors",
-            value === opt
-              ? "bg-brand-bg text-brand-500 border-brand-300"
-              : "bg-white text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",
+        <span key={opt} className="inline-flex items-center gap-1">
+          <button
+            onClick={() => onChange(opt)}
+            className={cn(
+              "text-sm font-semibold px-3 py-1 rounded-full border transition-colors",
+              value === opt
+                ? "bg-brand-bg text-brand-500 border-brand-300"
+                : "bg-white text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",
+            )}
+          >
+            {opt}
+          </button>
+          {opt === "기타" && (
+            <span className="text-xs text-[var(--muted)]">
+              — 고양이·강아지를 제외한 동물은 기타에서 확인하세요
+            </span>
           )}
-        >
-          {opt}
-        </button>
+        </span>
       ))}
     </div>
   );
