@@ -105,10 +105,6 @@ export default function AnimalPageClient({ initialData }: Props) {
         />
       )}
 
-      {/* 데이터 출처 */}
-      <div className="mt-6 text-right text-xs text-[var(--muted)] leading-relaxed">
-        출처: 농림축산식품부 공공동물보호시스템 · 대전광역시 유기동물
-      </div>
     </main>
   );
 }

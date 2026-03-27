@@ -4,7 +4,6 @@ import { useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
-import { UPKIND_DOG, UPKIND_CAT } from "@/lib/constants";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
@@ -52,7 +51,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             <span className="text-6xl">{emoji}</span>
             {imgError && (
               <span className="text-xs text-[var(--muted)] text-center px-4">
-                이미지를 불러오는데 실패했어요<br />새로고침 하면 됩니다
+                이미지를 불러오는데 실패했어요
               </span>
             )}
           </div>
