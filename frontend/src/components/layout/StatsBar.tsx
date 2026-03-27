@@ -1,4 +1,3 @@
-import { formatAgo } from "@/lib/utils";
 
 interface StatsBarProps {
   total: number;
@@ -24,7 +23,7 @@ export default function StatsBar({ total, page, totalPages, fetchedAt }: StatsBa
       </div>
       {fetchedStr && (
         <span className="text-sm text-[var(--muted)] sm:ml-auto">
-          🕐 {fetchedStr} 기준 ({formatAgo(fetchedAt!)})
+          🕐 {fetchedStr} 기준 · 매 정각 자동 업데이트
         </span>
       )}
     </div>
