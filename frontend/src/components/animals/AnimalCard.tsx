@@ -84,13 +84,20 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
         {/* 날짜 */}
         {(happenDt || noticeEdt) && (
-          <>
-            <hr className="border-t border-[#F5F0EB] my-1.5" />
-            <div className="text-xs text-[var(--muted)] leading-relaxed">
-              {happenDt && <>🚑 구조일: <b>{formatDate(happenDt)}</b><br /></>}
-              {noticeEdt && <>📅 공고 기간: <b>{formatDate(noticeEdt)}</b></>}
-            </div>
-          </>
+          <div className="flex flex-col gap-1 mt-2 bg-[#F8F7F5] rounded-lg px-2.5 py-2">
+            {happenDt && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[var(--muted)] font-medium">🚑 구조일</span>
+                <span className="font-bold text-[var(--text)]">{formatDate(happenDt)}</span>
+              </div>
+            )}
+            {noticeEdt && (
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-[var(--muted)] font-medium">📅 공고 마감</span>
+                <span className="font-bold text-brand-500">{formatDate(noticeEdt)}</span>
+              </div>
+            )}
+          </div>
         )}
 
         {/* 특이사항 */}
