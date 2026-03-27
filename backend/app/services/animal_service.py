@@ -24,7 +24,7 @@ KNOWN_KEYWORDS = [kw for kws in SPECIES_KEYWORDS.values() for kw in kws]
 
 def _sort_key(a: dict) -> int:
     upkind = a.get("upkind", "")
-    kind = a.get("kindNm", "")
+    kind = a.get("kindNm", "") + a.get("kindFullNm", "")
     if upkind == UPKIND_ETC and "햄스터" in kind:
         return 0
     if upkind == UPKIND_ETC:
@@ -117,7 +117,7 @@ async def get_animals(
     filtered = [
         a for a in all_raw
         if _matches_state(a.get("processState", ""), state)
-        and _matches_species(a.get("kindNm", ""), a.get("upkind", ""), species)
+        and _matches_species(a.get("kindNm", "") + a.get("kindFullNm", ""), a.get("upkind", ""), species)
     ]
 
     total = len(filtered)
