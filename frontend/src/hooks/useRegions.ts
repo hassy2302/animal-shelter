@@ -3,7 +3,10 @@
 import useSWR from "swr";
 import type { Sido, Sigungu } from "@/types/region";
 
-const fetcher = (url: string) => fetch(url).then((r) => r.json());
+const fetcher = (url: string) => fetch(url).then((r) => {
+  if (!r.ok) throw new Error("로드 실패");
+  return r.json();
+});
 
 export function useSido() {
   const { data, isLoading } = useSWR<Sido[]>("/api/regions/sido", fetcher, {
