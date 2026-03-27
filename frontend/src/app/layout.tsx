@@ -1,0 +1,21 @@
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "유기 동물 입양 공고",
+  description:
+    "보호소의 강아지, 고양이, 햄스터, 토끼 등 유기동물 입양 공고를 확인하세요.",
+  openGraph: {
+    title: "유기 동물 입양 공고",
+    description: "보호소의 동물들이 새 가족을 기다리고 있어요.",
+    type: "website",
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="ko">
+      <body className="min-h-screen bg-[var(--bg)]">{children}</body>
+    </html>
+  );
+}
