@@ -51,6 +51,15 @@ def _matches_species(kind_nm: str, upkind: str, selected: str) -> bool:
     return any(kw in kind_nm for kw in keywords)
 
 
+def _matches_search(a: dict, search: str) -> bool:
+    if not search:
+        return True
+    s = search.lower()
+    return any(s in (a.get(f, "") or "").lower() for f in (
+        "kindNm", "kindFullNm", "careNm", "happenPlace", "orgNm", "noticeNo", "specialMark"
+    ))
+
+
 def _matches_state(state: str, selected: str) -> bool:
     if selected == "all":
         return True
@@ -89,6 +98,7 @@ async def get_animals(
     sigungu_code: str = "",
     state: str = "protect",
     species: str = "전체",
+    search: str = "",
     page: int = 1,
     per_page: int = 12,
     force_refresh: bool = False,
@@ -120,6 +130,7 @@ async def get_animals(
         a for a in all_raw
         if _matches_state(a.get("processState", ""), state)
         and _matches_species(a.get("kindNm", "") + a.get("kindFullNm", ""), a.get("upkind", ""), species)
+        and _matches_search(a, search)
     ]
 
     total = len(filtered)

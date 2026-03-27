@@ -13,6 +13,7 @@ async def list_animals(
     sigungu_code: str = Query("", description="시군구 코드"),
     state: str = Query("protect", description="상태: all | protect | complete | etc"),
     species: str = Query("전체", description="종류"),
+    search: str = Query("", description="텍스트 검색"),
     page: int = Query(1, ge=1),
     per_page: int = Query(12, ge=1, le=100),
     cache: CacheManager = Depends(get_cache),
@@ -23,6 +24,7 @@ async def list_animals(
         sigungu_code=sigungu_code,
         state=state,
         species=species,
+        search=search,
         page=page,
         per_page=per_page,
     )

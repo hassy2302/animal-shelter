@@ -35,6 +35,7 @@ export interface AnimalFilters {
   sigungu_code?: string;
   state?: "all" | "protect" | "complete" | "etc";
   species?: string;
+  search?: string;
   page?: number;
   per_page?: number;
 }

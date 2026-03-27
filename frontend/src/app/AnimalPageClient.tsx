@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import type { AnimalListResponse } from "@/types/animal";
 import type { AnimalFilters } from "@/types/animal";
 import { useAnimals } from "@/hooks/useAnimals";
@@ -18,7 +18,8 @@ interface Props {
 
 export default function AnimalPageClient({ initialData }: Props) {
   const [filters, setFilters] = useState<AnimalFilters>(DEFAULT_FILTERS);
-  const { data, animals, total, totalPages, fetchedAt, isLoading } = useAnimals(filters);
+  const [searchInput, setSearchInput] = useState("");
+  const { data, animals, total, totalPages, fetchedAt, isLoading, error } = useAnimals(filters);
 
   const updateFilters = useCallback((patch: Partial<AnimalFilters>) => {
     setFilters((prev) => ({ ...prev, ...patch, page: patch.page ?? 1 }));
@@ -26,7 +27,16 @@ export default function AnimalPageClient({ initialData }: Props) {
 
   const handleReset = useCallback(() => {
     setFilters(DEFAULT_FILTERS);
+    setSearchInput("");
   }, []);
+
+  // 검색어 디바운스 (400ms)
+  useEffect(() => {
+    const t = setTimeout(() => {
+      setFilters((prev) => ({ ...prev, search: searchInput, page: 1 }));
+    }, 400);
+    return () => clearTimeout(t);
+  }, [searchInput]);
 
   const displayAnimals = data !== undefined ? animals : (initialData?.items ?? []);
   const displayTotal = data !== undefined ? total : (initialData?.total ?? 0);
@@ -46,8 +56,19 @@ export default function AnimalPageClient({ initialData }: Props) {
       </div>
 
       {/* 지역/상태 필터 */}
-      <div className="mb-4">
+      <div className="mb-3">
         <FilterBar filters={filters} onChange={updateFilters} onReset={handleReset} />
+      </div>
+
+      {/* 텍스트 검색 */}
+      <div className="mb-4">
+        <input
+          type="text"
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          placeholder="🔍 보호소명, 발견장소, 종류 등으로 검색"
+          className="w-full text-base bg-white border border-[var(--border)] rounded-lg px-4 py-2.5 text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-1 focus:ring-brand-300"
+        />
       </div>
 
       <hr className="border-[var(--border)] mb-4" />
@@ -60,11 +81,20 @@ export default function AnimalPageClient({ initialData }: Props) {
         fetchedAt={displayFetchedAt}
       />
 
+      {/* 에러 */}
+      {error && !isLoading && (
+        <div className="flex flex-col items-center justify-center py-20 text-center">
+          <p className="text-4xl mb-4">😿</p>
+          <p className="text-base font-semibold text-[var(--text)] mb-1">데이터를 불러오지 못했어요</p>
+          <p className="text-sm text-[var(--muted)]">잠시 후 다시 시도해주세요.</p>
+        </div>
+      )}
+
       {/* 카드 그리드 */}
-      <AnimalGrid animals={displayAnimals} isLoading={isLoading} />
+      {!error && <AnimalGrid animals={displayAnimals} isLoading={isLoading} />}
 
       {/* 페이지네이션 */}
-      {displayTotalPages > 1 && (
+      {!error && displayTotalPages > 1 && (
         <Pagination
           page={filters.page ?? 1}
           totalPages={displayTotalPages}
