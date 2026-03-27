@@ -15,6 +15,8 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
         <span key={opt} className="inline-flex items-center gap-1">
           <button
             onClick={() => onChange(opt)}
+            aria-label={`${opt} 필터`}
+            aria-pressed={value === opt}
             className={cn(
               "text-base font-semibold px-3 py-1.5 rounded-full border transition-colors",
               value === opt

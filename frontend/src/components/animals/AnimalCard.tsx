@@ -124,18 +124,19 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             href={detailUrl}
             target="_blank"
             rel="noopener noreferrer"
+            aria-label={`${kindNm} 상세보기 (새 창)`}
             className="flex-1 text-center text-sm font-bold px-3 py-1.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
           >
             🔍 상세보기
           </a>
-          <CopyButton url={detailUrl} />
+          <CopyButton url={detailUrl} kindNm={kindNm} />
         </div>
       )}
     </div>
   );
 }
 
-function CopyButton({ url }: { url: string }) {
+function CopyButton({ url, kindNm }: { url: string; kindNm: string }) {
   return (
     <button
       onClick={async (e) => {
@@ -144,6 +145,7 @@ function CopyButton({ url }: { url: string }) {
         btn.textContent = "✅ 복사됨";
         setTimeout(() => { btn.textContent = "🔗 링크 복사"; }, 2000);
       }}
+      aria-label={`${kindNm} 링크 복사`}
       className="flex-1 text-sm font-bold px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
     >
       🔗 링크 복사

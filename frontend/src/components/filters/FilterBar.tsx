@@ -64,6 +64,7 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
       {/* 초기화 */}
       <button
         onClick={onReset}
+        aria-label="필터 초기화"
         className="text-sm font-semibold px-4 py-2 rounded-lg bg-white border border-[var(--border)] text-[var(--muted)] hover:border-brand-200 hover:text-brand-500 transition-colors"
       >
         초기화
