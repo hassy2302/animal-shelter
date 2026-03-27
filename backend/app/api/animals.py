@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Query
+from fastapi import APIRouter, Depends, Query, Response
 from app.models.animal import AnimalListResponse
 from app.services import animal_service
 from app.dependencies import get_cache
@@ -17,7 +17,9 @@ async def list_animals(
     page: int = Query(1, ge=1),
     per_page: int = Query(12, ge=1, le=100),
     cache: CacheManager = Depends(get_cache),
+    response: Response = None,
 ):
+    response.headers["Cache-Control"] = "public, s-maxage=3600, stale-while-revalidate=86400"
     return await animal_service.get_animals(
         cache=cache,
         sido_code=sido_code,

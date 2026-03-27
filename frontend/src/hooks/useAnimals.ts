@@ -16,7 +16,7 @@ export function useAnimals(filters: AnimalFilters) {
   const { data, error, isLoading, mutate } = useSWR<AnimalListResponse>(key, fetcher, {
     keepPreviousData: true,  // 필터 변경 시 깜빡임 방지
     revalidateOnFocus: false,
-    dedupingInterval: 60_000,
+    dedupingInterval: 300_000,  // 5분
     refreshInterval: 3_600_000,  // 1시간마다 자동 갱신
   });
 
