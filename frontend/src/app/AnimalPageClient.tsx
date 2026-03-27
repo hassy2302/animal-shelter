@@ -66,7 +66,7 @@ export default function AnimalPageClient({ initialData }: Props) {
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
-          placeholder="🔍 보호소명, 발견장소, 종류 등으로 검색"
+          placeholder="🔍 공고번호, 보호소명, 발견장소, 종류 등으로 검색"
           className="w-full text-base bg-white border border-[var(--border)] rounded-lg px-4 py-2.5 text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-1 focus:ring-brand-300"
         />
       </div>
