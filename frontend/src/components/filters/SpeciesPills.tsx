@@ -25,7 +25,7 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
             {opt}
           </button>
           {opt === "기타" && (
-            <span className="text-sm text-[var(--muted)]">
+            <span className="hidden sm:inline text-sm text-[var(--muted)]">
               — 고양이·강아지를 제외한 동물은 기타에서 확인하는 게 더 정확해요
             </span>
           )}
