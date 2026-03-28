@@ -5,6 +5,7 @@ import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
 import AnimalDetailModal from "./AnimalDetailModal";
+import ShareSheet from "./ShareSheet";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
@@ -27,6 +28,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const emoji = getAnimalEmoji(kindNm, upkind);
   const [imgError, setImgError] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showShare, setShowShare] = useState(false);
 
   const detailUrl = source === "daejeon" && animalSeq
     ? `https://www.daejeon.go.kr/ani/AniStrayAnimalView.do?animalSeq=${animalSeq}`
@@ -129,30 +131,24 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
           >
             🔍 상세보기
           </button>
-          {detailUrl && <CopyButton url={detailUrl} kindNm={kindNm} />}
+          {detailUrl && (
+            <button
+              onClick={() => setShowShare(true)}
+              aria-label={`${kindNm} 공유`}
+              className="flex-1 text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors whitespace-nowrap"
+            >
+              🔗 공유
+            </button>
+          )}
         </div>
       </div>
 
       {showModal && (
         <AnimalDetailModal animal={animal} onClose={() => setShowModal(false)} />
       )}
+      {showShare && detailUrl && (
+        <ShareSheet url={detailUrl} title={kindNm} onClose={() => setShowShare(false)} />
+      )}
     </>
-  );
-}
-
-function CopyButton({ url, kindNm }: { url: string; kindNm: string }) {
-  return (
-    <button
-      onClick={async (e) => {
-        const btn = e.currentTarget;
-        await navigator.clipboard.writeText(url);
-        btn.textContent = "✅ 복사됨";
-        setTimeout(() => { btn.textContent = "🔗 링크 복사"; }, 2000);
-      }}
-      aria-label={`${kindNm} 링크 복사`}
-      className="flex-1 text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors whitespace-nowrap"
-    >
-      🔗 복사
-    </button>
   );
 }

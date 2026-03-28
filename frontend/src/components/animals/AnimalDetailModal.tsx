@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
+import ShareSheet from "./ShareSheet";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
@@ -29,24 +30,8 @@ function InfoChip({ label, value }: { label: string; value: string }) {
   );
 }
 
-function CopyButton({ url, kindNm }: { url: string; kindNm: string }) {
-  return (
-    <button
-      onClick={async (e) => {
-        const btn = e.currentTarget;
-        await navigator.clipboard.writeText(url);
-        btn.textContent = "✅ 복사됨";
-        setTimeout(() => { btn.textContent = "🔗 링크 복사"; }, 2000);
-      }}
-      aria-label={`${kindNm} 링크 복사`}
-      className="flex-1 text-sm font-bold px-3 py-2.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
-    >
-      🔗 링크 복사
-    </button>
-  );
-}
-
 export default function AnimalDetailModal({ animal, onClose }: Props) {
+  const [showShare, setShowShare] = useState(false);
   const {
     noticeNo, kindNm, upkind, sexCd, age, colorCd, weight,
     careNm, careTel, orgNm, happenPlace, happenDt, noticeEdt,
@@ -187,12 +172,21 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
               rel="noopener noreferrer"
               className="flex-1 text-center text-sm font-bold px-4 py-2.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
             >
-              🔍 상세 페이지 열기
+              🔍 공고 보러가기
             </a>
-            <CopyButton url={detailUrl} kindNm={kindNm} />
+            <button
+              onClick={() => setShowShare(true)}
+              aria-label={`${kindNm} 공유`}
+              className="flex-1 text-sm font-bold px-4 py-2.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
+            >
+              🔗 공유
+            </button>
           </div>
         )}
       </div>
+      {showShare && detailUrl && (
+        <ShareSheet url={detailUrl} title={kindNm} onClose={() => setShowShare(false)} />
+      )}
     </div>
   );
 }
