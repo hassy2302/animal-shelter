@@ -129,16 +129,14 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       <hr className="border-[var(--border)] mb-4" />
 
       {/* 통계 바 + 페이지당 표시 수 */}
-      <div className="flex items-center justify-between gap-2 mb-4">
-        <div className="flex-1 min-w-0">
-          <StatsBar
-            total={displayTotal}
-            page={filters.page ?? 1}
-            totalPages={displayTotalPages}
-            fetchedAt={displayFetchedAt}
-          />
-        </div>
-        <div className="flex items-center gap-1 shrink-0">
+      <div className="flex items-start justify-between gap-3 mb-4">
+        <StatsBar
+          total={displayTotal}
+          page={filters.page ?? 1}
+          totalPages={displayTotalPages}
+          fetchedAt={displayFetchedAt}
+        />
+        <div className="flex items-center gap-1 shrink-0 pt-0.5">
           {([12, 24, 48] as const).map((n) => (
             <button
               key={n}

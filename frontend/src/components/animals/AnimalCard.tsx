@@ -150,7 +150,7 @@ function CopyButton({ url, kindNm }: { url: string; kindNm: string }) {
         setTimeout(() => { btn.textContent = "🔗 링크 복사"; }, 2000);
       }}
       aria-label={`${kindNm} 링크 복사`}
-      className="flex-1 text-sm font-bold px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
+      className="flex-1 text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors whitespace-nowrap"
     >
       🔗 링크 복사
     </button>
