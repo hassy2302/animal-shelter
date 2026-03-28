@@ -11,8 +11,8 @@ interface FilterBarProps {
 }
 
 export default function FilterBar({ filters, onChange, onReset }: FilterBarProps) {
-  const { sido } = useSido();
-  const { sigungu } = useSigungu(filters.sido_code ?? "");
+  const { sido, isLoading: sidoLoading } = useSido();
+  const { sigungu, isLoading: sigunguLoading } = useSigungu(filters.sido_code ?? "");
 
   return (
     <div className="flex gap-2 items-center">
@@ -21,9 +21,10 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
         aria-label="시도"
         value={filters.sido_code ?? ""}
         onChange={(e) => onChange({ sido_code: e.target.value, sigungu_code: "", page: 1 })}
-        className="select-field flex-1 min-w-0"
+        disabled={sidoLoading}
+        className="select-field flex-1 min-w-0 disabled:opacity-40"
       >
-        <option value="">시도</option>
+        <option value="">{sidoLoading ? "로딩 중..." : "시도"}</option>
         {sido.map((s) => (
           <option key={s.code} value={s.code}>{s.name}</option>
         ))}
@@ -34,10 +35,10 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
         aria-label="시군구"
         value={filters.sigungu_code ?? ""}
         onChange={(e) => onChange({ sigungu_code: e.target.value, page: 1 })}
-        disabled={!filters.sido_code}
+        disabled={!filters.sido_code || sigunguLoading}
         className="select-field flex-1 min-w-0 disabled:opacity-40"
       >
-        <option value="">시군구</option>
+        <option value="">{sigunguLoading ? "로딩 중..." : "시군구"}</option>
         {sigungu.map((s) => (
           <option key={s.code} value={s.code}>{s.name}</option>
         ))}

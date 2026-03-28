@@ -4,21 +4,15 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
+import { BASE_URL } from "@/lib/constants";
 import ShareSheet from "./ShareSheet";
+import StateBadge from "./StateBadge";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
 interface Props {
   animal: Animal;
   onClose: () => void;
-}
-
-function StateBadge({ state }: { state: string }) {
-  if (state.includes("보호"))
-    return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3]">보호중</span>;
-  if (state.includes("입양") || state.includes("종료"))
-    return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0]">입양완료</span>;
-  return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#F5F4F2] text-[var(--muted)] border border-[#E7E5E4]">{state || "기타"}</span>;
 }
 
 function InfoChip({ label, value }: { label: string; value: string }) {
@@ -47,7 +41,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
     ? `https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=${desertionNo}`
     : "";
   const shareUrl = noticeNo
-    ? `https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(noticeNo)}`
+    ? `${BASE_URL}/animal/${encodeURIComponent(noticeNo)}`
     : "";
 
   useEffect(() => {
@@ -167,25 +161,27 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
         </div>
 
         {/* 하단 버튼 */}
-        {detailUrl && (
+        {(detailUrl || shareUrl) && (
           <div className="px-5 py-4 border-t border-[var(--border)] flex gap-2">
-            <a
-              href={detailUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex-1 text-center text-sm font-bold px-4 py-2.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
-            >
-              🔍 공고 보러가기
-            </a>
+            {detailUrl && (
+              <a
+                href={detailUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 text-center text-sm font-bold px-4 py-2.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
+              >
+                🔍 공고 보러가기
+              </a>
+            )}
             {shareUrl && (
-            <button
-              onClick={() => setShowShare(true)}
-              aria-label={`${kindNm} 공유`}
-              className="flex-1 text-sm font-bold px-4 py-2.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
-            >
-              🔗 공유
-            </button>
-          )}
+              <button
+                onClick={() => setShowShare(true)}
+                aria-label={`${kindNm} 공유`}
+                className="flex-1 text-sm font-bold px-4 py-2.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
+              >
+                🔗 공유
+              </button>
+            )}
           </div>
         )}
       </div>

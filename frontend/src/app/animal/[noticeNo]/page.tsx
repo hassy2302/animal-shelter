@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
+import { BASE_URL } from "@/lib/constants";
 import ShareButton from "@/components/animals/ShareButton";
 
 async function getAnimal(noticeNo: string): Promise<Animal | null> {
@@ -21,7 +22,6 @@ async function getAnimal(noticeNo: string): Promise<Animal | null> {
 }
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
-const BASE_URL = "https://animal-shelter-navy.vercel.app";
 
 type Props = { params: Promise<{ noticeNo: string }> };
 
@@ -210,7 +210,7 @@ export default async function AnimalDetailPage({ params }: Props) {
             )}
             <div className={detailUrl ? "flex-1" : "w-full"}>
               <ShareButton
-                url={`https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(decodedNoticeNo)}`}
+                url={`${BASE_URL}/animal/${encodeURIComponent(decodedNoticeNo)}`}
                 title={kindNm}
                 imageUrl={imgSrc ?? undefined}
               />

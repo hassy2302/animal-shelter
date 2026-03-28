@@ -4,18 +4,12 @@ import { useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
+import { BASE_URL } from "@/lib/constants";
 import AnimalDetailModal from "./AnimalDetailModal";
 import ShareSheet from "./ShareSheet";
+import StateBadge from "./StateBadge";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
-
-function StateBadge({ state }: { state: string }) {
-  if (state.includes("보호"))
-    return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3]">보호중</span>;
-  if (state.includes("입양") || state.includes("종료"))
-    return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#F0FDF4] text-[#166534] border border-[#BBF7D0]">입양완료</span>;
-  return <span className="text-sm font-bold px-2 py-0.5 rounded-full bg-[#F5F4F2] text-[var(--muted)] border border-[#E7E5E4]">{state || "기타"}</span>;
-}
 
 export default function AnimalCard({ animal }: { animal: Animal }) {
   const {
@@ -31,7 +25,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const [showShare, setShowShare] = useState(false);
 
   const shareUrl = noticeNo
-    ? `https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(noticeNo)}`
+    ? `${BASE_URL}/animal/${encodeURIComponent(noticeNo)}`
     : "";
 
   return (
