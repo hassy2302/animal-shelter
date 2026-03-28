@@ -2,8 +2,22 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
-import { fetchAnimal } from "@/lib/api";
+import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
+
+async function getAnimal(noticeNo: string): Promise<Animal | null> {
+  const apiBase = process.env.API_BASE_URL;
+  try {
+    const res = await fetch(
+      `${apiBase}/api/animals/by-notice/${encodeURIComponent(noticeNo)}`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    return res.json();
+  } catch {
+    return null;
+  }
+}
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 const BASE_URL = "https://animal-shelter-navy.vercel.app";
@@ -14,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { noticeNo } = await params;
   const decodedNoticeNo = decodeURIComponent(noticeNo);
   try {
-    const animal = await fetchAnimal(decodedNoticeNo);
+    const animal = await getAnimal(decodedNoticeNo);
     const title = `${animal.kindNm} - 유기동물 공고`;
     const description = `${animal.careNm} 보호 중 · ${animal.orgNm}${animal.noticeEdt ? ` · 공고 마감 ${formatDate(animal.noticeEdt)}` : ""}`;
     const pageUrl = `${BASE_URL}/animal/${noticeNo}`;
@@ -46,12 +60,8 @@ export default async function AnimalDetailPage({ params }: Props) {
   const { noticeNo } = await params;
   const decodedNoticeNo = decodeURIComponent(noticeNo);
 
-  let animal;
-  try {
-    animal = await fetchAnimal(decodedNoticeNo);
-  } catch {
-    notFound();
-  }
+  const animal = await getAnimal(decodedNoticeNo);
+  if (!animal) notFound();
 
   const {
     kindNm, upkind, sexCd, age, colorCd, weight,
