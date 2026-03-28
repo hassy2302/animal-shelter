@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
+import { usePathname } from "next/navigation";
 import type { AnimalListResponse } from "@/types/animal";
 import type { AnimalFilters } from "@/types/animal";
 import { useAnimals } from "@/hooks/useAnimals";
@@ -14,12 +15,15 @@ import Pagination from "@/components/pagination/Pagination";
 
 interface Props {
   initialData: AnimalListResponse | null;
+  initialFilters?: AnimalFilters;
 }
 
-export default function AnimalPageClient({ initialData }: Props) {
-  const [filters, setFilters] = useState<AnimalFilters>(DEFAULT_FILTERS);
-  const [searchInput, setSearchInput] = useState("");
+export default function AnimalPageClient({ initialData, initialFilters }: Props) {
+  const [filters, setFilters] = useState<AnimalFilters>({ ...DEFAULT_FILTERS, ...initialFilters });
+  const [searchInput, setSearchInput] = useState(initialFilters?.search ?? "");
   const { data, animals, total, totalPages, fetchedAt, isLoading, error } = useAnimals(filters);
+  const pathname = usePathname();
+  const isFirstRender = useRef(true);
 
   const updateFilters = useCallback((patch: Partial<AnimalFilters>) => {
     setFilters((prev) => ({ ...prev, ...patch, page: patch.page ?? 1 }));
@@ -38,10 +42,29 @@ export default function AnimalPageClient({ initialData }: Props) {
     return () => clearTimeout(t);
   }, [searchInput]);
 
+  // URL 동기화 (히스토리 API로 페이지 리로드 없이 URL 반영)
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const params = new URLSearchParams();
+    if (filters.sido_code) params.set("sido_code", filters.sido_code);
+    if (filters.sigungu_code) params.set("sigungu_code", filters.sigungu_code);
+    if (filters.state && filters.state !== "protect") params.set("state", filters.state);
+    if (filters.species && filters.species !== "전체") params.set("species", filters.species);
+    if (filters.search) params.set("search", filters.search);
+    if (filters.page && filters.page > 1) params.set("page", String(filters.page));
+    if (filters.per_page) params.set("per_page", String(filters.per_page));
+    const query = params.toString();
+    window.history.replaceState(null, "", pathname + (query ? `?${query}` : ""));
+  }, [filters, pathname]);
+
   const displayAnimals = data !== undefined ? animals : (initialData?.items ?? []);
   const displayTotal = data !== undefined ? total : (initialData?.total ?? 0);
   const displayTotalPages = data !== undefined ? totalPages : (initialData?.total_pages ?? 1);
   const displayFetchedAt = data !== undefined ? fetchedAt : initialData?.fetched_at;
+  const activePerPage = filters.per_page ?? 12;
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
@@ -105,13 +128,30 @@ export default function AnimalPageClient({ initialData }: Props) {
 
       <hr className="border-[var(--border)] mb-4" />
 
-      {/* 통계 바 */}
-      <StatsBar
-        total={displayTotal}
-        page={filters.page ?? 1}
-        totalPages={displayTotalPages}
-        fetchedAt={displayFetchedAt}
-      />
+      {/* 통계 바 + 페이지당 표시 수 */}
+      <div className="flex items-start sm:items-center justify-between gap-2 mb-4">
+        <StatsBar
+          total={displayTotal}
+          page={filters.page ?? 1}
+          totalPages={displayTotalPages}
+          fetchedAt={displayFetchedAt}
+        />
+        <div className="flex items-center gap-1 shrink-0">
+          {([12, 24, 48] as const).map((n) => (
+            <button
+              key={n}
+              onClick={() => updateFilters({ per_page: n, page: 1 })}
+              className={`text-sm px-2.5 py-1 rounded-lg font-bold transition-colors ${
+                activePerPage === n
+                  ? "bg-brand-500 text-white"
+                  : "bg-white border border-[var(--border)] text-[var(--muted)] hover:border-brand-300"
+              }`}
+            >
+              {n}
+            </button>
+          ))}
+        </div>
+      </div>
 
       {/* 에러 */}
       {error && !isLoading && (

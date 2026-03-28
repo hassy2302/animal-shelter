@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
+import AnimalDetailModal from "./AnimalDetailModal";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
@@ -25,6 +26,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const imgSrc = popfile1 || animal.popfile2;
   const emoji = getAnimalEmoji(kindNm, upkind);
   const [imgError, setImgError] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   const detailUrl = source === "daejeon" && animalSeq
     ? `https://www.daejeon.go.kr/ani/AniStrayAnimalView.do?animalSeq=${animalSeq}`
@@ -33,106 +35,108 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
     : "";
 
   return (
-    <div className="bg-white border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm card-hover flex flex-col">
-      {/* 이미지 */}
-      <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6]">
-        {imgSrc && !imgError ? (
-          <Image
-            src={imgSrc}
-            alt={`${kindNm} - ${careNm} 보호 중`}
-            fill
-            className="object-cover"
-            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            unoptimized
-            onError={() => setImgError(true)}
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-2">
-            <span className="text-6xl">{emoji}</span>
-            {imgError && (
-              <span className="text-xs text-[var(--muted)] text-center px-4">
-                이미지를 불러오는데 실패했어요
+    <>
+      <div className="bg-white border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm card-hover flex flex-col">
+        {/* 이미지 */}
+        <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6]">
+          {imgSrc && !imgError ? (
+            <Image
+              src={imgSrc}
+              alt={`${kindNm} - ${careNm} 보호 중`}
+              fill
+              className="object-cover"
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+              unoptimized
+              onError={() => setImgError(true)}
+            />
+          ) : (
+            <div className="w-full h-full flex flex-col items-center justify-center gap-2">
+              <span className="text-6xl">{emoji}</span>
+              {imgError && (
+                <span className="text-xs text-[var(--muted)] text-center px-4">
+                  이미지를 불러오는데 실패했어요
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* 본문 */}
+        <div className="p-3 flex flex-col flex-1">
+          <p className="text-xs text-[#B8B4AF] mb-1">📋 {noticeNo}</p>
+
+          {/* 제목 */}
+          <div className="flex items-center gap-1.5 flex-wrap mb-2">
+            {source === "daejeon" && (
+              <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
+                대전시
               </span>
             )}
+            <span className="text-base font-extrabold text-[var(--text)]">{kindNm}</span>
+            <StateBadge state={processState} />
           </div>
-        )}
-      </div>
 
-      {/* 본문 */}
-      <div className="p-3 flex flex-col flex-1">
-        <p className="text-xs text-[#B8B4AF] mb-1">📋 {noticeNo}</p>
+          {/* 칩 */}
+          <div className="flex flex-wrap gap-1 mb-2">
+            <span className="chip">⚥ {SEX_LABEL[sexCd] ?? "미상"}</span>
+            <span className="chip">🎂 {age}</span>
+            {weight && <span className="chip">⚖️ {weight}</span>}
+            {colorCd && <span className="chip chip-color">🎨 {colorCd}</span>}
+          </div>
 
-        {/* 제목 */}
-        <div className="flex items-center gap-1.5 flex-wrap mb-2">
-          {source === "daejeon" && (
-            <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
-              대전시
-            </span>
+          <hr className="border-t border-[#F5F0EB] my-1.5" />
+
+          {/* 위치 */}
+          <div className="text-sm text-[#57534E] leading-relaxed">
+            🏠 <b className="text-[var(--text)]">{careNm}</b>
+            {careTel && <><br />📞 {careTel}</>}
+            <br />📍 {orgNm}
+            {happenPlace && <><br />📌 발견: {happenPlace}</>}
+          </div>
+
+          {/* 날짜 */}
+          {(happenDt || noticeEdt) && (
+            <div className="flex gap-2 mt-2">
+              {happenDt && (
+                <div className="flex-1 bg-[#F8F7F5] rounded-lg px-2 py-1.5 text-center">
+                  <div className="text-xs text-[var(--muted)] font-medium mb-0.5">🚑 구조일</div>
+                  <div className="text-xs font-bold text-[var(--text)]">{formatDate(happenDt)}</div>
+                </div>
+              )}
+              {noticeEdt && (
+                <div className="flex-1 bg-[#FFF7ED] rounded-lg px-2 py-1.5 text-center">
+                  <div className="text-xs text-[var(--muted)] font-medium mb-0.5">📅 공고 마감</div>
+                  <div className="text-xs font-bold text-brand-500">{formatDate(noticeEdt)}</div>
+                </div>
+              )}
+            </div>
           )}
-          <span className="text-base font-extrabold text-[var(--text)]">{kindNm}</span>
-          <StateBadge state={processState} />
+
+          {/* 특이사항 */}
+          {specialMark && (
+            <p className="text-xs text-[var(--muted)] bg-[#FAFAF8] rounded-lg px-2.5 py-1.5 mt-1.5 line-clamp-3">
+              💬 {specialMark}
+            </p>
+          )}
         </div>
 
-        {/* 칩 */}
-        <div className="flex flex-wrap gap-1 mb-2">
-          <span className="chip">⚥ {SEX_LABEL[sexCd] ?? "미상"}</span>
-          <span className="chip">🎂 {age}</span>
-          {weight && <span className="chip">⚖️ {weight}</span>}
-          {colorCd && <span className="chip chip-color">🎨 {colorCd}</span>}
-        </div>
-
-        <hr className="border-t border-[#F5F0EB] my-1.5" />
-
-        {/* 위치 */}
-        <div className="text-sm text-[#57534E] leading-relaxed">
-          🏠 <b className="text-[var(--text)]">{careNm}</b>
-          {careTel && <><br />📞 {careTel}</>}
-          <br />📍 {orgNm}
-          {happenPlace && <><br />📌 발견: {happenPlace}</>}
-        </div>
-
-        {/* 날짜 */}
-        {(happenDt || noticeEdt) && (
-          <div className="flex gap-2 mt-2">
-            {happenDt && (
-              <div className="flex-1 bg-[#F8F7F5] rounded-lg px-2 py-1.5 text-center">
-                <div className="text-xs text-[var(--muted)] font-medium mb-0.5">🚑 구조일</div>
-                <div className="text-xs font-bold text-[var(--text)]">{formatDate(happenDt)}</div>
-              </div>
-            )}
-            {noticeEdt && (
-              <div className="flex-1 bg-[#FFF7ED] rounded-lg px-2 py-1.5 text-center">
-                <div className="text-xs text-[var(--muted)] font-medium mb-0.5">📅 공고 마감</div>
-                <div className="text-xs font-bold text-brand-500">{formatDate(noticeEdt)}</div>
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* 특이사항 */}
-        {specialMark && (
-          <p className="text-xs text-[var(--muted)] bg-[#FAFAF8] rounded-lg px-2.5 py-1.5 mt-1.5 line-clamp-3">
-            💬 {specialMark}
-          </p>
-        )}
-      </div>
-
-      {/* 버튼 */}
-      {detailUrl && (
-        <div className="flex flex-col sm:flex-row gap-1.5 px-3 pb-3 mt-auto">
-          <a
-            href={detailUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label={`${kindNm} 상세보기 (새 창)`}
+        {/* 버튼 */}
+        <div className="flex gap-1.5 px-3 pb-3 mt-auto">
+          <button
+            onClick={() => setShowModal(true)}
+            aria-label={`${kindNm} 상세보기`}
             className="flex-1 text-center text-sm font-bold px-3 py-1.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
           >
             🔍 상세보기
-          </a>
-          <CopyButton url={detailUrl} kindNm={kindNm} />
+          </button>
+          {detailUrl && <CopyButton url={detailUrl} kindNm={kindNm} />}
         </div>
+      </div>
+
+      {showModal && (
+        <AnimalDetailModal animal={animal} onClose={() => setShowModal(false)} />
       )}
-    </div>
+    </>
   );
 }
 
