@@ -50,22 +50,8 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
       Kakao.init(appKey);
     }
 
-    const content: Record<string, unknown> = {
-      title: title ? `${title} 유기동물 공고` : "유기동물 공고",
-      description: "입양을 기다리고 있어요. 지금 바로 확인해보세요!",
-      link: { mobileWebUrl: url, webUrl: url },
-    };
-    if (imageUrl) content.imageUrl = imageUrl;
-
-    Kakao.Share.sendDefault({
-      objectType: "feed",
-      content,
-      buttons: [
-        {
-          title: "공고 보러가기",
-          link: { mobileWebUrl: url, webUrl: url },
-        },
-      ],
+    Kakao.Share.sendScrap({
+      requestUrl: url,
     });
     onClose();
   };
