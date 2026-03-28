@@ -30,7 +30,7 @@ async def lifespan(app: FastAPI):
         await asyncio.sleep(2)
         logger.info("초기 캐시 워밍 시작")
         try:
-            await animal_service.get_animals(cache=cache, force_refresh=False)
+            await animal_service.get_animals(cache=cache, force_refresh=True)
         except Exception as e:
             logger.warning(f"초기 캐시 워밍 실패: {e}")
 
