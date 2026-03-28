@@ -47,6 +47,16 @@ export default function AnimalPageClient({ initialData }: Props) {
     <main className="max-w-screen-xl mx-auto px-4 py-8">
       <Header />
 
+      {/* 신고 안내 배너 */}
+      <div className="mb-4 px-4 py-2.5 bg-[#FFF7ED] border border-[#FDE68A] rounded-xl flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-4 text-sm">
+        <span className="font-semibold text-[#92400E]">🐾 유기동물을 발견하셨나요?</span>
+        <div className="flex items-center gap-3">
+          <a href="tel:1577-0954" className="font-bold text-brand-500 hover:text-brand-600 transition-colors">📞 1577-0954</a>
+          <span className="w-1 h-1 bg-[#D6D3D1] rounded-full" />
+          <a href="https://www.animal.go.kr" target="_blank" rel="noopener noreferrer" className="font-bold text-brand-500 hover:text-brand-600 transition-colors">🌐 홈페이지 신고</a>
+        </div>
+      </div>
+
       {/* 종류 필터 */}
       <div className="mb-3">
         <SpeciesPills
