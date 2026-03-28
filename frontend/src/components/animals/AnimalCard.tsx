@@ -125,7 +125,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
           <button
             onClick={() => setShowModal(true)}
             aria-label={`${kindNm} 상세보기`}
-            className="flex-1 text-center text-sm font-bold px-3 py-1.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
+            className="flex-1 text-center text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors whitespace-nowrap"
           >
             🔍 상세보기
           </button>
