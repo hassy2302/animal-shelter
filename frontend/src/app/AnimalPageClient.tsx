@@ -48,20 +48,20 @@ export default function AnimalPageClient({ initialData }: Props) {
       <Header />
 
       {/* 신고 안내 배너 */}
-      <div className="mb-4 px-5 py-4 bg-gradient-to-r from-brand-500 to-[#EA580C] rounded-2xl shadow-md">
-        <p className="text-white font-bold text-base text-center mb-3">🐾 유기동물을 발견하셨나요? 신고해주세요!</p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-3">
+      <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] border border-brand-200 rounded-2xl flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">
+        <span className="text-sm font-bold text-[#9A3412]">🐾 유기동물을 발견하셨나요? 신고해주세요</span>
+        <div className="flex items-center gap-3">
           <a
             href="tel:1577-0954"
-            className="w-full sm:w-auto text-center bg-white text-brand-600 font-extrabold text-sm px-5 py-2 rounded-full hover:bg-orange-50 transition-colors shadow-sm"
+            className="text-sm font-bold text-brand-500 hover:text-brand-600 bg-white border border-brand-200 px-4 py-1.5 rounded-full transition-colors shadow-sm"
           >
-            📞 전화 신고 1577-0954
+            📞 1577-0954
           </a>
           <a
             href="https://www.animal.go.kr"
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full sm:w-auto text-center bg-white/20 border border-white/60 text-white font-extrabold text-sm px-5 py-2 rounded-full hover:bg-white/30 transition-colors"
+            className="text-sm font-bold text-brand-500 hover:text-brand-600 bg-white border border-brand-200 px-4 py-1.5 rounded-full transition-colors shadow-sm"
           >
             🌐 홈페이지 신고
           </a>
