@@ -125,13 +125,24 @@ export default function AnimalPageClient({ initialData }: Props) {
       {/* 푸터 */}
       <footer className="mt-12 py-6 border-t border-[var(--border)] text-center">
         <p className="text-sm font-semibold text-[var(--text)] mb-1">유기동물을 발견하셨나요?</p>
-        <p className="text-sm text-[var(--muted)] mb-2">국가동물보호정보시스템에 신고해주세요</p>
-        <a
-          href="tel:1577-0954"
-          className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
-        >
-          📞 1577-0954
-        </a>
+        <p className="text-sm text-[var(--muted)] mb-3">국가동물보호정보시스템에 신고해주세요</p>
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a
+            href="tel:1577-0954"
+            className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
+          >
+            📞 1577-0954
+          </a>
+          <span className="hidden sm:block w-1 h-1 bg-[#D6D3D1] rounded-full" />
+          <a
+            href="https://www.animal.go.kr"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
+          >
+            🌐 인터넷 신고
+          </a>
+        </div>
       </footer>
     </main>
   );
