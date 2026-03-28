@@ -5,7 +5,7 @@ const API_BASE = process.env.API_BASE_URL;
 export async function GET(request: NextRequest) {
   const params = request.nextUrl.searchParams.toString();
   const res = await fetch(`${API_BASE}/api/animals?${params}`, {
-    next: { revalidate: 3600 },
+    cache: "no-store",
   });
 
   if (!res.ok) {
@@ -15,7 +15,7 @@ export async function GET(request: NextRequest) {
   const data = await res.json();
   return NextResponse.json(data, {
     headers: {
-      "Cache-Control": "public, s-maxage=3600, stale-while-revalidate=86400",
+      "Cache-Control": "no-store",
     },
   });
 }
