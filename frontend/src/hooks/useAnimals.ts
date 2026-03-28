@@ -4,11 +4,22 @@ import useSWR from "swr";
 import type { AnimalFilters, AnimalListResponse } from "@/types/animal";
 import { buildApiUrl } from "@/lib/utils";
 
-const fetcher = (url: string) =>
-  fetch(url).then((r) => {
-    if (!r.ok) throw new Error("데이터 로드 실패");
-    return r.json() as Promise<AnimalListResponse>;
-  });
+const fetcher = (url: string) => {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 10_000);
+  return fetch(url, { signal: controller.signal })
+    .then((r) => {
+      if (!r.ok) throw new Error("데이터 로드 실패");
+      return r.json() as Promise<AnimalListResponse>;
+    })
+    .catch((e: unknown) => {
+      if (e instanceof Error && e.name === "AbortError") {
+        throw new Error("서버 응답 시간이 초과됐어요");
+      }
+      throw e;
+    })
+    .finally(() => clearTimeout(timer));
+};
 
 export function useAnimals(filters: AnimalFilters) {
   const key = buildApiUrl("/api/animals", filters as Record<string, unknown>);

@@ -51,7 +51,10 @@ export default function AnimalPageClient({ initialData }: Props) {
       <div className="mb-3">
         <SpeciesPills
           value={filters.species ?? "전체"}
-          onChange={(v) => updateFilters({ species: v, page: 1 })}
+          onChange={(v) => {
+            updateFilters({ species: v, page: 1 });
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
         />
       </div>
 
@@ -61,15 +64,22 @@ export default function AnimalPageClient({ initialData }: Props) {
       </div>
 
       {/* 텍스트 검색 */}
-      <div className="mb-4">
+      <div className="mb-4 relative">
         <input
           type="text"
           value={searchInput}
           onChange={(e) => setSearchInput(e.target.value)}
           placeholder="🔍 공고번호, 보호소명, 발견장소 등 검색"
           aria-label="동물 검색"
-          className="w-full text-base bg-white border border-[var(--border)] rounded-lg px-4 py-2.5 text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-1 focus:ring-brand-300"
+          className={`w-full text-base bg-white border rounded-lg px-4 py-2.5 text-[var(--text)] placeholder:text-[var(--muted)] focus:outline-none focus:ring-1 focus:ring-brand-300 transition-colors ${
+            searchInput !== (filters.search ?? "")
+              ? "border-brand-300"
+              : "border-[var(--border)]"
+          }`}
         />
+        {searchInput !== (filters.search ?? "") && (
+          <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-brand-400">검색 중...</span>
+        )}
       </div>
 
       <hr className="border-[var(--border)] mb-4" />
@@ -86,8 +96,14 @@ export default function AnimalPageClient({ initialData }: Props) {
       {error && !isLoading && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <p className="text-4xl mb-4">😿</p>
-          <p className="text-base font-semibold text-[var(--text)] mb-1">데이터를 불러오지 못했어요</p>
-          <p className="text-sm text-[var(--muted)]">잠시 후 다시 시도해주세요.</p>
+          <p className="text-base font-semibold text-[var(--text)] mb-1">
+            {error.message === "서버 응답 시간이 초과됐어요"
+              ? "서버에 연결할 수 없어요"
+              : "데이터를 불러오지 못했어요"}
+          </p>
+          <p className="text-sm text-[var(--muted)]">{error.message === "서버 응답 시간이 초과됐어요"
+            ? "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요."
+            : "잠시 후 다시 시도해주세요."}</p>
         </div>
       )}
 

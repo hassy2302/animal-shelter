@@ -18,8 +18,9 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
     <div className="flex flex-wrap gap-2 items-end">
       {/* 시도 */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-semibold text-[var(--muted)]">시도</label>
+        <label htmlFor="filter-sido" className="text-sm font-semibold text-[var(--muted)]">시도</label>
         <select
+          id="filter-sido"
           value={filters.sido_code ?? ""}
           onChange={(e) => onChange({ sido_code: e.target.value, sigungu_code: "", page: 1 })}
           className="select-field"
@@ -33,8 +34,9 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
 
       {/* 시군구 */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-semibold text-[var(--muted)]">시군구</label>
+        <label htmlFor="filter-sigungu" className="text-sm font-semibold text-[var(--muted)]">시군구</label>
         <select
+          id="filter-sigungu"
           value={filters.sigungu_code ?? ""}
           onChange={(e) => onChange({ sigungu_code: e.target.value, page: 1 })}
           disabled={!filters.sido_code}
@@ -49,8 +51,9 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
 
       {/* 상태 */}
       <div className="flex flex-col gap-1">
-        <label className="text-sm font-semibold text-[var(--muted)]">상태</label>
+        <label htmlFor="filter-state" className="text-sm font-semibold text-[var(--muted)]">상태</label>
         <select
+          id="filter-state"
           value={filters.state ?? "protect"}
           onChange={(e) => onChange({ state: e.target.value as AnimalFilters["state"], page: 1 })}
           className="select-field"

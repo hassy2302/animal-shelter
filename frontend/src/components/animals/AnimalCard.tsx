@@ -39,11 +39,10 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
         {imgSrc && !imgError ? (
           <Image
             src={imgSrc}
-            alt={kindNm}
+            alt={`${kindNm} - ${careNm} 보호 중`}
             fill
             className="object-cover"
             sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-            unoptimized
             onError={() => setImgError(true)}
           />
         ) : (

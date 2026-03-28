@@ -37,17 +37,21 @@ async def _fetch_page(
         "pageNo": page,
         "_type": "json",
     }.items() if v}
-    try:
-        r = await client.get(
-            f"{BASE_URL}/abandonmentPublic_v2",
-            params=params,
-            timeout=20,
-        )
-        r.raise_for_status()
-        return r.json().get("response", {}).get("body", {})
-    except Exception as e:
-        logger.warning(f"국가 API 오류 upkind={upkind} page={page}: {e}")
-        return {}
+    for attempt in range(3):
+        try:
+            r = await client.get(
+                f"{BASE_URL}/abandonmentPublic_v2",
+                params=params,
+                timeout=20,
+            )
+            r.raise_for_status()
+            return r.json().get("response", {}).get("body", {})
+        except Exception as e:
+            if attempt == 2:
+                logger.warning(f"국가 API 오류 upkind={upkind} page={page}: {e}")
+                return {}
+            await asyncio.sleep(2 ** attempt)
+    return {}
 
 
 async def fetch_upkind(
