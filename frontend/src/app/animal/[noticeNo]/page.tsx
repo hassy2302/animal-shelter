@@ -33,8 +33,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     const title = `${animal.kindNm} - 유기동물 공고`;
     const description = `${animal.careNm} 보호 중 · ${animal.orgNm}${animal.noticeEdt ? ` · 공고 마감 ${formatDate(animal.noticeEdt)}` : ""}`;
     const pageUrl = `${BASE_URL}/animal/${noticeNo}`;
-    const ogImage = animal.popfile1
-      ? `${BASE_URL}/_next/image?url=${encodeURIComponent(animal.popfile1)}&w=1200&q=75`
+    const ogImage = animal.popfile1 || animal.popfile2
+      ? (animal.popfile1 || animal.popfile2)!
       : `${BASE_URL}/opengraph-image`;
     return {
       title,
