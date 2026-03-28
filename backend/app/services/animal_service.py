@@ -95,9 +95,15 @@ async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], da
 async def get_animal_by_notice_no(cache: CacheManager, notice_no: str) -> Animal | None:
     key = CacheManager.animals_key("", "")
     cached = await cache.get(key)
-    if not cached:
-        return None
-    for a in cached["items"]:
+    if cached:
+        all_raw = cached["items"]
+    else:
+        all_raw, fetched_at = await _load_fresh("", "")
+        await cache.set(key, {
+            "items": all_raw,
+            "fetched_at": fetched_at.isoformat(),
+        }, settings.CACHE_TTL_ANIMALS)
+    for a in all_raw:
         if a.get("noticeNo") == notice_no:
             return Animal(**a)
     return None
