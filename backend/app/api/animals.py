@@ -9,6 +9,7 @@ router = APIRouter(prefix="/animals", tags=["animals"])
 
 @router.get("", response_model=AnimalListResponse)
 async def list_animals(
+    response: Response,
     sido_code: str = Query("", description="시도 코드"),
     sigungu_code: str = Query("", description="시군구 코드"),
     state: str = Query("protect", description="상태: all | protect | complete | etc"),
@@ -17,7 +18,6 @@ async def list_animals(
     page: int = Query(1, ge=1),
     per_page: int = Query(12, ge=1, le=100),
     cache: CacheManager = Depends(get_cache),
-    response: Response,
 ):
     response.headers["Cache-Control"] = "public, s-maxage=3600, stale-while-revalidate=86400"
     return await animal_service.get_animals(
