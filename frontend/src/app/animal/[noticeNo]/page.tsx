@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate } from "@/lib/utils";
+import ShareButton from "@/components/animals/ShareButton";
 
 async function getAnimal(noticeNo: string): Promise<Animal | null> {
   const apiBase = process.env.API_BASE_URL;
@@ -196,16 +197,25 @@ export default async function AnimalDetailPage({ params }: Props) {
           )}
 
           {/* 버튼 */}
-          {detailUrl && (
-            <a
-              href={detailUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block w-full text-center text-sm font-bold px-4 py-3 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
-            >
-              🔍 공고 보러가기
-            </a>
-          )}
+          <div className="flex gap-2">
+            {detailUrl && (
+              <a
+                href={detailUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 text-center text-sm font-bold px-4 py-3 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors"
+              >
+                🔍 공고 보러가기
+              </a>
+            )}
+            <div className={detailUrl ? "flex-1" : "w-full"}>
+              <ShareButton
+                url={`https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(decodedNoticeNo)}`}
+                title={kindNm}
+                imageUrl={imgSrc ?? undefined}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </main>
