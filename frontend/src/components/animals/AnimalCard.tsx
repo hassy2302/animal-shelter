@@ -96,7 +96,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
           {/* 날짜 */}
           {(happenDt || noticeEdt) && (
-            <div className="flex gap-2 mt-2">
+            <div className="flex flex-col sm:flex-row gap-2 mt-2">
               {happenDt && (
                 <div className="flex-1 bg-[#F8F7F5] rounded-lg px-2 py-1.5 text-center">
                   <div className="text-xs text-[var(--muted)] font-medium mb-0.5">🚑 구조일</div>
