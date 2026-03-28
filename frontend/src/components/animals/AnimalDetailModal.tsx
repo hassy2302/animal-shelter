@@ -126,7 +126,12 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
             <div className="space-y-1.5 text-sm text-[var(--text)]">
               <p>🏠 <b>{careNm}</b></p>
               {careTel && (
-                <p>📞 <a href={`tel:${careTel}`} className="text-brand-500 hover:underline">{careTel}</a></p>
+                <a
+                  href={`tel:${careTel}`}
+                  className="flex items-center gap-2 w-fit px-3 py-1.5 rounded-full bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3] font-bold text-sm hover:bg-[#FFE4E6] transition-colors"
+                >
+                  📞 {careTel}
+                </a>
               )}
               <p>📍 {orgNm}</p>
               {happenPlace && <p>📌 발견장소: {happenPlace}</p>}

@@ -12,6 +12,7 @@ import FilterBar from "@/components/filters/FilterBar";
 import SpeciesPills from "@/components/filters/SpeciesPills";
 import AnimalGrid from "@/components/animals/AnimalGrid";
 import Pagination from "@/components/pagination/Pagination";
+import ScrollToTop from "@/components/layout/ScrollToTop";
 
 interface Props {
   initialData: AnimalListResponse | null;
@@ -182,6 +183,8 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
           }}
         />
       )}
+
+      <ScrollToTop />
 
       {/* 푸터 */}
       <footer className="mt-12 py-6 border-t border-[var(--border)] text-center">

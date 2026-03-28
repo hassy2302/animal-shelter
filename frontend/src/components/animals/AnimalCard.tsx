@@ -83,7 +83,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
           {/* 위치 */}
           <div className="text-sm text-[#57534E] leading-relaxed">
             🏠 <b className="text-[var(--text)]">{careNm}</b>
-            {careTel && <><br />📞 {careTel}</>}
+            {careTel && <><br />📞 <a href={`tel:${careTel}`} className="text-brand-500 font-semibold">{careTel}</a></>}
             <br />📍 {orgNm}
             {happenPlace && <><br />📌 발견: {happenPlace}</>}
           </div>
