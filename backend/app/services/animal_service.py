@@ -92,6 +92,17 @@ async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], da
     return all_raw, datetime.now(KST)
 
 
+async def get_animal_by_notice_no(cache: CacheManager, notice_no: str) -> Animal | None:
+    key = CacheManager.animals_key("", "")
+    cached = await cache.get(key)
+    if not cached:
+        return None
+    for a in cached["items"]:
+        if a.get("noticeNo") == notice_no:
+            return Animal(**a)
+    return None
+
+
 async def get_animals(
     cache: CacheManager,
     sido_code: str = "",

@@ -21,7 +21,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const {
     noticeNo, kindNm, upkind, sexCd, age, colorCd, weight,
     careNm, careTel, orgNm, happenPlace, happenDt, noticeEdt,
-    specialMark, popfile1, processState, source, animalSeq, desertionNo,
+    specialMark, popfile1, processState, source,
   } = animal;
 
   const imgSrc = popfile1 || animal.popfile2;
@@ -30,10 +30,8 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const [showModal, setShowModal] = useState(false);
   const [showShare, setShowShare] = useState(false);
 
-  const detailUrl = source === "daejeon" && animalSeq
-    ? `https://www.daejeon.go.kr/ani/AniStrayAnimalView.do?animalSeq=${animalSeq}`
-    : desertionNo
-    ? `https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=${desertionNo}`
+  const shareUrl = noticeNo
+    ? `https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(noticeNo)}`
     : "";
 
   return (
@@ -131,7 +129,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
           >
             🔍 상세보기
           </button>
-          {detailUrl && (
+          {shareUrl && (
             <button
               onClick={() => setShowShare(true)}
               aria-label={`${kindNm} 공유`}
@@ -146,8 +144,8 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
       {showModal && (
         <AnimalDetailModal animal={animal} onClose={() => setShowModal(false)} />
       )}
-      {showShare && detailUrl && (
-        <ShareSheet url={detailUrl} title={kindNm} imageUrl={imgSrc ?? undefined} onClose={() => setShowShare(false)} />
+      {showShare && shareUrl && (
+        <ShareSheet url={shareUrl} title={kindNm} imageUrl={imgSrc ?? undefined} onClose={() => setShowShare(false)} />
       )}
     </>
   );

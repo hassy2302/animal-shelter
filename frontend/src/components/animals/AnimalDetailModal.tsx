@@ -46,6 +46,9 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
     : desertionNo
     ? `https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=${desertionNo}`
     : "";
+  const shareUrl = noticeNo
+    ? `https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(noticeNo)}`
+    : "";
 
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => {
@@ -174,6 +177,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
             >
               🔍 공고 보러가기
             </a>
+            {shareUrl && (
             <button
               onClick={() => setShowShare(true)}
               aria-label={`${kindNm} 공유`}
@@ -181,11 +185,12 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
             >
               🔗 공유
             </button>
+          )}
           </div>
         )}
       </div>
-      {showShare && detailUrl && (
-        <ShareSheet url={detailUrl} title={kindNm} imageUrl={imgSrc ?? undefined} onClose={() => setShowShare(false)} />
+      {showShare && shareUrl && (
+        <ShareSheet url={shareUrl} title={kindNm} imageUrl={imgSrc ?? undefined} onClose={() => setShowShare(false)} />
       )}
     </div>
   );

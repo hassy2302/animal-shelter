@@ -1,4 +1,4 @@
-import type { AnimalFilters, AnimalListResponse } from "@/types/animal";
+import type { Animal, AnimalFilters, AnimalListResponse } from "@/types/animal";
 import type { Sido, Sigungu } from "@/types/region";
 import { buildApiUrl } from "./utils";
 
@@ -16,6 +16,14 @@ export async function refreshAnimals(
   const url = buildApiUrl("/api/animals/refresh", { sido_code, sigungu_code });
   const res = await fetch(url, { method: "POST" });
   if (!res.ok) throw new Error(`갱신 실패: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchAnimal(noticeNo: string): Promise<Animal> {
+  const res = await fetch(`/api/animals/${encodeURIComponent(noticeNo)}`, {
+    next: { revalidate: 3600 },
+  });
+  if (!res.ok) throw new Error(`동물 데이터 로드 실패: ${res.status}`);
   return res.json();
 }
 

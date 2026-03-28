@@ -1,10 +1,21 @@
-from fastapi import APIRouter, Depends, Query, Response
-from app.models.animal import AnimalListResponse
+from fastapi import APIRouter, Depends, Query, Response, HTTPException
+from app.models.animal import Animal, AnimalListResponse
 from app.services import animal_service
 from app.dependencies import get_cache
 from app.cache.manager import CacheManager
 
 router = APIRouter(prefix="/animals", tags=["animals"])
+
+
+@router.get("/by-notice/{notice_no}", response_model=Animal)
+async def get_animal_by_notice_no(
+    notice_no: str,
+    cache: CacheManager = Depends(get_cache),
+):
+    animal = await animal_service.get_animal_by_notice_no(cache, notice_no)
+    if not animal:
+        raise HTTPException(status_code=404, detail="동물을 찾을 수 없습니다")
+    return animal
 
 
 @router.get("", response_model=AnimalListResponse)
