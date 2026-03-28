@@ -67,6 +67,13 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
     onClose();
   };
 
+  const handleMore = () => {
+    if (typeof navigator.share === "function") {
+      navigator.share({ title: title ?? "유기동물 공고", url }).catch(() => {});
+      onClose();
+    }
+  };
+
   const handleCopy = async () => {
     await navigator.clipboard.writeText(url);
     setCopied(true);
@@ -117,6 +124,16 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
             </div>
             <span className="text-xs font-semibold text-[var(--text)]">X (트위터)</span>
           </button>
+
+          {/* 더보기 */}
+          {typeof navigator !== "undefined" && typeof navigator.share === "function" && (
+            <button onClick={handleMore} className="flex flex-col items-center gap-2 group">
+              <div className="w-14 h-14 rounded-2xl bg-[#F5F4F2] flex items-center justify-center text-2xl shadow-sm group-hover:bg-[#ECEAE8] transition-all">
+                ···
+              </div>
+              <span className="text-xs font-semibold text-[var(--text)]">더보기</span>
+            </button>
+          )}
 
           {/* 링크 복사 */}
           <button onClick={handleCopy} className="flex flex-col items-center gap-2 group">
