@@ -43,11 +43,12 @@ async def list_sigungu(
     async with httpx.AsyncClient() as client:
         raw = await national_api.fetch_sigungu(client, sido_code)
 
+    _SIDO_SUFFIXES = ("특별시", "광역시", "특별자치시", "특별자치도", "도")
     result = []
     for item in raw:
         name = item.get("orgdownNm") or item.get("orgNm") or ""
         code = item.get("orgCd") or item.get("sigunguCd") or ""
-        if name and code and code != sido_code:
+        if name and code and code != sido_code and not name.endswith(_SIDO_SUFFIXES):
             result.append(Sigungu(name=name, code=code))
 
     # 가정보호 추가
