@@ -49,11 +49,11 @@ export default function AnimalPageClient({ initialData }: Props) {
 
       {/* 신고 안내 배너 */}
       <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] border border-brand-200 rounded-2xl flex flex-col sm:flex-row items-center justify-center gap-2 sm:gap-6">
-        <span className="text-sm font-bold text-[#9A3412]">🐾 유기동물을 발견하셨나요? 신고해주세요</span>
+        <span className="text-base font-bold text-[#9A3412]">🐾 유기동물을 발견하셨나요? 신고해주세요</span>
         <div className="flex items-center gap-3">
           <a
             href="tel:1577-0954"
-            className="text-sm font-bold text-brand-500 hover:text-brand-600 bg-white border border-brand-200 px-4 py-1.5 rounded-full transition-colors shadow-sm"
+            className="text-base font-bold text-brand-500 hover:text-brand-600 bg-white border border-brand-200 px-4 py-1.5 rounded-full transition-colors shadow-sm"
           >
             📞 1577-0954
           </a>
@@ -61,7 +61,7 @@ export default function AnimalPageClient({ initialData }: Props) {
             href="https://www.animal.go.kr"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-sm font-bold text-brand-500 hover:text-brand-600 bg-white border border-brand-200 px-4 py-1.5 rounded-full transition-colors shadow-sm"
+            className="text-base font-bold text-brand-500 hover:text-brand-600 bg-white border border-brand-200 px-4 py-1.5 rounded-full transition-colors shadow-sm"
           >
             🌐 홈페이지 신고
           </a>
