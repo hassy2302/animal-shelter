@@ -140,7 +140,7 @@ export default function AnimalPageClient({ initialData }: Props) {
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
           >
-            🌐 인터넷 신고
+            🌐 홈페이지 신고
           </a>
         </div>
       </footer>
