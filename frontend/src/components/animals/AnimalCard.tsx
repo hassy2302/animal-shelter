@@ -31,7 +31,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const [showShare, setShowShare] = useState(false);
 
   const shareUrl = noticeNo
-    ? `https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(noticeNo)}`
+    ? `https://animal-shelter-navy.vercel.app/animal/${noticeNo}`
     : "";
 
   return (

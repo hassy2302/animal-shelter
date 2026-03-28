@@ -47,7 +47,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
     ? `https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=${desertionNo}`
     : "";
   const shareUrl = noticeNo
-    ? `https://animal-shelter-navy.vercel.app/animal/${encodeURIComponent(noticeNo)}`
+    ? `https://animal-shelter-navy.vercel.app/animal/${noticeNo}`
     : "";
 
   useEffect(() => {
