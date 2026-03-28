@@ -15,7 +15,7 @@ class Settings(BaseSettings):
     CORS_ORIGINS: list[str] = ["http://localhost:3000"]
 
     # Cache TTL
-    CACHE_TTL_ANIMALS: int = 7200   # 2시간
+    CACHE_TTL_ANIMALS: int = 3600   # 1시간
     CACHE_TTL_REGIONS: int = 86400  # 24시간
 
     # App
