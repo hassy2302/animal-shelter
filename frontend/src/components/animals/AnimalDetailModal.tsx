@@ -185,7 +185,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
         )}
       </div>
       {showShare && detailUrl && (
-        <ShareSheet url={detailUrl} title={kindNm} onClose={() => setShowShare(false)} />
+        <ShareSheet url={detailUrl} title={kindNm} imageUrl={imgSrc ?? undefined} onClose={() => setShowShare(false)} />
       )}
     </div>
   );

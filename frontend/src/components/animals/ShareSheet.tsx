@@ -5,10 +5,23 @@ import { useEffect, useState } from "react";
 interface ShareSheetProps {
   url: string;
   title?: string;
+  imageUrl?: string;
   onClose: () => void;
 }
 
-export default function ShareSheet({ url, title, onClose }: ShareSheetProps) {
+function getKakao() {
+  return typeof window !== "undefined" ? (window as unknown as { Kakao?: KakaoSDK }).Kakao : undefined;
+}
+
+interface KakaoSDK {
+  isInitialized: () => boolean;
+  init: (key: string) => void;
+  Share: {
+    sendDefault: (options: object) => void;
+  };
+}
+
+export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheetProps) {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -17,19 +30,44 @@ export default function ShareSheet({ url, title, onClose }: ShareSheetProps) {
     return () => document.removeEventListener("keydown", handleKey);
   }, [onClose]);
 
-  const handleKakao = async () => {
-    if (typeof navigator.share === "function") {
-      try {
-        await navigator.share({ title: title ?? "유기동물 공고", url });
-        onClose();
-      } catch {
-        // 사용자가 취소한 경우
+  const handleKakao = () => {
+    const Kakao = getKakao();
+    const appKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
+
+    if (!Kakao || !appKey) {
+      // SDK 미로드 시 Web Share API로 폴백
+      if (typeof navigator.share === "function") {
+        navigator.share({ title: title ?? "유기동물 공고", url }).catch(() => {});
+      } else {
+        navigator.clipboard.writeText(url);
+        alert("카카오 SDK를 불러오지 못했어요.\n링크가 복사됐으니 카카오톡에 붙여넣기 해주세요.");
       }
-    } else {
-      await navigator.clipboard.writeText(url);
-      alert("카카오톡 앱에서 링크를 붙여넣기 해주세요.\n(링크가 클립보드에 복사됐어요)");
       onClose();
+      return;
     }
+
+    if (!Kakao.isInitialized()) {
+      Kakao.init(appKey);
+    }
+
+    const content: Record<string, unknown> = {
+      title: title ? `${title} 유기동물 공고` : "유기동물 공고",
+      description: "입양을 기다리고 있어요. 지금 바로 확인해보세요!",
+      link: { mobileWebUrl: url, webUrl: url },
+    };
+    if (imageUrl) content.imageUrl = imageUrl;
+
+    Kakao.Share.sendDefault({
+      objectType: "feed",
+      content,
+      buttons: [
+        {
+          title: "공고 보러가기",
+          link: { mobileWebUrl: url, webUrl: url },
+        },
+      ],
+    });
+    onClose();
   };
 
   const handleX = () => {

@@ -147,7 +147,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
         <AnimalDetailModal animal={animal} onClose={() => setShowModal(false)} />
       )}
       {showShare && detailUrl && (
-        <ShareSheet url={detailUrl} title={kindNm} onClose={() => setShowShare(false)} />
+        <ShareSheet url={detailUrl} title={kindNm} imageUrl={imgSrc ?? undefined} onClose={() => setShowShare(false)} />
       )}
     </>
   );
