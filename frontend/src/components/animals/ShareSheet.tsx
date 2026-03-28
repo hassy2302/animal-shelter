@@ -70,7 +70,7 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
   const handleMore = async () => {
     if (typeof navigator.share === "function") {
       try {
-        await navigator.share({ title: title ?? "유기동물 공고", url });
+        await navigator.share({ url });
       } catch {
         // 취소 또는 오류 무시
       } finally {
