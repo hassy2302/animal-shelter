@@ -18,6 +18,7 @@ interface KakaoSDK {
   init: (key: string) => void;
   Share: {
     sendDefault: (options: object) => void;
+    sendScrap: (options: object) => void;
   };
 }
 
