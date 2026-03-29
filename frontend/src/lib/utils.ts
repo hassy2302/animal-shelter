@@ -27,6 +27,17 @@ export function formatDate(yyyymmdd: string): string {
   return `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6)}`;
 }
 
+export function isNewAnimal(happenDt: string): boolean {
+  if (happenDt.length !== 8) return false;
+  const date = new Date(
+    parseInt(happenDt.slice(0, 4)),
+    parseInt(happenDt.slice(4, 6)) - 1,
+    parseInt(happenDt.slice(6, 8))
+  );
+  const diffDays = (Date.now() - date.getTime()) / (1000 * 60 * 60 * 24);
+  return diffDays <= 7;
+}
+
 export function formatAgo(isoString: string): string {
   const diff = Math.floor((Date.now() - new Date(isoString).getTime()) / 60000);
   if (diff < 1) return "방금";

@@ -7,6 +7,7 @@ import { getAnimalEmoji, formatDate } from "@/lib/utils";
 import { BASE_URL } from "@/lib/constants";
 import ShareSheet from "./ShareSheet";
 import StateBadge from "./StateBadge";
+import { useFavorites } from "@/hooks/useFavorites";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
@@ -26,6 +27,7 @@ function InfoChip({ label, value }: { label: string; value: string }) {
 
 export default function AnimalDetailModal({ animal, onClose }: Props) {
   const [showShare, setShowShare] = useState(false);
+  const { isFavorite, toggle } = useFavorites();
   const {
     noticeNo, kindNm, upkind, sexCd, age, colorCd, weight,
     careNm, careTel, orgNm, happenPlace, happenDt, noticeEdt,
@@ -80,13 +82,22 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
             <h2 className="text-lg font-extrabold text-[var(--text)]">{kindNm}</h2>
             <StateBadge state={processState} />
           </div>
-          <button
-            onClick={onClose}
-            aria-label="닫기"
-            className="w-8 h-8 flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] text-xl transition-colors rounded-full hover:bg-[#F5F4F2]"
-          >
-            ✕
-          </button>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => toggle(noticeNo)}
+              aria-label={isFavorite(noticeNo) ? "찜 해제" : "찜하기"}
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F5F4F2] transition-colors text-lg"
+            >
+              {isFavorite(noticeNo) ? "❤️" : "🤍"}
+            </button>
+            <button
+              onClick={onClose}
+              aria-label="닫기"
+              className="w-8 h-8 flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] text-xl transition-colors rounded-full hover:bg-[#F5F4F2]"
+            >
+              ✕
+            </button>
+          </div>
         </div>
 
         {/* 스크롤 영역 */}

@@ -3,7 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
-import { getAnimalEmoji, formatDate } from "@/lib/utils";
+import { getAnimalEmoji, formatDate, isNewAnimal } from "@/lib/utils";
+import { useFavorites } from "@/hooks/useFavorites";
 import { BASE_URL } from "@/lib/constants";
 import AnimalDetailModal from "./AnimalDetailModal";
 import ShareSheet from "./ShareSheet";
@@ -23,6 +24,8 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const [imgError, setImgError] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const { isFavorite, toggle } = useFavorites();
+  const isNew = isNewAnimal(happenDt);
 
   const shareUrl = noticeNo
     ? `${BASE_URL}/animal/${encodeURIComponent(noticeNo)}`
@@ -53,6 +56,20 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
               )}
             </div>
           )}
+          {/* NEW 배지 */}
+          {isNew && (
+            <span className="absolute top-2 left-2 z-10 text-xs font-bold px-2 py-0.5 rounded-full bg-green-500 text-white shadow-sm">
+              NEW
+            </span>
+          )}
+          {/* 찜 버튼 */}
+          <button
+            onClick={() => toggle(noticeNo)}
+            aria-label={isFavorite(noticeNo) ? "찜 해제" : "찜하기"}
+            className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 shadow-sm hover:bg-white transition-colors"
+          >
+            {isFavorite(noticeNo) ? "❤️" : "🤍"}
+          </button>
         </div>
 
         {/* 본문 */}
