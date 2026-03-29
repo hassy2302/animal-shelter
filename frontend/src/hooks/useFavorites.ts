@@ -31,5 +31,5 @@ export function useFavorites() {
     [favorites]
   );
 
-  return { isFavorite, toggle, count: favorites.size };
+  return { isFavorite, toggle, count: favorites.size, favorites };
 }
