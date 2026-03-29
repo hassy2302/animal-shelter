@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import "./globals.css";
+import Providers from "./Providers";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://animal-shelter-navy.vercel.app"),
@@ -44,7 +45,7 @@ gtag('js', new Date());
 gtag('config', 'G-3Y4321MKJF');`}
         </Script>
       </head>
-      <body className="min-h-screen bg-[var(--bg)]">{children}</body>
+      <body className="min-h-screen bg-[var(--bg)]"><Providers>{children}</Providers></body>
     </html>
   );
 }

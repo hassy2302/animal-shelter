@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import { getAnimalEmoji, formatDate, isNewAnimal } from "@/lib/utils";
-import { useFavorites } from "@/hooks/useFavorites";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import { BASE_URL } from "@/lib/constants";
 import AnimalDetailModal from "./AnimalDetailModal";
 import ShareSheet from "./ShareSheet";

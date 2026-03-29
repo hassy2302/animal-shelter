@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import type { AnimalListResponse } from "@/types/animal";
 import type { AnimalFilters } from "@/types/animal";
 import { useAnimals } from "@/hooks/useAnimals";
-import { useFavorites } from "@/hooks/useFavorites";
+import { useFavorites } from "@/contexts/FavoritesContext";
 import { DEFAULT_FILTERS } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import StatsBar from "@/components/layout/StatsBar";

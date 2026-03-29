@@ -7,7 +7,7 @@ import { getAnimalEmoji, formatDate } from "@/lib/utils";
 import { BASE_URL } from "@/lib/constants";
 import ShareSheet from "./ShareSheet";
 import StateBadge from "./StateBadge";
-import { useFavorites } from "@/hooks/useFavorites";
+import { useFavorites } from "@/contexts/FavoritesContext";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
