@@ -1,10 +1,25 @@
 from fastapi import APIRouter, Depends, Query, Response, HTTPException
+from pydantic import BaseModel
 from app.models.animal import Animal, AnimalListResponse
 from app.services import animal_service
 from app.dependencies import get_cache
 from app.cache.manager import CacheManager
 
 router = APIRouter(prefix="/animals", tags=["animals"])
+
+
+class BatchRequest(BaseModel):
+    notice_nos: list[str]
+
+
+@router.post("/batch", response_model=list[Animal])
+async def get_animals_batch(
+    body: BatchRequest,
+    cache: CacheManager = Depends(get_cache),
+):
+    if not body.notice_nos:
+        return []
+    return await animal_service.get_animals_by_notice_nos(cache, body.notice_nos)
 
 
 @router.get("/by-notice/{notice_no}", response_model=Animal)

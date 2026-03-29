@@ -6,6 +6,8 @@ import type { AnimalListResponse } from "@/types/animal";
 import type { AnimalFilters } from "@/types/animal";
 import { useAnimals } from "@/hooks/useAnimals";
 import { useFavorites } from "@/contexts/FavoritesContext";
+import { fetchAnimalsBatch } from "@/lib/api";
+import type { Animal } from "@/types/animal";
 import { DEFAULT_FILTERS } from "@/lib/constants";
 import Header from "@/components/layout/Header";
 import StatsBar from "@/components/layout/StatsBar";
@@ -24,8 +26,22 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   const [filters, setFilters] = useState<AnimalFilters>({ ...DEFAULT_FILTERS, ...initialFilters });
   const [searchInput, setSearchInput] = useState(initialFilters?.search ?? "");
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
+  const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
   const { data, animals, total, totalPages, fetchedAt, isLoading, error } = useAnimals(filters);
   const { favorites, count: favCount } = useFavorites();
+
+  useEffect(() => {
+    if (!showFavoritesOnly || favorites.size === 0) {
+      setFavoriteAnimals([]);
+      return;
+    }
+    setFavoriteLoading(true);
+    fetchAnimalsBatch([...favorites])
+      .then(setFavoriteAnimals)
+      .catch(() => setFavoriteAnimals([]))
+      .finally(() => setFavoriteLoading(false));
+  }, [showFavoritesOnly, favorites]);
   const pathname = usePathname();
   const isFirstRender = useRef(true);
 
@@ -65,11 +81,12 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   }, [filters, pathname]);
 
   const rawAnimals = data !== undefined ? animals : (initialData?.items ?? []);
-  const displayAnimals = showFavoritesOnly ? rawAnimals.filter((a: { noticeNo: string }) => favorites.has(a.noticeNo)) : rawAnimals;
-  const displayTotal = data !== undefined ? total : (initialData?.total ?? 0);
-  const displayTotalPages = data !== undefined ? totalPages : (initialData?.total_pages ?? 1);
+  const displayAnimals = showFavoritesOnly ? favoriteAnimals : rawAnimals;
+  const displayTotal = showFavoritesOnly ? favoriteAnimals.length : (data !== undefined ? total : (initialData?.total ?? 0));
+  const displayTotalPages = showFavoritesOnly ? 1 : (data !== undefined ? totalPages : (initialData?.total_pages ?? 1));
   const displayFetchedAt = data !== undefined ? fetchedAt : initialData?.fetched_at;
   const activePerPage = filters.per_page ?? 12;
+  const displayLoading = showFavoritesOnly ? favoriteLoading : isLoading;
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
@@ -173,7 +190,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       </div>
 
       {/* 에러 */}
-      {error && !isLoading && (
+      {error && !displayLoading && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <p className="text-4xl mb-4">😿</p>
           <p className="text-base font-semibold text-[var(--text)] mb-1">
@@ -188,10 +205,10 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       )}
 
       {/* 카드 그리드 */}
-      {!error && <AnimalGrid animals={displayAnimals} isLoading={isLoading} />}
+      {!error && <AnimalGrid animals={displayAnimals} isLoading={displayLoading} />}
 
-      {/* 페이지네이션 */}
-      {!error && displayTotalPages > 1 && (
+      {/* 페이지네이션 - 찜 모드에서는 숨김 */}
+      {!error && !showFavoritesOnly && displayTotalPages > 1 && (
         <Pagination
           page={filters.page ?? 1}
           totalPages={displayTotalPages}

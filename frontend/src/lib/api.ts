@@ -27,6 +27,16 @@ export async function fetchAnimal(noticeNo: string): Promise<Animal> {
   return res.json();
 }
 
+export async function fetchAnimalsBatch(noticeNos: string[]): Promise<Animal[]> {
+  const res = await fetch("/api/animals/batch", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ notice_nos: noticeNos }),
+  });
+  if (!res.ok) throw new Error("찜 목록 로드 실패");
+  return res.json();
+}
+
 export async function fetchSido(): Promise<Sido[]> {
   const res = await fetch("/api/regions/sido", { next: { revalidate: 86400 } });
   if (!res.ok) throw new Error("시도 로드 실패");
