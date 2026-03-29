@@ -8,6 +8,7 @@ interface FavoritesContextValue {
   favorites: Set<string>;
   isFavorite: (noticeNo: string) => boolean;
   toggle: (noticeNo: string) => void;
+  cleanup: (validNoticeNos: string[]) => void;
   count: number;
 }
 
@@ -40,8 +41,20 @@ export function FavoritesProvider({ children }: { children: React.ReactNode }) {
     [favorites]
   );
 
+  const cleanup = useCallback((validNoticeNos: string[]) => {
+    const valid = new Set(validNoticeNos);
+    setFavorites((prev) => {
+      const next = new Set([...prev].filter((n) => valid.has(n)));
+      if (next.size === prev.size) return prev;
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify([...next]));
+      } catch {}
+      return next;
+    });
+  }, []);
+
   return (
-    <FavoritesContext.Provider value={{ favorites, isFavorite, toggle, count: favorites.size }}>
+    <FavoritesContext.Provider value={{ favorites, isFavorite, toggle, cleanup, count: favorites.size }}>
       {children}
     </FavoritesContext.Provider>
   );

@@ -29,7 +29,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
   const { data, animals, total, totalPages, fetchedAt, isLoading, error } = useAnimals(filters);
-  const { favorites, count: favCount } = useFavorites();
+  const { favorites, count: favCount, cleanup } = useFavorites();
 
   useEffect(() => {
     if (!showFavoritesOnly || favorites.size === 0) {
@@ -38,10 +38,13 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
     }
     setFavoriteLoading(true);
     fetchAnimalsBatch([...favorites])
-      .then(setFavoriteAnimals)
+      .then((result) => {
+        setFavoriteAnimals(result);
+        cleanup(result.map((a: Animal) => a.noticeNo));
+      })
       .catch(() => setFavoriteAnimals([]))
       .finally(() => setFavoriteLoading(false));
-  }, [showFavoritesOnly, favorites]);
+  }, [showFavoritesOnly, favorites, cleanup]);
   const pathname = usePathname();
   const isFirstRender = useRef(true);
 
