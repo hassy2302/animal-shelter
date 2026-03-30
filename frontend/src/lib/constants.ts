@@ -1,4 +1,4 @@
-export const BASE_URL = "https://animal-shelter-navy.vercel.app";
+export const BASE_URL = "https://hamsoto.kr";
 
 export const UPKIND_DOG = "417000";
 export const UPKIND_CAT = "422400";
