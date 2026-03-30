@@ -98,6 +98,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   }, [filters, pathname]);
 
   const rawAnimals = data !== undefined ? animals : (initialData?.items ?? []);
+  const featuredAnimals = rawAnimals.filter((a: Animal) => a.popfile1 || a.popfile2).slice(0, 8);
   const displayAnimals = showFavoritesOnly ? favoriteAnimals : rawAnimals;
   const displayTotal = showFavoritesOnly ? favoriteAnimals.length : (data !== undefined ? total : (initialData?.total ?? 0));
   const displayTotalPages = showFavoritesOnly ? 1 : (data !== undefined ? totalPages : (initialData?.total_pages ?? 1));
@@ -107,7 +108,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
-      <Header />
+      <Header featuredAnimals={featuredAnimals} />
 
       {/* 신고 안내 배너 */}
       <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] border border-brand-200 rounded-2xl text-center">
