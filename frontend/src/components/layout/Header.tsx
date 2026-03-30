@@ -8,7 +8,8 @@ export default function Header() {
           </h1>
           <p className="text-base text-[var(--muted)] leading-relaxed">
             보호소의 작은 동물들이에요.<br />
-            공고 기간이 지나면 입양 절차가 시작돼요. (공고 및 보호소마다 상이할 수 있어요)<br />
+            공고 기간이 지나면 입양 절차가 시작돼요.<br />
+            <span className="text-sm">(공고 및 보호소마다 상이할 수 있어요)</span><br />
             새 가족이 필요해요.
           </p>
         </div>
