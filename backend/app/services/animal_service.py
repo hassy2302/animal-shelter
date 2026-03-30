@@ -24,16 +24,21 @@ SPECIES_KEYWORDS = {
 KNOWN_KEYWORDS = [kw for kws in SPECIES_KEYWORDS.values() for kw in kws]
 
 
+RODENT_KEYWORDS = ["쥐", "래트", "레트", "rat", "팬시마우스", "팬더마우스", "팬마", "기니피그", "데구"]
+
+
 def _sort_key(a: dict) -> int:
     upkind = a.get("upkind", "")
-    kind = a.get("kindNm", "") + a.get("kindFullNm", "")
+    kind = (a.get("kindNm", "") + a.get("kindFullNm", "")).lower()
     if upkind == UPKIND_ETC and "햄스터" in kind:
         return 0
-    if upkind == UPKIND_ETC:
+    if upkind == UPKIND_ETC and any(kw in kind for kw in RODENT_KEYWORDS):
         return 1
-    if upkind == UPKIND_CAT:
+    if upkind == UPKIND_ETC:
         return 2
-    return 3
+    if upkind == UPKIND_CAT:
+        return 3
+    return 4
 
 
 def _matches_species(kind_nm: str, upkind: str, selected: str) -> bool:
