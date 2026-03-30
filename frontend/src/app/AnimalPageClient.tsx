@@ -106,8 +106,8 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
     <main className="max-w-screen-xl mx-auto px-4 py-8">
       <Header />
 
-      {/* 신고 안내 배너 */}
-      <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] border border-brand-200 rounded-2xl text-center">
+      {/* 신고 안내 배너 - 모바일만 */}
+      <div className="sm:hidden mb-4 px-5 py-3.5 bg-[#FFF1E6] border border-brand-200 rounded-2xl text-center">
         <p className="text-base font-bold text-[#9A3412] mb-2.5">🐾 유기동물을 발견하셨나요?</p>
         <div className="flex items-center justify-center gap-3">
           <a
