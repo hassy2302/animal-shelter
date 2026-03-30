@@ -256,8 +256,8 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
 
       {/* 푸터 */}
       <footer className="mt-12 py-6 border-t border-[var(--border)]">
-        <div className="flex items-center justify-between">
-          <div className="text-center flex-1">
+        <div className="relative flex items-center justify-center">
+          <div className="text-center">
             <p className="text-sm font-semibold text-[var(--text)] mb-1">유기동물을 발견하셨나요?</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
@@ -277,7 +277,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
               </a>
             </div>
           </div>
-          <div className="hidden sm:flex flex-col items-end gap-1.5 shrink-0">
+          <div className="hidden sm:flex flex-col items-end gap-1.5 absolute right-0">
             <span className="text-xs text-[var(--muted)] font-semibold">데이터 출처</span>
             <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
               🏛️ 국가동물보호정보시스템
