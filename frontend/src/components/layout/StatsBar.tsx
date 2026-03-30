@@ -12,6 +12,7 @@ export default function StatsBar({ total, page, totalPages, fetchedAt }: StatsBa
     const d = new Date(fetchedAt);
     d.setMinutes(0, 0, 0);
     return d.toLocaleString("ko-KR", {
+      timeZone: "Asia/Seoul",
       month: "2-digit", day: "2-digit",
       hour: "2-digit", minute: "2-digit", hour12: false,
     });

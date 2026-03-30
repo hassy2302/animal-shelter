@@ -43,6 +43,7 @@ async def list_animals(
     search: str = Query("", description="텍스트 검색"),
     page: int = Query(1, ge=1),
     per_page: int = Query(12, ge=1, le=100),
+    sort: str = Query("latest", description="정렬: latest | oldest"),
     cache: CacheManager = Depends(get_cache),
 ):
     response.headers["Cache-Control"] = "public, s-maxage=3600, stale-while-revalidate=86400"
@@ -55,4 +56,5 @@ async def list_animals(
         search=search,
         page=page,
         per_page=per_page,
+        sort=sort,
     )

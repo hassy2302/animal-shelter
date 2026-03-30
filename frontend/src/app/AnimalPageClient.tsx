@@ -89,6 +89,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
     if (filters.search) params.set("search", filters.search);
     if (filters.page && filters.page > 1) params.set("page", String(filters.page));
     if (filters.per_page) params.set("per_page", String(filters.per_page));
+    if (filters.sort && filters.sort !== "latest") params.set("sort", filters.sort);
     const query = params.toString();
     window.history.replaceState(null, "", pathname + (query ? `?${query}` : ""));
   }, [filters, pathname]);
@@ -177,7 +178,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
 
       <hr className="border-[var(--border)] mb-4" />
 
-      {/* 통계 바 + 페이지당 표시 수 */}
+      {/* 통계 바 + 정렬 + 페이지당 표시 수 */}
       <div className="flex items-start justify-between gap-3 mb-4">
         <StatsBar
           total={displayTotal}
@@ -185,20 +186,37 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
           totalPages={displayTotalPages}
           fetchedAt={displayFetchedAt}
         />
-        <div className="flex items-center gap-1 shrink-0 pt-0.5">
-          {([12, 24, 48] as const).map((n) => (
-            <button
-              key={n}
-              onClick={() => updateFilters({ per_page: n, page: 1 })}
-              className={`text-sm px-2.5 py-1 rounded-lg font-bold transition-colors ${
-                activePerPage === n
-                  ? "bg-brand-500 text-white"
-                  : "bg-white border border-[var(--border)] text-[var(--muted)] hover:border-brand-300"
-              }`}
-            >
-              {n}
-            </button>
-          ))}
+        <div className="flex items-center gap-2 shrink-0 pt-0.5">
+          <div className="flex items-center gap-1">
+            {(["latest", "oldest"] as const).map((v) => (
+              <button
+                key={v}
+                onClick={() => updateFilters({ sort: v, page: 1 })}
+                className={`text-sm px-2.5 py-1 rounded-lg font-bold transition-colors ${
+                  (filters.sort ?? "latest") === v
+                    ? "bg-brand-500 text-white"
+                    : "bg-white border border-[var(--border)] text-[var(--muted)] hover:border-brand-300"
+                }`}
+              >
+                {v === "latest" ? "최신순" : "과거순"}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-1">
+            {([12, 24, 48] as const).map((n) => (
+              <button
+                key={n}
+                onClick={() => updateFilters({ per_page: n, page: 1 })}
+                className={`text-sm px-2.5 py-1 rounded-lg font-bold transition-colors ${
+                  activePerPage === n
+                    ? "bg-brand-500 text-white"
+                    : "bg-white border border-[var(--border)] text-[var(--muted)] hover:border-brand-300"
+                }`}
+              >
+                {n}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 

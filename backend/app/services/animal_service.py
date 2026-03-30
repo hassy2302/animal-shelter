@@ -133,6 +133,7 @@ async def get_animals(
     search: str = "",
     page: int = 1,
     per_page: int = 12,
+    sort: str = "latest",
     force_refresh: bool = False,
 ) -> AnimalListResponse:
     key = CacheManager.animals_key(sido_code, sigungu_code)
@@ -164,6 +165,11 @@ async def get_animals(
         and _matches_species(a.get("kindNm", "") + a.get("kindFullNm", ""), a.get("upkind", ""), species)
         and _matches_search(a, search)
     ]
+
+    # 정렬: 종류 우선순위(1차) + 날짜(2차)
+    # happenDt는 "YYYYMMDD" 형식 → 문자열 비교 가능
+    date_sign = -1 if sort == "latest" else 1
+    filtered.sort(key=lambda a: (_sort_key(a), date_sign * int(a.get("happenDt", "0") or "0")))
 
     total = len(filtered)
     total_pages = max(1, -(-total // per_page))

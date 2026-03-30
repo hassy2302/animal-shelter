@@ -22,4 +22,5 @@ export const DEFAULT_FILTERS = {
   state: "protect" as const,
   species: "전체",
   page: 1,
+  sort: "latest" as const,
 };

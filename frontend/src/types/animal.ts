@@ -38,4 +38,5 @@ export interface AnimalFilters {
   search?: string;
   page?: number;
   per_page?: number;
+  sort?: "latest" | "oldest";
 }
