@@ -27,6 +27,7 @@ function InfoChip({ label, value }: { label: string; value: string }) {
 
 export default function AnimalDetailModal({ animal, onClose }: Props) {
   const [showShare, setShowShare] = useState(false);
+  const [imgError, setImgError] = useState(false);
   const { isFavorite, toggle } = useFavorites();
   const {
     noticeNo, kindNm, upkind, sexCd, age, colorCd, weight,
@@ -104,13 +105,14 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
         <div className="overflow-y-auto flex-1">
           {/* 이미지 */}
           <div className="relative w-full aspect-video bg-gradient-to-br from-brand-100 to-[#FFE8D6]">
-            {imgSrc ? (
+            {imgSrc && !imgError ? (
               <Image
                 src={imgSrc}
                 alt={`${kindNm} - ${careNm} 보호 중`}
                 fill
                 className="object-contain"
                 unoptimized
+                onError={() => setImgError(true)}
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">

@@ -28,6 +28,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false);
   const [favoriteAnimals, setFavoriteAnimals] = useState<Animal[]>([]);
   const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [favoriteError, setFavoriteError] = useState(false);
   const { data, animals, total, totalPages, fetchedAt, isLoading, error } = useAnimals(filters);
   const { favorites, count: favCount, cleanup } = useFavorites();
   const cleanupDone = useRef(false);
@@ -44,15 +45,17 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   useEffect(() => {
     if (!showFavoritesOnly || favorites.size === 0) {
       setFavoriteAnimals([]);
+      setFavoriteError(false);
       return;
     }
     setFavoriteLoading(true);
+    setFavoriteError(false);
     fetchAnimalsBatch([...favorites])
       .then((result) => {
         setFavoriteAnimals(result);
         cleanup(result.map((a: Animal) => a.noticeNo));
       })
-      .catch(() => setFavoriteAnimals([]))
+      .catch(() => { setFavoriteAnimals([]); setFavoriteError(true); })
       .finally(() => setFavoriteLoading(false));
   }, [showFavoritesOnly, favorites, cleanup]);
   const pathname = usePathname();
@@ -128,7 +131,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       </div>
 
       {/* 종류 필터 */}
-      <div className="mb-3">
+      <div className={`mb-3 transition-opacity ${showFavoritesOnly ? "opacity-40 pointer-events-none select-none" : ""}`}>
         <SpeciesPills
           value={filters.species ?? "전체"}
           onChange={(v) => {
@@ -153,12 +156,12 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       </div>
 
       {/* 지역/상태 필터 */}
-      <div className="mb-3">
+      <div className={`mb-3 transition-opacity ${showFavoritesOnly ? "opacity-40 pointer-events-none select-none" : ""}`}>
         <FilterBar filters={filters} onChange={updateFilters} onReset={handleReset} />
       </div>
 
       {/* 텍스트 검색 */}
-      <div className="mb-4 relative">
+      <div className={`mb-4 relative transition-opacity ${showFavoritesOnly ? "opacity-40 pointer-events-none select-none" : ""}`}>
         <input
           type="text"
           value={searchInput}
@@ -179,7 +182,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       <hr className="border-[var(--border)] mb-4" />
 
       {/* 정렬 + 페이지당 표시 수 */}
-      <div className="flex items-center justify-between mb-2">
+      <div className={`flex items-center justify-between mb-2 transition-opacity ${showFavoritesOnly ? "opacity-40 pointer-events-none select-none" : ""}`}>
         <div className="flex items-center gap-1">
           {(["latest", "oldest"] as const).map((v) => (
             <button
@@ -238,7 +241,24 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       )}
 
       {/* 카드 그리드 */}
-      {!error && <AnimalGrid animals={displayAnimals} isLoading={displayLoading} />}
+      {!error && (
+        <AnimalGrid
+          animals={displayAnimals}
+          isLoading={displayLoading}
+          emptyMessage={
+            showFavoritesOnly && favoriteError ? "찜 목록을 불러오지 못했어요" :
+            showFavoritesOnly ? "찜한 동물이 없어요" :
+            filters.search ? "검색 결과가 없어요" :
+            "조건에 맞는 동물이 없습니다"
+          }
+          emptySubMessage={
+            showFavoritesOnly && favoriteError ? "잠시 후 다시 시도해주세요." :
+            showFavoritesOnly ? "동물 카드의 🤍를 눌러 찜해보세요." :
+            filters.search ? `'${filters.search}'에 대한 결과가 없습니다.` :
+            "필터를 변경하거나 초기화해보세요."
+          }
+        />
+      )}
 
       {/* 페이지네이션 - 찜 모드에서는 숨김 */}
       {!error && !showFavoritesOnly && displayTotalPages > 1 && (

@@ -4,9 +4,11 @@ import AnimalCard from "./AnimalCard";
 interface AnimalGridProps {
   animals: Animal[];
   isLoading?: boolean;
+  emptyMessage?: string;
+  emptySubMessage?: string;
 }
 
-export default function AnimalGrid({ animals, isLoading }: AnimalGridProps) {
+export default function AnimalGrid({ animals, isLoading, emptyMessage, emptySubMessage }: AnimalGridProps) {
   if (isLoading && animals.length === 0) {
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -28,8 +30,8 @@ export default function AnimalGrid({ animals, isLoading }: AnimalGridProps) {
     return (
       <div className="text-center py-20 text-[var(--muted)]">
         <div className="text-5xl mb-4">🐾</div>
-        <p className="font-bold text-base">조건에 맞는 동물이 없습니다</p>
-        <p className="text-sm mt-1">필터를 변경하거나 초기화해보세요.</p>
+        <p className="font-bold text-base">{emptyMessage ?? "조건에 맞는 동물이 없습니다"}</p>
+        <p className="text-sm mt-1">{emptySubMessage ?? "필터를 변경하거나 초기화해보세요."}</p>
       </div>
     );
   }
