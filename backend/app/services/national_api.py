@@ -70,10 +70,15 @@ async def fetch_upkind(
     total_pages = -(-total_count // 100)  # ceil division
 
     if total_pages > 1:
-        tasks = [
-            _fetch_page(client, upkind, sido_code, sigungu_code, p)
-            for p in range(2, total_pages + 1)
-        ]
+        semaphore = asyncio.Semaphore(3)
+
+        async def _fetch_limited(p: int) -> dict:
+            async with semaphore:
+                result = await _fetch_page(client, upkind, sido_code, sigungu_code, p)
+                await asyncio.sleep(0.2)
+                return result
+
+        tasks = [_fetch_limited(p) for p in range(2, total_pages + 1)]
         results = await asyncio.gather(*tasks)
         for b in results:
             items.extend(_parse_items(b))
