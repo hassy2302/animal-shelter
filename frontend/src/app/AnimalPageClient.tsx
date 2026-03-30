@@ -255,24 +255,37 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       <ScrollToTop />
 
       {/* 푸터 */}
-      <footer className="mt-12 py-6 border-t border-[var(--border)] text-center">
-        <p className="text-sm font-semibold text-[var(--text)] mb-1">유기동물을 발견하셨나요?</p>
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-          <a
-            href="tel:1577-0954"
-            className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
-          >
-            📞 1577-0954
-          </a>
-          <span className="hidden sm:block w-1 h-1 bg-[#D6D3D1] rounded-full" />
-          <a
-            href="https://www.animal.go.kr"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
-          >
-            🌐 홈페이지 신고
-          </a>
+      <footer className="mt-12 py-6 border-t border-[var(--border)]">
+        <div className="flex items-center justify-between">
+          <div className="text-center flex-1">
+            <p className="text-sm font-semibold text-[var(--text)] mb-1">유기동물을 발견하셨나요?</p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href="tel:1577-0954"
+                className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
+              >
+                📞 1577-0954
+              </a>
+              <span className="hidden sm:block w-1 h-1 bg-[#D6D3D1] rounded-full" />
+              <a
+                href="https://www.animal.go.kr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-base font-bold text-brand-500 hover:text-brand-600 transition-colors"
+              >
+                🌐 홈페이지 신고
+              </a>
+            </div>
+          </div>
+          <div className="hidden sm:flex flex-col items-end gap-1.5 shrink-0">
+            <span className="text-xs text-[var(--muted)] font-semibold">데이터 출처</span>
+            <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
+              🏛️ 국가동물보호정보시스템
+            </span>
+            <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
+              🌆 대전광역시 유기동물공고현황
+            </span>
+          </div>
         </div>
       </footer>
     </main>

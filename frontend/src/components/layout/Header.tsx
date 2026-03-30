@@ -13,7 +13,7 @@ export default function Header() {
             새 가족이 필요해요.
           </p>
         </div>
-        <div className="flex flex-col items-start sm:items-end gap-1.5 shrink-0">
+        <div className="flex sm:hidden flex-col items-start gap-1.5 shrink-0">
           <span className="text-xs text-[var(--muted)] font-semibold">데이터 출처</span>
           <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
             🏛️ 국가동물보호정보시스템
