@@ -45,6 +45,7 @@
 - **Android 앱:** Capacitor + Google Play (내부 테스트 중)
 - **모니터링:** Sentry (프론트엔드 + 백엔드 에러 트래킹)
 - **분석:** Google Analytics 4
+- **SEO:** 구글 서치콘솔 + 네이버 서치어드바이저 등록
 
 ---
 
