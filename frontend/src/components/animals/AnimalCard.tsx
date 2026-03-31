@@ -9,6 +9,7 @@ import { BASE_URL } from "@/lib/constants";
 import AnimalDetailModal from "./AnimalDetailModal";
 import ShareSheet from "./ShareSheet";
 import StateBadge from "./StateBadge";
+import { useRecentlyViewed } from "@/contexts/RecentlyViewedContext";
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 
@@ -25,6 +26,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const [showModal, setShowModal] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const { isFavorite, toggle } = useFavorites();
+  const { addRecentlyViewed } = useRecentlyViewed();
   const isNew = isNewAnimal(happenDt);
 
   const shareUrl = noticeNo
@@ -134,7 +136,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
         {/* 버튼 */}
         <div className="flex gap-1.5 px-3 pb-3 mt-auto">
           <button
-            onClick={() => setShowModal(true)}
+            onClick={() => { setShowModal(true); addRecentlyViewed(noticeNo); }}
             aria-label={`${kindNm} 상세보기`}
             className="flex-1 text-center text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 rounded-full bg-brand-bg text-brand-500 border border-brand-300 hover:bg-brand-200 transition-colors whitespace-nowrap"
           >
