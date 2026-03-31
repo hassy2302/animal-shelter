@@ -101,15 +101,19 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   const [marqueeAnimals, setMarqueeAnimals] = useState<Animal[]>([]);
 
   useEffect(() => {
-    fetchAnimals({ per_page: 1, page: 1, state: "protect", species: "기타" })
+    fetchAnimals({ per_page: 48, page: 1, state: "protect" })
       .then((res) => {
         const totalPages = res.total_pages;
-        const pages = Array.from({ length: 3 }, () =>
-          Math.floor(Math.random() * totalPages) + 1
-        );
-        return Promise.all(
-          pages.map((p) => fetchAnimals({ per_page: 48, page: p, state: "protect", species: "기타" }))
-        );
+        const pageSet = new Set<number>();
+        pageSet.add(1);
+        while (pageSet.size < Math.min(3, totalPages)) {
+          pageSet.add(Math.floor(Math.random() * totalPages) + 1);
+        }
+        const extraPages = [...pageSet].filter((p) => p !== 1);
+        return Promise.all([
+          Promise.resolve(res),
+          ...extraPages.map((p) => fetchAnimals({ per_page: 48, page: p, state: "protect" })),
+        ]);
       })
       .then((results) => {
         const all = results.flatMap((r) => r.items);
@@ -117,7 +121,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
         const unique = all.filter((a: Animal) => {
           if (seen.has(a.noticeNo)) return false;
           seen.add(a.noticeNo);
-          return a.popfile1 || a.popfile2;
+          return (a.upkind !== "417000" && a.upkind !== "422400") && (a.popfile1 || a.popfile2);
         });
         setMarqueeAnimals(unique.sort(() => Math.random() - 0.5).slice(0, 16));
       })
