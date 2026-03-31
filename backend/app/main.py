@@ -1,6 +1,7 @@
 import logging
 from contextlib import asynccontextmanager
 import asyncio
+import sentry_sdk
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.config import settings
@@ -9,6 +10,12 @@ from app.dependencies import set_cache
 from app.api.router import router
 from app.scheduler.jobs import scheduler, setup_scheduler
 from app.services import animal_service
+
+sentry_sdk.init(
+    dsn="https://d7ea3f2c258b44459efb2a99d67c7dfe@o4511137869463552.ingest.us.sentry.io/4511137880211456",
+    environment=settings.ENV,
+    traces_sample_rate=0.2,
+)
 
 logging.basicConfig(level=settings.LOG_LEVEL)
 logger = logging.getLogger(__name__)
