@@ -3,7 +3,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from "react";
 
 const STORAGE_KEY = "animal-recently-viewed";
-const MAX_COUNT = 10;
+const MAX_COUNT = 12;
 
 interface RecentlyViewedContextValue {
   recentlyViewed: string[];

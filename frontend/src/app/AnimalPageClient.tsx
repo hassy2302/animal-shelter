@@ -214,7 +214,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
                 : "bg-white dark:bg-[#292524] text-[var(--muted)] border-[var(--border)] hover:border-blue-300"
             }`}
           >
-            {showRecentOnly ? "🕐 최근 본 동물만" : `🕐 최근 본 동물 (${recentCount})`}
+            {showRecentOnly ? "🕐 최근 본 동물만" : "🕐 최근 본 동물"}
           </button>
         )}
       </div>
