@@ -35,7 +35,7 @@
 
 ### Backend
 - **FastAPI** — 비동기 REST API
-- **Redis** — 캐시 레이어 (in-memory 폴백 지원)
+- **Redis (Upstash)** — 캐시 레이어 (in-memory 폴백 지원)
 - **APScheduler** — 매시간 캐시 워밍
 - **httpx** — 외부 API 비동기 호출 (동시 요청 수 제한으로 429 방지)
 
@@ -43,6 +43,8 @@
 - **Frontend:** Vercel + 커스텀 도메인 (hamsoto.kr, Vercel DNS)
 - **Backend:** Render (Docker)
 - **Android 앱:** Capacitor + Google Play (내부 테스트 중)
+- **모니터링:** Sentry (프론트엔드 + 백엔드 에러 트래킹)
+- **분석:** Google Analytics 4
 
 ---
 
@@ -89,6 +91,7 @@ ENV=development
 ```env
 API_BASE_URL=http://localhost:8000
 NEXT_PUBLIC_KAKAO_JS_KEY=카카오_JS키
+SENTRY_AUTH_TOKEN=Sentry_인증토큰
 ```
 
 ### Backend 실행
