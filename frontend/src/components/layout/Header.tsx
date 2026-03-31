@@ -34,17 +34,17 @@ export default function Header({ featuredAnimals = [] }: HeaderProps) {
 
           {/* 오른쪽: 무한 흐르는 이미지 (PC만) */}
           {items.length > 0 && (
-            <div className="hidden sm:block overflow-hidden w-56 shrink-0 rounded-xl">
+            <div className="hidden sm:block overflow-hidden w-72 shrink-0 rounded-xl">
               <div
                 className="flex gap-2 animate-marquee"
-                style={{ width: `${items.length * 88}px` }}
+                style={{ width: `${items.length * 120}px` }}
               >
                 {items.map((animal, i) => (
                   <button
                     key={i}
                     onClick={() => setSelected(animal)}
                     aria-label={`${animal.kindNm} 공고 보기`}
-                    className="relative w-20 h-20 rounded-xl overflow-hidden shrink-0 border-2 border-white/70 shadow-sm hover:scale-105 hover:border-brand-300 transition-transform duration-200"
+                    className="relative w-28 h-28 rounded-xl overflow-hidden shrink-0 border-2 border-white/70 shadow-sm hover:scale-105 hover:border-brand-300 transition-transform duration-200"
                   >
                     <Image
                       src={animal.popfile1 || animal.popfile2 || ""}

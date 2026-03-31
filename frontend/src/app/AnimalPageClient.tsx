@@ -6,7 +6,7 @@ import type { AnimalListResponse } from "@/types/animal";
 import type { AnimalFilters } from "@/types/animal";
 import { useAnimals } from "@/hooks/useAnimals";
 import { useFavorites } from "@/contexts/FavoritesContext";
-import { fetchAnimalsBatch } from "@/lib/api";
+import { fetchAnimalsBatch, fetchAnimals } from "@/lib/api";
 import type { Animal } from "@/types/animal";
 import { DEFAULT_FILTERS } from "@/lib/constants";
 import Header from "@/components/layout/Header";
@@ -98,7 +98,16 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   }, [filters, pathname]);
 
   const rawAnimals = data !== undefined ? animals : (initialData?.items ?? []);
-  const featuredAnimals = rawAnimals.filter((a: Animal) => a.popfile1 || a.popfile2).slice(0, 8);
+  const [marqueeAnimals, setMarqueeAnimals] = useState<Animal[]>([]);
+
+  useEffect(() => {
+    fetchAnimals({ per_page: 48, page: 1, state: "protect" })
+      .then((res) => {
+        const withImages = res.items.filter((a: Animal) => a.popfile1 || a.popfile2);
+        setMarqueeAnimals(withImages.sort(() => Math.random() - 0.5).slice(0, 16));
+      })
+      .catch(() => {});
+  }, []);
   const displayAnimals = showFavoritesOnly ? favoriteAnimals : rawAnimals;
   const displayTotal = showFavoritesOnly ? favoriteAnimals.length : (data !== undefined ? total : (initialData?.total ?? 0));
   const displayTotalPages = showFavoritesOnly ? 1 : (data !== undefined ? totalPages : (initialData?.total_pages ?? 1));
@@ -108,7 +117,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
 
   return (
     <main className="max-w-screen-xl mx-auto px-4 py-8">
-      <Header featuredAnimals={featuredAnimals} />
+      <Header featuredAnimals={marqueeAnimals} />
 
       {/* 신고 안내 배너 */}
       <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] border border-brand-200 rounded-2xl text-center">
