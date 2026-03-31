@@ -4,9 +4,15 @@ import { buildApiUrl } from "./utils";
 
 export async function fetchAnimals(filters: AnimalFilters): Promise<AnimalListResponse> {
   const url = buildApiUrl("/api/animals", filters as Record<string, unknown>);
-  const res = await fetch(url, { next: { revalidate: 0 } });
-  if (!res.ok) throw new Error(`동물 데이터 로드 실패: ${res.status}`);
-  return res.json();
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), 8_000);
+  try {
+    const res = await fetch(url, { next: { revalidate: 0 }, signal: controller.signal });
+    if (!res.ok) throw new Error(`동물 데이터 로드 실패: ${res.status}`);
+    return res.json();
+  } finally {
+    clearTimeout(timer);
+  }
 }
 
 export async function refreshAnimals(
