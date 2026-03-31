@@ -19,8 +19,8 @@ const nextConfig: NextConfig = {
 };
 
 export default withSentryConfig(nextConfig, {
-  org: "hamster",
-  project: "animal-shelter-frontend",
+  org: "hassy",
+  project: "javascript-nextjs",
   silent: true,
   telemetry: false,
 });

@@ -49,7 +49,11 @@ class CacheManager:
             return
         try:
             import redis.asyncio as aioredis
-            self._redis = aioredis.from_url(self._redis_url, decode_responses=True)
+            self._redis = aioredis.from_url(
+                self._redis_url,
+                decode_responses=True,
+                ssl_cert_reqs=None,
+            )
             await self._redis.ping()
             logger.info("Redis 연결 성공")
         except Exception as e:
