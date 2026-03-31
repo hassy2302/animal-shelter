@@ -123,7 +123,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
           seen.add(a.noticeNo);
           return (a.upkind !== "417000" && a.upkind !== "422400") && (a.popfile1 || a.popfile2);
         });
-        setMarqueeAnimals(unique.sort(() => Math.random() - 0.5).slice(0, 16));
+        setMarqueeAnimals(unique.sort(() => Math.random() - 0.5).slice(0, 32));
       })
       .catch(() => {});
   }, []);
