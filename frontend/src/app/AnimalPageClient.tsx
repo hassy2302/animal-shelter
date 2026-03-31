@@ -326,6 +326,15 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
               </a>
             </div>
           </div>
+          <div className="hidden sm:flex flex-col items-start gap-1.5 absolute left-0">
+            <span className="text-xs text-[var(--muted)] font-semibold">문의</span>
+            <a
+              href="mailto:hassy2302@gmail.com"
+              className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold hover:text-brand-500 transition-colors"
+            >
+              ✉️ hassy2302@gmail.com
+            </a>
+          </div>
           <div className="hidden sm:flex flex-col items-end gap-1.5 absolute right-0">
             <span className="text-xs text-[var(--muted)] font-semibold">데이터 출처</span>
             <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
