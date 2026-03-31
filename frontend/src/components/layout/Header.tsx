@@ -37,7 +37,7 @@ export default function Header({ featuredAnimals = [] }: HeaderProps) {
             <div className="hidden sm:block overflow-hidden w-1/2 shrink-0 rounded-xl">
               <div
                 className="flex gap-3 animate-marquee"
-                style={{ width: `${items.length * 156}px` }}
+                style={{ width: `${items.length * 156}px`, willChange: "transform" }}
               >
                 {items.map((animal, i) => (
                   <button
