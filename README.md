@@ -40,8 +40,9 @@
 - **httpx** — 외부 API 비동기 호출 (동시 요청 수 제한으로 429 방지)
 
 ### 인프라
-- **Frontend:** Vercel + 커스텀 도메인 (hamsoto.kr, Cloudflare DNS)
+- **Frontend:** Vercel + 커스텀 도메인 (hamsoto.kr, Vercel DNS)
 - **Backend:** Render (Docker)
+- **Android 앱:** Capacitor + Google Play (내부 테스트 중)
 
 ---
 
@@ -191,5 +192,16 @@ API_BASE_URL=https://[render-서비스명].onrender.com
 NEXT_PUBLIC_KAKAO_JS_KEY=...
 ```
 
-커스텀 도메인 hamsoto.kr은 Cloudflare DNS를 통해 연결.
-Cloudflare SSL 설정: **Full** 모드 권장 (Flexible 시 리다이렉트 루프 발생).
+커스텀 도메인 hamsoto.kr은 Vercel DNS를 통해 연결.
+
+### Android 앱 (animal-shelter-native)
+
+Capacitor 기반 Android 앱. 웹과 동일한 Next.js 코드를 static export 후 WebView로 래핑.
+
+```bash
+cd animal-shelter-native
+npm run build
+npx cap sync android
+```
+
+업데이트 배포 시 `android/app/build.gradle`에서 `versionCode`를 1 올리고 Android Studio에서 AAB 빌드 후 Play Console에 업로드.
