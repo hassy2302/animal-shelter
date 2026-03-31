@@ -19,7 +19,7 @@ const config: Config = {
         sans: ["Pretendard", "-apple-system", "BlinkMacSystemFont", "Segoe UI", "sans-serif"],
       },
       animation: {
-        marquee: "marquee 14s linear infinite",
+        marquee: "marquee 28s linear infinite",
       },
       keyframes: {
         marquee: {
