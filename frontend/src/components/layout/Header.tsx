@@ -19,8 +19,8 @@ export default function Header({ featuredAnimals = [] }: HeaderProps) {
     <>
       <div className="bg-gradient-to-br from-brand-100 via-[#FFF8F4] to-[#EEF4FF] border border-brand-200 rounded-2xl overflow-hidden mb-4">
         <div className="flex items-center gap-6 px-8 py-6">
-          {/* 왼쪽: 서비스 이름 + 설명 */}
-          <div className="flex-1 min-w-0">
+          {/* 왼쪽: 서비스 이름 + 설명 (고정 너비) */}
+          <div className="shrink-0 w-56">
             <h1 className="text-2xl sm:text-3xl font-black text-[var(--text)] tracking-tight mb-1.5">
               🐾 유기 동물 입양 공고
             </h1>
@@ -34,17 +34,17 @@ export default function Header({ featuredAnimals = [] }: HeaderProps) {
 
           {/* 오른쪽: 무한 흐르는 이미지 (PC만) */}
           {items.length > 0 && (
-            <div className="hidden sm:block overflow-hidden w-72 shrink-0 rounded-xl">
+            <div className="hidden sm:block overflow-hidden flex-1 min-w-0 rounded-xl">
               <div
-                className="flex gap-2 animate-marquee"
-                style={{ width: `${items.length * 120}px` }}
+                className="flex gap-3 animate-marquee"
+                style={{ width: `${items.length * 156}px` }}
               >
                 {items.map((animal, i) => (
                   <button
                     key={i}
                     onClick={() => setSelected(animal)}
                     aria-label={`${animal.kindNm} 공고 보기`}
-                    className="relative w-28 h-28 rounded-xl overflow-hidden shrink-0 border-2 border-white/70 shadow-sm hover:scale-105 hover:border-brand-300 transition-transform duration-200"
+                    className="relative w-36 h-36 rounded-xl overflow-hidden shrink-0 border-2 border-white/70 shadow-sm hover:scale-105 hover:border-brand-300 transition-transform duration-200"
                   >
                     <Image
                       src={animal.popfile1 || animal.popfile2 || ""}
