@@ -65,7 +65,7 @@ function PageBtn({
         "min-w-[40px] h-10 px-2 rounded-lg text-base font-semibold border transition-colors",
         active
           ? "bg-brand-bg text-brand-500 border-brand-300"
-          : "bg-white text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",
+          : "bg-white dark:bg-[#292524] text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",
         disabled && "opacity-30 cursor-not-allowed hover:border-[var(--border)] hover:text-[var(--muted)]",
       )}
     >

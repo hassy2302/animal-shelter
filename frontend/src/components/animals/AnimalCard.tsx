@@ -35,9 +35,9 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
   return (
     <>
-      <div className="bg-white border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm card-hover flex flex-col">
+      <div className="bg-white dark:bg-[#292524] border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm card-hover flex flex-col">
         {/* 이미지 */}
-        <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6]">
+        <div className="relative w-full aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6] dark:from-[#3D1A08] dark:to-[#431407]">
           {imgSrc && !imgError ? (
             <Image
               src={imgSrc}
@@ -68,7 +68,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
           <button
             onClick={() => toggle(noticeNo)}
             aria-label={isFavorite(noticeNo) ? "찜 해제" : "찜하기"}
-            className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 shadow-sm hover:bg-white transition-colors"
+            className="absolute top-2 right-2 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 dark:bg-black/60 shadow-sm hover:bg-white dark:hover:bg-black/80 transition-colors"
           >
             {isFavorite(noticeNo) ? "❤️" : "🤍"}
           </button>
@@ -76,12 +76,12 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
         {/* 본문 */}
         <div className="p-3 flex flex-col flex-1">
-          <p className="text-xs text-[#B8B4AF] mb-1">📋 {noticeNo}</p>
+          <p className="text-xs text-[#B8B4AF] dark:text-[#78716C] mb-1">📋 {noticeNo}</p>
 
           {/* 제목 */}
           <div className="flex items-center gap-1.5 flex-wrap mb-2">
             {source === "daejeon" && (
-              <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">
+              <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] dark:bg-[#422006] dark:text-[#FBBF24] dark:border-[#92400E]">
                 대전시
               </span>
             )}
@@ -97,10 +97,10 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             {colorCd && <span className="chip chip-color">🎨 {colorCd}</span>}
           </div>
 
-          <hr className="border-t border-[#F5F0EB] my-1.5" />
+          <hr className="border-t border-[#F5F0EB] dark:border-[#44403C] my-1.5" />
 
           {/* 위치 */}
-          <div className="text-sm text-[#57534E] leading-relaxed">
+          <div className="text-sm text-[#57534E] dark:text-[#A8A29E] leading-relaxed">
             🏠 <b className="text-[var(--text)]">{careNm}</b>
             {careTel && <><br />📞 <a href={`tel:${careTel}`} className="text-brand-500 font-semibold">{careTel}</a></>}
             <br />📍 {orgNm}
@@ -111,13 +111,13 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
           {(happenDt || noticeEdt) && (
             <div className="flex flex-col sm:flex-row gap-2 mt-2">
               {happenDt && (
-                <div className="flex-1 bg-[#F8F7F5] rounded-lg px-2 py-1.5 text-center">
+                <div className="flex-1 bg-[#F8F7F5] dark:bg-[#3D3935] rounded-lg px-2 py-1.5 text-center">
                   <div className="text-xs text-[var(--muted)] font-medium mb-0.5">🚑 구조일</div>
                   <div className="text-xs font-bold text-[var(--text)]">{formatDate(happenDt)}</div>
                 </div>
               )}
               {noticeEdt && (
-                <div className="flex-1 bg-[#FFF7ED] rounded-lg px-2 py-1.5 text-center">
+                <div className="flex-1 bg-[#FFF7ED] dark:bg-[#3D1A08] rounded-lg px-2 py-1.5 text-center">
                   <div className="text-xs text-[var(--muted)] font-medium mb-0.5">📅 공고 마감</div>
                   <div className="text-xs font-bold text-brand-500">{formatDate(noticeEdt)}</div>
                 </div>
@@ -127,7 +127,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
           {/* 특이사항 */}
           {specialMark && (
-            <p className="text-xs text-[var(--muted)] bg-[#FAFAF8] rounded-lg px-2.5 py-1.5 mt-1.5 line-clamp-3">
+            <p className="text-xs text-[var(--muted)] bg-[#FAFAF8] dark:bg-[#3D3935] rounded-lg px-2.5 py-1.5 mt-1.5 line-clamp-3">
               💬 {specialMark}
             </p>
           )}
@@ -146,7 +146,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             <button
               onClick={() => setShowShare(true)}
               aria-label={`${kindNm} 공유`}
-              className="flex-1 text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors whitespace-nowrap"
+              className="flex-1 text-xs sm:text-sm font-bold px-2 sm:px-3 py-1.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] dark:bg-[#3D3935] dark:text-[#A8A29E] dark:border-[#44403C] dark:hover:bg-[#57534E] transition-colors whitespace-nowrap"
             >
               🔗 공유
             </button>

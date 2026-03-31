@@ -21,7 +21,7 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
               "text-base font-semibold px-3 py-1.5 rounded-full border transition-colors",
               value === opt
                 ? "bg-brand-bg text-brand-500 border-brand-300"
-                : "bg-white text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",
+                : "bg-white dark:bg-[#292524] text-[var(--muted)] border-[var(--border)] hover:border-brand-200 hover:text-brand-500",
             )}
           >
             {opt}

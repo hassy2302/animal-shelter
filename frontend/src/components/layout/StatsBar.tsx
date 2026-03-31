@@ -22,7 +22,7 @@ export default function StatsBar({ total, page, totalPages, fetchedAt }: StatsBa
     <div>
       <div className="flex items-center gap-3">
         <span className="font-bold text-base text-[var(--text)]">총 {total.toLocaleString()}건</span>
-        <span className="w-1 h-1 bg-[#D6D3D1] rounded-full" />
+        <span className="w-1 h-1 bg-[#D6D3D1] dark:bg-[#57534E] rounded-full" />
         <span className="text-sm text-[var(--muted)]">{page} / {totalPages} 페이지</span>
       </div>
       {fetchedStr && (

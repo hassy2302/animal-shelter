@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import type { Animal } from "@/types/animal";
 import AnimalDetailModal from "@/components/animals/AnimalDetailModal";
+import { useTheme } from "@/contexts/ThemeContext";
 
 interface HeaderProps {
   featuredAnimals?: Animal[];
@@ -11,13 +12,21 @@ interface HeaderProps {
 
 export default function Header({ featuredAnimals = [] }: HeaderProps) {
   const [selected, setSelected] = useState<Animal | null>(null);
+  const { theme, toggle } = useTheme();
   const items = featuredAnimals.length > 0
     ? [...featuredAnimals, ...featuredAnimals]
     : [];
 
   return (
     <>
-      <div className="bg-gradient-to-br from-brand-100 via-[#FFF8F4] to-[#EEF4FF] border border-brand-200 rounded-2xl overflow-hidden mb-4">
+      <div className="relative bg-gradient-to-br from-brand-100 via-[#FFF8F4] to-[#EEF4FF] dark:from-[#292524] dark:via-[#1C1917] dark:to-[#1E2A3A] border border-brand-200 dark:border-[#44403C] rounded-2xl overflow-hidden mb-4">
+        <button
+          onClick={toggle}
+          aria-label={theme === "dark" ? "라이트 모드로 전환" : "다크 모드로 전환"}
+          className="absolute top-3 right-3 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-white/70 dark:bg-black/40 hover:bg-white dark:hover:bg-black/60 transition-colors text-base"
+        >
+          {theme === "dark" ? "☀️" : "🌙"}
+        </button>
         <div className="flex items-center gap-6 px-8 py-6">
           {/* 왼쪽: 서비스 이름 + 설명 */}
           <div className="flex-1 min-w-0">
@@ -44,7 +53,7 @@ export default function Header({ featuredAnimals = [] }: HeaderProps) {
                     key={i}
                     onClick={() => setSelected(animal)}
                     aria-label={`${animal.kindNm} 공고 보기`}
-                    className="relative w-36 h-36 rounded-xl overflow-hidden shrink-0 border-2 border-white/70 shadow-sm hover:scale-105 hover:border-brand-300 transition-transform duration-200"
+                    className="relative w-36 h-36 rounded-xl overflow-hidden shrink-0 border-2 border-white/70 dark:border-white/20 shadow-sm hover:scale-105 hover:border-brand-300 transition-transform duration-200"
                   >
                     <Image
                       src={animal.popfile1 || animal.popfile2 || ""}

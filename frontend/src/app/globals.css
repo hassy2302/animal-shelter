@@ -14,6 +14,17 @@
     --brand-border: #FDDCB5;
   }
 
+  .dark {
+    --bg: #1C1917;
+    --card: #292524;
+    --border: #44403C;
+    --text: #FAFAF8;
+    --muted: #A8A29E;
+    --brand: #C2410C;
+    --brand-bg: #431407;
+    --brand-border: #7C2D12;
+  }
+
   html { scroll-behavior: smooth; }
 
   body {
@@ -26,13 +37,13 @@
 
 @layer components {
   .chip {
-    @apply text-xs font-semibold bg-[#F5F4F2] text-[#57534E] px-2 py-0.5 rounded-full whitespace-nowrap;
+    @apply text-xs font-semibold bg-[#F5F4F2] text-[#57534E] dark:bg-[#3D3935] dark:text-[#A8A29E] px-2 py-0.5 rounded-full whitespace-nowrap;
   }
   .chip-color {
-    @apply bg-[#FFF7ED] text-[#9A3412];
+    @apply bg-[#FFF7ED] text-[#9A3412] dark:bg-[#3D1A08] dark:text-[#FB923C];
   }
   .select-field {
-    @apply text-base bg-white border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)]
+    @apply text-base bg-white dark:bg-[#292524] border border-[var(--border)] rounded-lg px-3 py-2 text-[var(--text)]
       focus:outline-none focus:ring-1 focus:ring-brand-300 min-w-[120px] cursor-pointer;
   }
 }

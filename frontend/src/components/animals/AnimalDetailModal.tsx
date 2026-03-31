@@ -18,7 +18,7 @@ interface Props {
 
 function InfoChip({ label, value }: { label: string; value: string }) {
   return (
-    <div className="bg-[#F8F7F5] rounded-xl px-3 py-2">
+    <div className="bg-[#F8F7F5] dark:bg-[#3D3935] rounded-xl px-3 py-2">
       <div className="text-xs text-[var(--muted)] mb-0.5">{label}</div>
       <div className="text-sm font-bold text-[var(--text)]">{value}</div>
     </div>
@@ -73,12 +73,12 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
       />
 
       {/* 모달 패널 */}
-      <div className="relative bg-white w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl overflow-hidden max-h-[90vh] flex flex-col shadow-xl">
+      <div className="relative bg-white dark:bg-[#292524] w-full sm:max-w-lg rounded-t-3xl sm:rounded-2xl overflow-hidden max-h-[90vh] flex flex-col shadow-xl">
         {/* 헤더 */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
           <div className="flex items-center gap-2 flex-wrap">
             {source === "daejeon" && (
-              <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A]">대전시</span>
+              <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] dark:bg-[#422006] dark:text-[#FBBF24] dark:border-[#92400E]">대전시</span>
             )}
             <h2 className="text-lg font-extrabold text-[var(--text)]">{kindNm}</h2>
             <StateBadge state={processState} />
@@ -87,14 +87,14 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
             <button
               onClick={() => toggle(noticeNo)}
               aria-label={isFavorite(noticeNo) ? "찜 해제" : "찜하기"}
-              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F5F4F2] transition-colors text-lg"
+              className="w-8 h-8 flex items-center justify-center rounded-full hover:bg-[#F5F4F2] dark:hover:bg-[#3D3935] transition-colors text-lg"
             >
               {isFavorite(noticeNo) ? "❤️" : "🤍"}
             </button>
             <button
               onClick={onClose}
               aria-label="닫기"
-              className="w-8 h-8 flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] text-xl transition-colors rounded-full hover:bg-[#F5F4F2]"
+              className="w-8 h-8 flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] text-xl transition-colors rounded-full hover:bg-[#F5F4F2] dark:hover:bg-[#3D3935]"
             >
               ✕
             </button>
@@ -104,7 +104,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
         {/* 스크롤 영역 */}
         <div className="overflow-y-auto flex-1">
           {/* 이미지 */}
-          <div className="relative w-full aspect-video bg-gradient-to-br from-brand-100 to-[#FFE8D6]">
+          <div className="relative w-full aspect-video bg-gradient-to-br from-brand-100 to-[#FFE8D6] dark:from-[#3D1A08] dark:to-[#431407]">
             {imgSrc && !imgError ? (
               <Image
                 src={imgSrc}
@@ -123,7 +123,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
 
           <div className="p-5 space-y-4">
             {/* 공고번호 */}
-            <p className="text-xs text-[#B8B4AF]">📋 {noticeNo}</p>
+            <p className="text-xs text-[#B8B4AF] dark:text-[#78716C]">📋 {noticeNo}</p>
 
             {/* 기본 정보 칩 */}
             <div className="grid grid-cols-2 gap-2">
@@ -141,7 +141,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
               {careTel && (
                 <a
                   href={`tel:${careTel}`}
-                  className="flex items-center gap-2 w-fit px-3 py-1.5 rounded-full bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3] font-bold text-sm hover:bg-[#FFE4E6] transition-colors"
+                  className="flex items-center gap-2 w-fit px-3 py-1.5 rounded-full bg-[#FFF1F2] text-[#BE123C] border border-[#FECDD3] font-bold text-sm hover:bg-[#FFE4E6] dark:bg-[#4C0519] dark:text-[#FB7185] dark:border-[#9F1239] dark:hover:bg-[#5C0520] transition-colors"
                 >
                   📞 {careTel}
                 </a>
@@ -154,13 +154,13 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
             {(happenDt || noticeEdt) && (
               <div className="flex flex-col sm:flex-row gap-2">
                 {happenDt && (
-                  <div className="flex-1 bg-[#F8F7F5] rounded-xl px-3 py-2.5 text-center">
+                  <div className="flex-1 bg-[#F8F7F5] dark:bg-[#3D3935] rounded-xl px-3 py-2.5 text-center">
                     <div className="text-xs text-[var(--muted)] mb-0.5">🚑 구조일</div>
                     <div className="text-sm font-bold text-[var(--text)]">{formatDate(happenDt)}</div>
                   </div>
                 )}
                 {noticeEdt && (
-                  <div className="flex-1 bg-[#FFF7ED] rounded-xl px-3 py-2.5 text-center">
+                  <div className="flex-1 bg-[#FFF7ED] dark:bg-[#3D1A08] rounded-xl px-3 py-2.5 text-center">
                     <div className="text-xs text-[var(--muted)] mb-0.5">📅 공고 마감</div>
                     <div className="text-sm font-bold text-brand-500">{formatDate(noticeEdt)}</div>
                   </div>
@@ -170,7 +170,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
 
             {/* 특이사항 */}
             {specialMark && (
-              <div className="bg-[#FAFAF8] rounded-xl px-3 py-3">
+              <div className="bg-[#FAFAF8] dark:bg-[#292524] rounded-xl px-3 py-3">
                 <p className="text-xs font-bold text-[var(--muted)] mb-1">💬 특이사항</p>
                 <p className="text-sm text-[var(--text)] leading-relaxed">{specialMark}</p>
               </div>
@@ -195,7 +195,7 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
               <button
                 onClick={() => setShowShare(true)}
                 aria-label={`${kindNm} 공유`}
-                className="flex-1 text-sm font-bold px-4 py-2.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
+                className="flex-1 text-sm font-bold px-4 py-2.5 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] dark:bg-[#3D3935] dark:text-[#A8A29E] dark:border-[#44403C] dark:hover:bg-[#57534E] transition-colors"
               >
                 🔗 공유
               </button>

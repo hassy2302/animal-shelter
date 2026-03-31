@@ -36,7 +36,6 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
     const appKey = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 
     if (!Kakao || !appKey) {
-      // SDK 미로드 시 Web Share API로 폴백
       if (typeof navigator.share === "function") {
         navigator.share({ title: title ?? "유기동물 공고", url }).catch(() => {});
       } else {
@@ -94,11 +93,11 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
     >
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
       <div
-        className="relative bg-white w-full sm:max-w-xs rounded-t-3xl sm:rounded-2xl shadow-xl px-5 pt-5 pb-8 sm:pb-5"
+        className="relative bg-white dark:bg-[#292524] w-full sm:max-w-xs rounded-t-3xl sm:rounded-2xl shadow-xl px-5 pt-5 pb-8 sm:pb-5"
         onClick={(e) => e.stopPropagation()}
       >
         {/* 핸들 (모바일) */}
-        <div className="sm:hidden w-10 h-1 bg-[#D6D3D1] rounded-full mx-auto mb-4" />
+        <div className="sm:hidden w-10 h-1 bg-[#D6D3D1] dark:bg-[#57534E] rounded-full mx-auto mb-4" />
 
         {/* 헤더 */}
         <div className="flex items-center justify-between mb-6">
@@ -106,7 +105,7 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
           <button
             onClick={onClose}
             aria-label="닫기"
-            className="w-8 h-8 flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] text-xl transition-colors rounded-full hover:bg-[#F5F4F2]"
+            className="w-8 h-8 flex items-center justify-center text-[var(--muted)] hover:text-[var(--text)] text-xl transition-colors rounded-full hover:bg-[#F5F4F2] dark:hover:bg-[#3D3935]"
           >
             ✕
           </button>
@@ -133,7 +132,7 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
           {/* 더보기 */}
           {typeof navigator !== "undefined" && typeof navigator.share === "function" && (
             <button onClick={handleMore} className="flex flex-col items-center gap-2 group">
-              <div className="w-14 h-14 rounded-2xl bg-[#F5F4F2] flex items-center justify-center text-2xl shadow-sm group-hover:bg-[#ECEAE8] transition-all">
+              <div className="w-14 h-14 rounded-2xl bg-[#F5F4F2] dark:bg-[#3D3935] flex items-center justify-center text-2xl shadow-sm group-hover:bg-[#ECEAE8] dark:group-hover:bg-[#57534E] transition-all">
                 ···
               </div>
               <span className="text-xs font-semibold text-[var(--text)]">더보기</span>
@@ -144,7 +143,9 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
           <button onClick={handleCopy} className="flex flex-col items-center gap-2 group">
             <div
               className={`w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-sm transition-all ${
-                copied ? "bg-[#F0FDF4]" : "bg-[#F5F4F2] group-hover:bg-[#ECEAE8]"
+                copied
+                  ? "bg-[#F0FDF4] dark:bg-[#052E16]"
+                  : "bg-[#F5F4F2] dark:bg-[#3D3935] group-hover:bg-[#ECEAE8] dark:group-hover:bg-[#57534E]"
               }`}
             >
               {copied ? "✅" : "🔗"}

@@ -13,12 +13,12 @@ export default function AnimalGrid({ animals, isLoading, emptyMessage, emptySubM
     return (
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
         {Array.from({ length: 12 }).map((_, i) => (
-          <div key={i} className="bg-white border border-[var(--border)] rounded-2xl overflow-hidden animate-pulse">
-            <div className="aspect-[4/3] bg-brand-100" />
+          <div key={i} className="bg-white dark:bg-[#292524] border border-[var(--border)] rounded-2xl overflow-hidden animate-pulse">
+            <div className="aspect-[4/3] bg-brand-100 dark:bg-[#3D3935]" />
             <div className="p-3 space-y-2">
-              <div className="h-3 bg-gray-100 rounded w-3/4" />
-              <div className="h-3 bg-gray-100 rounded w-1/2" />
-              <div className="h-3 bg-gray-100 rounded w-2/3" />
+              <div className="h-3 bg-gray-100 dark:bg-[#3D3935] rounded w-3/4" />
+              <div className="h-3 bg-gray-100 dark:bg-[#3D3935] rounded w-1/2" />
+              <div className="h-3 bg-gray-100 dark:bg-[#3D3935] rounded w-2/3" />
             </div>
           </div>
         ))}
