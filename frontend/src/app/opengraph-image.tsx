@@ -30,35 +30,17 @@ export default function Image() {
         </div>
         <div
           style={{
-            marginTop: 40,
-            display: "flex",
-            gap: 16,
+            marginTop: 32,
+            fontSize: 22,
+            fontWeight: 700,
+            color: "#C2410C",
+            background: "#FFF3E0",
+            padding: "10px 28px",
+            borderRadius: 999,
+            border: "2px solid #FFE0B2",
           }}
         >
-          <div
-            style={{
-              fontSize: 20,
-              color: "#A8A29E",
-              background: "rgba(255,255,255,0.7)",
-              border: "1px solid #E5E0D8",
-              borderRadius: 999,
-              padding: "8px 20px",
-            }}
-          >
-            🏛️ 국가동물보호정보시스템
-          </div>
-          <div
-            style={{
-              fontSize: 20,
-              color: "#A8A29E",
-              background: "rgba(255,255,255,0.7)",
-              border: "1px solid #E5E0D8",
-              borderRadius: 999,
-              padding: "8px 20px",
-            }}
-          >
-            🌆 대전광역시 유기동물공고현황
-          </div>
+          hamsoto.kr
         </div>
       </div>
     ),

@@ -38,6 +38,17 @@ export function isNewAnimal(happenDt: string): boolean {
   return diffDays <= 7;
 }
 
+export function getDaysRemaining(noticeEdt: string): number | null {
+  if (noticeEdt.length !== 8) return null;
+  const end = new Date(
+    parseInt(noticeEdt.slice(0, 4)),
+    parseInt(noticeEdt.slice(4, 6)) - 1,
+    parseInt(noticeEdt.slice(6, 8))
+  );
+  const days = Math.ceil((end.getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  return days;
+}
+
 export function formatAgo(isoString: string): string {
   const diff = Math.floor((Date.now() - new Date(isoString).getTime()) / 60000);
   if (diff < 1) return "방금";
