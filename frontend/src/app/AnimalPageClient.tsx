@@ -326,7 +326,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
               </a>
             </div>
           </div>
-          <div className="hidden sm:flex flex-col items-start gap-1.5 absolute left-0">
+          <div className="hidden sm:flex items-center gap-2 absolute left-0">
             <span className="text-xs text-[var(--muted)] font-semibold">문의</span>
             <a
               href="mailto:hassy2302@gmail.com"
