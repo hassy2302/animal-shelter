@@ -115,8 +115,12 @@ export default function ShareSheet({ url, title, imageUrl, onClose }: ShareSheet
         <div className="flex justify-around">
           {/* 카카오톡 */}
           <button onClick={handleKakao} className="flex flex-col items-center gap-2 group">
-            <div className="w-14 h-14 rounded-2xl bg-[#FEE500] flex items-center justify-center text-2xl shadow-sm group-hover:brightness-95 transition-all">
-              💬
+            <div className="w-14 h-14 rounded-2xl overflow-hidden shadow-sm group-hover:brightness-95 transition-all">
+              <img
+                src="https://developers.kakao.com/assets/img/about/logos/kakaolink/kakaolink_btn_medium.png"
+                alt="카카오톡 공유"
+                className="w-full h-full object-cover"
+              />
             </div>
             <span className="text-xs font-semibold text-[var(--text)]">카카오톡</span>
           </button>
