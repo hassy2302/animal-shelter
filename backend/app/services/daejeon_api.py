@@ -48,6 +48,7 @@ async def fetch_all() -> list[dict]:
                         await asyncio.sleep(2 ** attempt)
 
             if root is None or root.findtext(".//returnCode") != "00":
+                logger.warning(f"대전 API returnCode={root.findtext('.//returnCode') if root is not None else 'None'}, 응답: {r.text[:300] if root is not None else ''}")
                 break
 
             total_page = int(root.findtext(".//totalPage", "1") or 1)
