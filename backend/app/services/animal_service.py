@@ -90,6 +90,7 @@ async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], da
     # 중복 제거 (noticeNo 기준)
     national_nos = {a.get("noticeNo", "") for a in national_raw}
     unique_daejeon = [a for a in daejeon_raw if a["noticeNo"] not in national_nos]
+    logger.info(f"대전 전체: {len(daejeon_raw)}건, 중복 제거 후: {len(unique_daejeon)}건")
 
     all_raw = national_raw + unique_daejeon
     all_raw.sort(key=_sort_key)
