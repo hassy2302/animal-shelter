@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from typing import Literal
 from datetime import datetime
 
 
@@ -22,8 +21,8 @@ class Animal(BaseModel):
     careNm: str = ""
     careTel: str = ""
     orgNm: str = ""
-    source: Literal["national", "daejeon"] = "national"
-    animalSeq: str = ""       # 대전시 전용
+    source: str = "national"
+    aiKindNm: str = ""        # Gemini Vision 분류 결과
 
 
 class AnimalListResponse(BaseModel):
