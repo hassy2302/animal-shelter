@@ -8,6 +8,7 @@ logger = logging.getLogger(__name__)
 
 DAEJEON_BASE = "http://apis.data.go.kr/6300000/animalDaejeonService"
 DAEJEON_GU = {"1": "동구", "2": "중구", "3": "서구", "4": "유성구", "5": "대덕구"}
+DAEJEON_UPKIND = {"1": "417000", "2": "422400", "3": "429900"}
 DAEJEON_STATUS = {
     "1": "보호중(공고중)", "2": "보호중(입양가능)", "3": "보호중(입양예정)",
     "4": "입양완료", "5": "자연사", "6": "안락사", "7": "주인반환",
@@ -33,7 +34,6 @@ async def fetch_all() -> list[dict]:
                         f"{DAEJEON_BASE}/animalDaejeonList",
                         params={
                             "serviceKey": settings.DAEJEON_KEY,
-                            "searchCondition": "3",
                             "numOfRows": 100,
                             "pageNo": page,
                         },
@@ -48,11 +48,9 @@ async def fetch_all() -> list[dict]:
                         await asyncio.sleep(2 ** attempt)
 
             if root is None or root.findtext(".//returnCode") != "00":
-                logger.warning(f"대전 API returnCode={root.findtext('.//returnCode') if root is not None else 'None'}, 응답: {r.text[:300] if root is not None else ''}")
                 break
 
             total_page = int(root.findtext(".//totalPage", "1") or 1)
-            logger.info(f"대전 API totalPage={total_page}, 응답 샘플: {r.text[:500]}")
 
             for item in root.findall(".//items"):
                 gu_cd = _t(item, "gu")
@@ -65,7 +63,7 @@ async def fetch_all() -> list[dict]:
                     "noticeNo": _t(item, "regId"),
                     "processState": DAEJEON_STATUS.get(_t(item, "adoptionStatusCd"), ""),
                     "kindNm": _t(item, "species"),
-                    "upkind": "429900",
+                    "upkind": DAEJEON_UPKIND.get(_t(item, "classification"), "429900"),
                     "sexCd": {"1": "F", "2": "M"}.get(_t(item, "gender"), "Q"),
                     "age": _t(item, "age"),
                     "colorCd": _t(item, "hairColor"),
