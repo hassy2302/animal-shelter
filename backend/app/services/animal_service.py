@@ -24,7 +24,7 @@ SPECIES_KEYWORDS = {
 KNOWN_KEYWORDS = [kw for kws in SPECIES_KEYWORDS.values() for kw in kws]
 
 
-RODENT_KEYWORDS = ["쥐", "래트", "레트", "rat", "팬시마우스", "팬더마우스", "팬마", "기니피그", "데구"]
+RODENT_KEYWORDS = ["쥐", "래트", "레트", "rat", "팬시마우스", "팬더마우스", "팬마", "기니피그", "데구", "친칠라"]
 
 
 def _sort_key(a: dict) -> int:
