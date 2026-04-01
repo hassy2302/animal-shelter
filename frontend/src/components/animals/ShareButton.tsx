@@ -16,7 +16,7 @@ export default function ShareButton({ url, title, imageUrl }: Props) {
     <>
       <button
         onClick={() => setShowShare(true)}
-        className="block w-full text-center text-sm font-bold px-4 py-3 rounded-full bg-[#F5F4F2] text-[#57534E] border border-[#E7E5E4] hover:bg-[#ECEAE8] transition-colors"
+        className="block w-full text-center text-sm font-bold px-4 py-3 rounded-full bg-[#F5F4F2] dark:bg-[#292524] text-[#57534E] dark:text-[#A8A29E] border border-[#E7E5E4] dark:border-[#44403C] hover:bg-[#ECEAE8] dark:hover:bg-[#3D3935] transition-colors"
       >
         🔗 공유
       </button>
