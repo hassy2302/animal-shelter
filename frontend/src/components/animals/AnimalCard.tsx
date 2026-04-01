@@ -15,10 +15,10 @@ const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상
 
 function InfoRow({ label, value, accent }: { label: string; value: string; accent?: boolean }) {
   return (
-    <p className="text-xs truncate">
-      <span className="text-[#B8B4AF] dark:text-[#78716C]">{label} : </span>
-      <span className={accent ? "text-brand-500 font-semibold" : "text-[var(--text)]"}>{value}</span>
-    </p>
+    <div className="flex gap-1.5 text-xs">
+      <span className="shrink-0 w-14 text-[#B8B4AF] dark:text-[#78716C]">{label}</span>
+      <span className={`flex-1 truncate ${accent ? "text-brand-500 font-semibold" : "text-[var(--text)]"}`}>{value}</span>
+    </div>
   );
 }
 
@@ -48,7 +48,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
       <div className="relative bg-white dark:bg-[#292524] border border-[var(--border)] rounded-2xl overflow-hidden shadow-sm card-hover flex flex-row md:flex-col">
 
         {/* ── 이미지 영역 ── */}
-        <div className="relative shrink-0 w-28 aspect-square md:w-full md:aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6] dark:from-[#3D1A08] dark:to-[#431407]">
+        <div className="relative shrink-0 w-28 aspect-[3/4] md:w-full md:aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6] dark:from-[#3D1A08] dark:to-[#431407]">
           {imgSrc && !imgError ? (
             <Image
               src={imgSrc}
@@ -105,7 +105,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
               <InfoRow label="공고 번호" value={noticeNo} />
               <InfoRow label="보호소" value={careNm} />
               {happenDt && <InfoRow label="구조일" value={formatDate(happenDt)} />}
-              {noticeEdt && <InfoRow label="공고 기간" value={`~${formatDate(noticeEdt)}`} accent />}
+              {noticeEdt && <InfoRow label="공고 마감" value={formatDate(noticeEdt)} accent />}
             </div>
           </div>
 
