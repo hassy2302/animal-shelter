@@ -171,7 +171,7 @@ export default async function AnimalDetailPage({ params }: Props) {
                 📞 {careTel}
               </a>
             )}
-            <p>📍 {orgNm}</p>
+            <p>📍 보호 기관 위치 : {orgNm}</p>
             {happenPlace && <p>📌 발견장소: {happenPlace}</p>}
           </div>
 
