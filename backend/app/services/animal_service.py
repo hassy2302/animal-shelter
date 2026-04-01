@@ -78,21 +78,9 @@ def _matches_state(state: str, selected: str) -> bool:
 
 
 async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], datetime]:
-    from app.services import national_api, daejeon_api
+    from app.services import national_api
 
-    national_task = national_api.fetch_all(sido_code, sigungu_code)
-    include_daejeon = not sido_code or sido_code == "6300000"
-    daejeon_task = daejeon_api.fetch_all() if include_daejeon else asyncio.sleep(0)
-
-    national_raw, daejeon_raw = await asyncio.gather(national_task, daejeon_task)
-    daejeon_raw = daejeon_raw or []
-
-    # 중복 제거 (noticeNo 기준)
-    national_nos = {a.get("noticeNo", "") for a in national_raw}
-    unique_daejeon = [a for a in daejeon_raw if a["noticeNo"] not in national_nos]
-    logger.info(f"대전 unique {len(unique_daejeon)}건: {[a['noticeNo'] for a in unique_daejeon]}")
-
-    all_raw = national_raw + unique_daejeon
+    all_raw = await national_api.fetch_all(sido_code, sigungu_code)
     all_raw.sort(key=_sort_key)
 
     return all_raw, datetime.now(KST)

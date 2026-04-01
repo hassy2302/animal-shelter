@@ -92,11 +92,6 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
           <div className="md:hidden flex flex-col gap-1 p-2.5 h-full justify-center">
             {/* 종류 + 배지 */}
             <div className="flex items-center gap-1 flex-wrap mb-0.5">
-              {source === "daejeon" && (
-                <span className="text-[10px] font-bold px-1 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] dark:bg-[#422006] dark:text-[#FBBF24] dark:border-[#92400E]">
-                  대전시
-                </span>
-              )}
               <span className="text-sm font-extrabold text-[var(--text)] truncate">{kindNm}</span>
               <StateBadge state={processState} />
             </div>
@@ -116,11 +111,6 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
             {/* 제목 */}
             <div className="flex items-center gap-1.5 flex-wrap mb-2">
-              {source === "daejeon" && (
-                <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] dark:bg-[#422006] dark:text-[#FBBF24] dark:border-[#92400E]">
-                  대전시
-                </span>
-              )}
               <span className="text-base font-extrabold text-[var(--text)]">{kindNm}</span>
               <StateBadge state={processState} />
             </div>

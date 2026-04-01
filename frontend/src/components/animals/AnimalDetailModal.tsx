@@ -32,15 +32,13 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
   const {
     noticeNo, kindNm, upkind, sexCd, age, colorCd, weight,
     careNm, careTel, orgNm, happenPlace, happenDt, noticeEdt,
-    specialMark, popfile1, popfile2, processState, source, animalSeq, desertionNo,
+    specialMark, popfile1, popfile2, processState, desertionNo,
   } = animal;
 
   const imgSrc = popfile1 || popfile2;
   const emoji = getAnimalEmoji(kindNm, upkind);
 
-  const detailUrl = source === "daejeon" && animalSeq
-    ? `https://www.daejeon.go.kr/ani/AniStrayAnimalView.do?animalSeq=${animalSeq}`
-    : desertionNo
+  const detailUrl = desertionNo
     ? `https://www.animal.go.kr/front/awtis/public/publicDtl.do?desertionNo=${desertionNo}`
     : "";
   const shareUrl = noticeNo
@@ -77,9 +75,6 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
         {/* 헤더 */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-[var(--border)]">
           <div className="flex items-center gap-2 flex-wrap">
-            {source === "daejeon" && (
-              <span className="text-xs font-bold px-1.5 py-0.5 rounded-full bg-[#FFFBEB] text-[#B45309] border border-[#FDE68A] dark:bg-[#422006] dark:text-[#FBBF24] dark:border-[#92400E]">대전시</span>
-            )}
             <h2 className="text-lg font-extrabold text-[var(--text)]">{kindNm}</h2>
             <StateBadge state={processState} />
           </div>

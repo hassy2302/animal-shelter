@@ -377,9 +377,6 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
             <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
               🏛️ 농림축산식품부
             </span>
-            <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
-              🌆 대전광역시 유기동물공고현황
-            </span>
           </div>
         </div>
       </footer>
