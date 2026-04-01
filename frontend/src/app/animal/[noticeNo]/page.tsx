@@ -177,7 +177,7 @@ export default async function AnimalDetailPage({ params }: Props) {
 
           {/* 날짜 */}
           {(happenDt || noticeEdt) && (
-            <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex flex-row gap-2">
               {happenDt && (
                 <div className="flex-1 bg-[#F8F7F5] rounded-xl px-3 py-2.5 text-center">
                   <div className="text-xs text-[var(--muted)] mb-0.5">🚑 구조일</div>
