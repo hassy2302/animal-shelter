@@ -28,7 +28,7 @@ export default function SpeciesPills({ value, onChange }: SpeciesPillsProps) {
           </button>
           {opt === "기타" && (
             <span className="hidden sm:inline text-sm text-[var(--muted)]">
-              — ex) 토끼임에도 토끼 메뉴에 없는 경우는 기타로 분류됩니다
+              — ex) 햄스터임에도 햄스터 메뉴에 없는 경우는 기타로 분류됩니다.
             </span>
           )}
         </span>
