@@ -146,8 +146,8 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
                   📞 {careTel}
                 </a>
               )}
-              <p>📍 {orgNm}</p>
-              {happenPlace && <p>📌 발견장소: {happenPlace}</p>}
+              <p>📍 보호 기관 위치 : {orgNm}</p>
+              {happenPlace && <p>📌 발견 장소 : {happenPlace}</p>}
             </div>
 
             {/* 날짜 */}

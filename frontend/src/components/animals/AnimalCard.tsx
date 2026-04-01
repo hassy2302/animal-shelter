@@ -103,7 +103,8 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             {/* 라벨형 정보 rows */}
             <div className="flex flex-col gap-0.5">
               <InfoRow label="공고 번호" value={noticeNo} />
-              <InfoRow label="보호소" value={careNm} />
+              <InfoRow label="보호 기관" value={careNm} />
+              {happenPlace && <InfoRow label="발견 장소" value={happenPlace} />}
               {happenDt && <InfoRow label="구조일" value={formatDate(happenDt)} />}
               {noticeEdt && <InfoRow label="공고 마감" value={formatDate(noticeEdt)} accent />}
             </div>
@@ -138,8 +139,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             <div className="text-sm text-[#57534E] dark:text-[#A8A29E] leading-relaxed">
               🏠 <b className="text-[var(--text)]">{careNm}</b>
               {careTel && <><br />📞 <a href={`tel:${careTel}`} className="text-brand-500 font-semibold">{careTel}</a></>}
-              <br />📍 {orgNm}
-              {happenPlace && <><br />📌 발견: {happenPlace}</>}
+              {happenPlace && <><br />📌 발견 장소: {happenPlace}</>}
             </div>
 
             {/* 날짜 */}
