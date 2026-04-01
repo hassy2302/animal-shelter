@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   try {
     const animal = await getAnimal(decodedNoticeNo);
     if (!animal) return {};
-    const title = `${animal.kindNm} - 유기동물 공고`;
+    const title = `${animal.kindNm} - 유기 동물 공고`;
     const description = `${animal.careNm} 보호 중 · ${animal.orgNm}${animal.noticeEdt ? ` · 공고 마감 ${formatDate(animal.noticeEdt)}` : ""}`;
     const pageUrl = `${BASE_URL}/animal/${noticeNo}`;
     const ogImage = animal.popfile1 || animal.popfile2

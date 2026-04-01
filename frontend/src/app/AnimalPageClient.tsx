@@ -163,7 +163,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
 
       {/* 신고 안내 배너 */}
       <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] dark:bg-[#431407] border border-brand-200 dark:border-[#7C2D12] rounded-2xl text-center">
-        <p className="text-base font-bold text-[#9A3412] dark:text-[#FB923C] mb-2.5">🐾 유기동물을 발견하셨나요?</p>
+        <p className="text-base font-bold text-[#9A3412] dark:text-[#FB923C] mb-2.5">🐾 유기 동물을 발견하셨나요?</p>
         <div className="flex items-center justify-center gap-3">
           <a
             href="tel:1577-0954"
@@ -344,7 +344,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       <footer className="mt-12 py-6 border-t border-[var(--border)]">
         <div className="relative flex items-center justify-center">
           <div className="text-center">
-            <p className="text-sm font-semibold text-[var(--text)] mb-1">유기동물을 발견하셨나요?</p>
+            <p className="text-sm font-semibold text-[var(--text)] mb-1">유기 동물을 발견하셨나요?</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a
                 href="tel:1577-0954"
@@ -373,7 +373,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
             </a>
           </div>
           <div className="hidden sm:flex flex-col items-end gap-1.5 absolute right-0">
-            <span className="text-xs text-[var(--muted)] font-semibold">유기동물 정보 제공</span>
+            <span className="text-xs text-[var(--muted)] font-semibold">유기 동물 정보 제공</span>
             <span className="text-sm bg-white/70 border border-[#E5E0D8] text-[var(--muted)] px-2.5 py-0.5 rounded-full font-semibold">
               🏛️ 농림축산식품부
             </span>
