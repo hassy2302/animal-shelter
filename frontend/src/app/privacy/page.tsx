@@ -9,7 +9,7 @@ export default function PrivacyPage() {
       <p style={{ fontSize: "0.85rem", color: "#78716c", marginBottom: 32 }}>시행일: 2026년 3월 29일</p>
 
       <p style={{ fontSize: "0.95rem", color: "#44403c" }}>
-        유기 동물 공고(이하 &quot;앱&quot;)는 농림축산식품부 동물보호관리시스템 및 대전광역시에서 제공하는
+        유기 동물 공고(이하 &quot;앱&quot;)는 농림축산식품부 동물보호관리시스템에서 제공하는
         유기 동물 공고 데이터를 조회하는 서비스입니다.
       </p>
 
@@ -26,7 +26,6 @@ export default function PrivacyPage() {
       <p style={{ fontSize: "0.95rem", color: "#44403c" }}>개인정보를 수집하지 않으므로 제3자 제공이 없습니다. 다만 앱은 다음 외부 서비스를 사용합니다.</p>
       <ul style={{ fontSize: "0.95rem", color: "#44403c" }}>
         <li>농림축산식품부 동물보호관리시스템 API (유기 동물 공고 데이터 조회)</li>
-        <li>대전광역시 유기 동물공고현황 (지역 데이터 조회)</li>
         <li>카카오 공유 SDK (공유 기능, 선택 사용)</li>
       </ul>
 
