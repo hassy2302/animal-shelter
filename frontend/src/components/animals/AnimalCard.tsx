@@ -91,6 +91,8 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
               <span className="text-sm font-extrabold text-[var(--text)] truncate">{kindNm}</span>
               <StateBadge state={processState} />
             </div>
+            {/* 공고 번호 */}
+            <p className="text-[10px] text-[#B8B4AF] dark:text-[#78716C] truncate">📋 {noticeNo}</p>
             {/* 보호소 */}
             <p className="text-xs text-[#57534E] dark:text-[#A8A29E] truncate">
               🏠 <span className="font-semibold text-[var(--text)]">{careNm}</span>
