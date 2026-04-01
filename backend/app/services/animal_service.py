@@ -156,7 +156,6 @@ async def get_animals(
                 "fetched_at": fetched_at.isoformat(),
             }, settings.CACHE_TTL_ANIMALS)
     else:
-        await cache.delete(key)
         all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
         await cache.set(key, {
             "items": all_raw,

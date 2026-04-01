@@ -31,16 +31,21 @@ def setup_scheduler(cache) -> None:
 
         async def warm(sido: str, sigungu: str):
             async with semaphore:
-                try:
-                    await animal_service.get_animals(
-                        cache=cache,
-                        sido_code=sido,
-                        sigungu_code=sigungu,
-                        force_refresh=True,
-                    )
-                    logger.info(f"캐시 워밍 완료: sido={sido or '전국'}")
-                except Exception as e:
-                    logger.error(f"캐시 워밍 실패 sido={sido}: {e}")
+                for attempt in range(1, 3):
+                    try:
+                        await animal_service.get_animals(
+                            cache=cache,
+                            sido_code=sido,
+                            sigungu_code=sigungu,
+                            force_refresh=True,
+                        )
+                        logger.info(f"캐시 워밍 완료: sido={sido or '전국'}")
+                        return
+                    except Exception as e:
+                        logger.warning(f"캐시 워밍 실패 (시도 {attempt}/2) sido={sido}: {e}")
+                        if attempt < 2:
+                            await asyncio.sleep(30)
+                logger.error(f"캐시 워밍 최종 실패 sido={sido}: 재시도 소진")
 
         await asyncio.gather(*[warm(sido, sigungu) for sido, sigungu in combinations])
         logger.info(f"캐시 워밍 완료 — 총 {len(combinations)}개 지역")
