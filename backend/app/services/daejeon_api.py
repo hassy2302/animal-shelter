@@ -52,6 +52,7 @@ async def fetch_all() -> list[dict]:
                 break
 
             total_page = int(root.findtext(".//totalPage", "1") or 1)
+            logger.info(f"대전 API totalPage={total_page}, 응답 샘플: {r.text[:500]}")
 
             for item in root.findall(".//items"):
                 gu_cd = _t(item, "gu")
