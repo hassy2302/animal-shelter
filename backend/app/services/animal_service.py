@@ -130,7 +130,7 @@ async def _classify_in_background(
             a["aiKindNm"] = result
             changed = True
 
-    await asyncio.gather(*[classify_one(a) for a in targets[:200]], return_exceptions=True)
+    await asyncio.gather(*[classify_one(a) for a in targets[:50]], return_exceptions=True)
 
     if changed:
         all_raw.sort(key=_sort_key)

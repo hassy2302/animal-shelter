@@ -31,11 +31,14 @@ CLASSIFY_CACHE_TTL = 604800  # 7일
 
 _semaphore: asyncio.Semaphore | None = None
 
+# 무료 티어: 분당 15건 제한 → 요청 간 5초 간격 (12 RPM)
+_REQUEST_INTERVAL = 5.0
+
 
 def _get_semaphore() -> asyncio.Semaphore:
     global _semaphore
     if _semaphore is None:
-        _semaphore = asyncio.Semaphore(3)
+        _semaphore = asyncio.Semaphore(1)
     return _semaphore
 
 
@@ -45,6 +48,7 @@ async def classify_image(image_url: str) -> str:
         return "기타"
 
     async with _get_semaphore():
+        await asyncio.sleep(_REQUEST_INTERVAL)
         try:
             async with httpx.AsyncClient(timeout=20) as client:
                 img_resp = await client.get(image_url, follow_redirects=True, timeout=10)
@@ -70,6 +74,14 @@ async def classify_image(image_url: str) -> str:
                     timeout=20,
                 )
 
+                if resp.status_code == 429:
+                    logger.warning("Gemini 429 - 30초 대기 후 재시도")
+                    await asyncio.sleep(30)
+                    resp = await client.post(
+                        f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key={settings.GEMINI_API_KEY}",
+                        json=payload,
+                        timeout=20,
+                    )
                 if resp.status_code != 200:
                     logger.warning(f"Gemini API 오류: {resp.status_code} {resp.text[:200]}")
                     return "기타"
