@@ -1,6 +1,6 @@
 # 🐾 햄스토 (hamsoto.kr)
 
-전국 보호소의 유기동물 입양 공고를 한눈에 확인할 수 있는 웹 서비스입니다.
+전국 보호소의 유기 동물 입양 공고를 한눈에 확인할 수 있는 웹 서비스입니다.
 
 **서비스 주소:** https://hamsoto.kr
 
@@ -8,7 +8,7 @@
 
 ## 서비스 소개
 
-국가동물보호정보시스템과 대전광역시 API를 통합하여 전국 유기동물 현황을 실시간으로 제공합니다. 햄스터를 좋아하는 개발자가 만든 서비스로, 햄스터·설치류를 포함한 모든 동물의 공고를 쉽게 찾을 수 있습니다.
+농림축산식품부 국가동물보호정보시스템 API를 통해 전국 유기 동물 현황을 실시간으로 제공합니다. 햄스터를 좋아하는 개발자가 만든 서비스로, 햄스터·설치류를 포함한 모든 동물의 공고를 쉽게 찾을 수 있습니다.
 
 ### 주요 기능
 
@@ -17,10 +17,13 @@
 - **보호 상태별 필터** — 보호중 / 입양완료 / 기타 / 전체
 - **최신순 / 과거순 정렬**
 - **텍스트 검색** — 공고번호, 보호소명, 발견장소 등
-- **찜 기능** — 관심 동물 저장 (로컬스토리지)
+- **찜 기능** — 관심 동물 저장 (로컬스토리지), 앱 시작 시 종료된 공고 자동 정리
+- **최근 본 동물** — 상세보기 열람 기록 저장
 - **신규 배지** — 최근 3일 내 등록된 공고 표시
-- **카카오톡 공유** — 공고 링크 공유
+- **다크 모드** — 라이트/다크 테마 전환
+- **카카오톡 공유** — 공고 링크 카카오톡 공유
 - **헤더 이미지 마퀴** — 전체 소동물(고양이·강아지 제외) 중 랜덤 선별된 사진이 흐르며 클릭 시 상세 공고 확인
+- **당겨서 새로고침** — 모바일 앱에서 스크롤 상단에서 당겨 데이터 갱신
 - **반응형 UI** — 모바일 우선 설계
 
 ---
@@ -53,11 +56,8 @@
 
 | API | 용도 |
 |-----|------|
-| 국가동물보호정보시스템 | 전국 유기동물(강아지·고양이·소동물) 조회, 시도·시군구 목록 |
-| 대전광역시 유기동물공고현황 | 대전 지역 유기동물 조회 (XML 파싱) |
+| 국가동물보호정보시스템 (농림축산식품부) | 전국 유기 동물(강아지·고양이·소동물) 조회, 시도·시군구 목록 |
 | 카카오 SDK | 공고 링크 카카오톡 공유 |
-
-두 API의 중복 데이터는 `noticeNo` 기준으로 자동 제거됩니다.
 
 ---
 
@@ -82,7 +82,6 @@
 **Backend** (`backend/.env`)
 ```env
 API_KEY=국가동물보호정보시스템_서비스키
-DAEJEON_KEY=대전광역시_서비스키
 REDIS_URL=redis://localhost:6379       # 선택 사항
 CORS_ORIGINS=["http://localhost:3000"]
 ENV=development
@@ -126,8 +125,7 @@ animal-shelter/
 │       ├── models/              # Pydantic 모델
 │       ├── services/
 │       │   ├── animal_service.py    # 필터링, 정렬, 종류 분류
-│       │   ├── national_api.py      # 국가 API (세마포어로 요청 수 제한)
-│       │   └── daejeon_api.py       # 대전 API (XML 파싱)
+│       │   └── national_api.py      # 국가 API (세마포어로 요청 수 제한)
 │       ├── api/                 # REST 엔드포인트 (animals, regions)
 │       ├── cache/manager.py     # Redis + in-memory 캐시
 │       └── scheduler/jobs.py    # 캐시 워밍 스케줄러
@@ -143,7 +141,8 @@ animal-shelter/
         │   ├── filters/             # FilterBar, SpeciesPills
         │   └── pagination/
         ├── contexts/
-        │   └── FavoritesContext.tsx # 찜 기능 전역 상태
+        │   ├── FavoritesContext.tsx     # 찜 기능 전역 상태
+        │   └── RecentlyViewedContext.tsx # 최근 본 동물 전역 상태
         ├── hooks/
         │   ├── useAnimals.ts        # SWR 훅 (동물 목록)
         │   └── useRegions.ts        # SWR 훅 (지역 목록)
@@ -164,7 +163,7 @@ animal-shelter/
 | 시군구 목록 | 24시간 | `sigungu:{sido}` |
 
 - Redis 우선, 연결 불가 시 in-memory 자동 폴백
-- APScheduler가 매 정시마다 전국/서울/대전 캐시 선제 워밍
+- APScheduler가 매 정시마다 전국/서울 캐시 선제 워밍
 - 앱 시작 시 2초 후 초기 캐시 워밍 실행
 
 ---
@@ -178,7 +177,6 @@ Render에서 `backend/` 디렉토리 기준 Docker 배포.
 환경 변수 (Render 대시보드 설정):
 ```
 API_KEY=...
-DAEJEON_KEY=...
 REDIS_URL=...
 CORS_ORIGINS=["https://hamsoto.kr","https://www.hamsoto.kr","https://animal-shelter-navy.vercel.app"]
 ENV=production
