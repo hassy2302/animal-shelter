@@ -31,8 +31,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
   const imgSrc = popfile1 || animal.popfile2;
   const emoji = getAnimalEmoji(kindNm, upkind);
-  const breedNm = kindFullNm ? kindFullNm.replace(/^\[.*?\]\s*/, "").trim() : "";
-  const kindLabel = breedNm && breedNm !== kindNm ? `${kindNm} / ${breedNm}` : kindNm;
+  const kindLabel = kindFullNm || kindNm;
   const [imgError, setImgError] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showShare, setShowShare] = useState(false);
