@@ -8,6 +8,7 @@ class Animal(BaseModel):
     noticeNo: str = ""
     processState: str = ""
     kindNm: str = ""
+    kindFullNm: str = ""      # [기타축종] 햄스터 형식
     upkind: str = ""          # 417000(강아지) / 422400(고양이) / 429900(소동물)
     sexCd: str = "Q"          # M / F / Q
     age: str = ""

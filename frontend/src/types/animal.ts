@@ -3,6 +3,7 @@ export interface Animal {
   noticeNo: string;
   processState: string;
   kindNm: string;
+  kindFullNm: string;
   upkind: string;
   sexCd: "M" | "F" | "Q";
   age: string;
