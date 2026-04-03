@@ -30,6 +30,9 @@ export default function Header({ featuredAnimals = [] }: HeaderProps) {
         <div className="flex items-center gap-6 px-8 py-6">
           {/* 왼쪽: 서비스 이름 + 설명 */}
           <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-xs font-bold px-2.5 py-0.5 rounded-full bg-brand-100 text-brand-500 border border-brand-200 dark:bg-[#3D1A08] dark:text-[#FB923C] dark:border-[#7C2D12] tracking-widest">🐹 햄소토</span>
+            </div>
             <h1 className="text-2xl sm:text-3xl font-black text-[var(--text)] tracking-tight mb-1.5">
               🐾 유기 동물 입양 공고
             </h1>

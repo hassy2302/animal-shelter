@@ -21,17 +21,20 @@ export default function Image() {
           fontFamily: "sans-serif",
         }}
       >
-        <div style={{ fontSize: 120, marginBottom: 24 }}>🐾</div>
-        <div style={{ fontSize: 56, fontWeight: 900, color: "#1C1917", marginBottom: 16 }}>
+        <div style={{ fontSize: 100, marginBottom: 16 }}>🐹</div>
+        <div style={{ fontSize: 72, fontWeight: 900, color: "#C2410C", marginBottom: 8, letterSpacing: "-2px" }}>
+          햄소토
+        </div>
+        <div style={{ fontSize: 32, fontWeight: 700, color: "#1C1917", marginBottom: 16 }}>
           유기 동물 입양 공고
         </div>
-        <div style={{ fontSize: 28, color: "#78716C", textAlign: "center", maxWidth: 800 }}>
+        <div style={{ fontSize: 24, color: "#78716C", textAlign: "center", maxWidth: 800 }}>
           보호소의 동물들이 새 가족을 기다리고 있어요
         </div>
         <div
           style={{
             marginTop: 32,
-            fontSize: 22,
+            fontSize: 20,
             fontWeight: 700,
             color: "#C2410C",
             background: "#FFF3E0",
