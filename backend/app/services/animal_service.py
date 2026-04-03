@@ -151,6 +151,14 @@ async def get_animals(
             "fetched_at": fetched_at.isoformat(),
         }, settings.CACHE_TTL_ANIMALS)
 
+    # 오버라이드 적용
+    overrides = await cache.get_overrides()
+    if overrides:
+        all_raw = [
+            {**a, "processState": overrides[a["noticeNo"]]} if a.get("noticeNo") in overrides else a
+            for a in all_raw
+        ]
+
     # 필터링
     filtered = [
         a for a in all_raw

@@ -1,4 +1,4 @@
-# 🐾 햄스토 (hamsoto.kr)
+# 🐹 햄소토 (hamsoto.kr)
 
 전국 보호소의 유기 동물 입양 공고를 한눈에 확인할 수 있는 웹 서비스입니다.
 
@@ -45,7 +45,7 @@
 ### 인프라
 - **Frontend:** Vercel + 커스텀 도메인 (hamsoto.kr, Vercel DNS)
 - **Backend:** Render (Docker)
-- **Android 앱:** Capacitor + Google Play (내부 테스트 중)
+- **Android 앱:** Capacitor + Google Play (비공개 테스트 중)
 - **모니터링:** Sentry (프론트엔드 + 백엔드 에러 트래킹)
 - **분석:** Google Analytics 4
 - **SEO:** 구글 서치콘솔 + 네이버 서치어드바이저 등록
@@ -178,7 +178,7 @@ Render에서 `backend/` 디렉토리 기준 Docker 배포.
 ```
 API_KEY=...
 REDIS_URL=...
-CORS_ORIGINS=["https://hamsoto.kr","https://www.hamsoto.kr","https://animal-shelter-navy.vercel.app"]
+CORS_ORIGINS=["https://hamsoto.kr","https://www.hamsoto.kr"]
 ENV=production
 ```
 

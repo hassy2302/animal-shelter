@@ -101,3 +101,25 @@ class CacheManager:
     @staticmethod
     def sigungu_key(sido: str) -> str:
         return f"sigungu:{sido}"
+
+    @staticmethod
+    def overrides_key() -> str:
+        return "admin:overrides"
+
+    async def get_overrides(self) -> dict[str, str]:
+        data = await self.get(self.overrides_key())
+        return data if isinstance(data, dict) else {}
+
+    async def set_override(self, notice_no: str, process_state: str) -> None:
+        overrides = await self.get_overrides()
+        overrides[notice_no] = process_state
+        # TTL 없이 영구 저장 (Redis: 큰 값, in-memory: 10년)
+        await self.set(self.overrides_key(), overrides, ttl=86400 * 3650)
+
+    async def delete_override(self, notice_no: str) -> bool:
+        overrides = await self.get_overrides()
+        if notice_no not in overrides:
+            return False
+        del overrides[notice_no]
+        await self.set(self.overrides_key(), overrides, ttl=86400 * 3650)
+        return True

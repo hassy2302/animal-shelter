@@ -7,6 +7,7 @@ class Settings(BaseSettings):
     # API Keys
     API_KEY: str = ""
     DAEJEON_KEY: str = ""
+    ADMIN_KEY: str = ""
 
     # Redis (없으면 인메모리 폴백)
     REDIS_URL: str = ""
