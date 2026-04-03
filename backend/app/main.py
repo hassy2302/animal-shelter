@@ -2,14 +2,20 @@ import logging
 from contextlib import asynccontextmanager
 import asyncio
 import sentry_sdk
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from slowapi import Limiter, _rate_limit_exceeded_handler
+from slowapi.util import get_remote_address
+from slowapi.errors import RateLimitExceeded
 from app.config import settings
 from app.cache.manager import CacheManager
 from app.dependencies import set_cache
 from app.api.router import router
 from app.scheduler.jobs import scheduler, setup_scheduler
 from app.services import animal_service
+
+limiter = Limiter(key_func=get_remote_address)
 
 sentry_sdk.init(
     dsn="https://d7ea3f2c258b44459efb2a99d67c7dfe@o4511137869463552.ingest.us.sentry.io/4511137880211456",
@@ -55,6 +61,9 @@ app = FastAPI(
     version="1.0.0",
     lifespan=lifespan,
 )
+
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
 app.add_middleware(
     CORSMiddleware,
