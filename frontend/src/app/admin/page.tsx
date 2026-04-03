@@ -132,7 +132,6 @@ export default function AdminPage() {
             className="border border-[var(--border)] rounded-xl px-3 py-2 text-sm bg-[var(--bg)] text-[var(--text)] outline-none"
           >
             <option value="입양완료">입양완료</option>
-            <option value="종료(입양)">종료(입양)</option>
             <option value="보호중">보호중</option>
           </select>
           <button

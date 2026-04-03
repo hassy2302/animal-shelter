@@ -9,7 +9,7 @@ from app.config import settings
 router = APIRouter(prefix="/admin", tags=["admin"])
 limiter = Limiter(key_func=get_remote_address)
 
-ALLOWED_STATES = {"입양완료", "종료(입양)", "보호중"}
+ALLOWED_STATES = {"입양완료", "보호중"}
 
 
 def verify_admin_key(x_admin_key: str = Header(...)):
