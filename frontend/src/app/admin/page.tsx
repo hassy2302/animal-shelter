@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 
@@ -108,7 +109,10 @@ export default function AdminPage() {
 
   return (
     <main className="min-h-screen bg-[var(--bg)] p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-extrabold text-[var(--text)] mb-6">🐾 입양 상태 관리</h1>
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-extrabold text-[var(--text)]">🐾 입양 상태 관리</h1>
+        <Link href="/" className="text-sm text-brand-500 hover:text-brand-600 font-semibold transition-colors">← 서비스로 돌아가기</Link>
+      </div>
 
       {/* 처리 폼 */}
       <div className="bg-white dark:bg-[#292524] border border-[var(--border)] rounded-2xl p-5 mb-6 shadow-sm">
