@@ -19,6 +19,9 @@ class Settings(BaseSettings):
     CACHE_TTL_ANIMALS: int = 3600   # 1시간
     CACHE_TTL_REGIONS: int = 86400  # 24시간
 
+    # FCM (Firebase Cloud Messaging) — base64(service-account.json)
+    FCM_SERVICE_ACCOUNT_JSON: str = ""
+
     # App
     ENV: str = "development"
     LOG_LEVEL: str = "INFO"
