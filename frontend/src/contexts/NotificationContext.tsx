@@ -11,7 +11,7 @@ export const NOTIFICATION_CATEGORIES = [
   { id: "🐢 거북이", label: "🐢 거북이" },
   { id: "🦔 고슴도치", label: "🦔 고슴도치" },
   { id: "🐦 새", label: "🐦 새" },
-  { id: "기타", label: "기타 소동물" },
+  { id: "기타", label: "기타" },
 ];
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
@@ -144,12 +144,11 @@ export function NotificationProvider({ children }: { children: React.ReactNode }
     setIsLoading(true);
     try {
       const token = await getToken();
-      const defaultCats = NOTIFICATION_CATEGORIES.map((c) => c.id);
-      await postJson("/api/notifications/register", { token, categories: defaultCats });
+      await postJson("/api/notifications/register", { token, categories: [] });
       tokenRef.current = token;
       setIsEnabled(true);
-      setCategories(defaultCats);
-      savePrefs({ enabled: true, token, categories: defaultCats });
+      setCategories([]);
+      savePrefs({ enabled: true, token, categories: [] });
     } finally {
       setIsLoading(false);
     }

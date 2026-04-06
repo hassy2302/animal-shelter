@@ -23,6 +23,7 @@
 - **다크 모드** — 라이트/다크 테마 전환
 - **카카오톡 공유** — 공고 링크 카카오톡 공유
 - **헤더 이미지 마퀴** — 전체 소동물(고양이·강아지 제외) 중 랜덤 선별된 사진이 흐르며 클릭 시 상세 공고 확인
+- **새 공고 알림** — 앱에서 관심 동물 카테고리별 알림 설정, 매 정시 신규 공고 감지 후 FCM 푸시 발송
 - **당겨서 새로고침** — 모바일 앱에서 스크롤 상단에서 당겨 데이터 갱신
 - **반응형 UI** — 모바일 우선 설계
 
@@ -85,6 +86,7 @@ API_KEY=국가동물보호정보시스템_서비스키
 REDIS_URL=redis://localhost:6379       # 선택 사항
 CORS_ORIGINS=["http://localhost:3000"]
 ENV=development
+FCM_SERVICE_ACCOUNT_JSON=             # Firebase 서비스 계정 JSON을 base64 인코딩한 값
 ```
 
 **Frontend** (`frontend/.env.local`)
@@ -124,11 +126,12 @@ animal-shelter/
 │       ├── config.py            # 환경변수 설정
 │       ├── models/              # Pydantic 모델
 │       ├── services/
-│       │   ├── animal_service.py    # 필터링, 정렬, 종류 분류
-│       │   └── national_api.py      # 국가 API (세마포어로 요청 수 제한)
-│       ├── api/                 # REST 엔드포인트 (animals, regions)
+│       │   ├── animal_service.py        # 필터링, 정렬, 종류 분류
+│       │   ├── national_api.py          # 국가 API (세마포어로 요청 수 제한)
+│       │   └── notification_service.py  # FCM 토큰 관리, 신규 공고 감지, 알림 발송
+│       ├── api/                 # REST 엔드포인트 (animals, regions, notifications)
 │       ├── cache/manager.py     # Redis + in-memory 캐시
-│       └── scheduler/jobs.py    # 캐시 워밍 스케줄러
+│       └── scheduler/jobs.py    # 캐시 워밍 + 알림 발송 스케줄러
 │
 └── frontend/
     └── src/
@@ -139,10 +142,12 @@ animal-shelter/
         │   ├── layout/              # Header (마퀴), StatsBar, ScrollToTop
         │   ├── animals/             # AnimalGrid, AnimalCard, AnimalDetailModal, ShareSheet
         │   ├── filters/             # FilterBar, SpeciesPills
+        │   ├── notifications/       # NotificationModal (알림 설정)
         │   └── pagination/
         ├── contexts/
-        │   ├── FavoritesContext.tsx     # 찜 기능 전역 상태
-        │   └── RecentlyViewedContext.tsx # 최근 본 동물 전역 상태
+        │   ├── FavoritesContext.tsx      # 찜 기능 전역 상태
+        │   ├── RecentlyViewedContext.tsx # 최근 본 동물 전역 상태
+        │   └── NotificationContext.tsx   # 알림 설정 전역 상태 (Capacitor 앱 전용)
         ├── hooks/
         │   ├── useAnimals.ts        # SWR 훅 (동물 목록)
         │   └── useRegions.ts        # SWR 훅 (지역 목록)
@@ -180,6 +185,7 @@ API_KEY=...
 REDIS_URL=...
 CORS_ORIGINS=["https://hamsoto.kr","https://www.hamsoto.kr"]
 ENV=production
+FCM_SERVICE_ACCOUNT_JSON=...
 ```
 
 헬스체크: `GET /health`

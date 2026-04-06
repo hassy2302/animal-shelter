@@ -51,6 +51,7 @@ API_KEY=국가동물보호정보시스템_서비스키
 GEMINI_API_KEY=           # AI 분류 기능용 (현재 홀딩)
 REDIS_URL=redis://...     # 없으면 in-memory 폴백
 CORS_ORIGINS=[...]
+FCM_SERVICE_ACCOUNT_JSON= # Firebase 서비스 계정 JSON을 base64 인코딩한 값 (알림 기능)
 ```
 
 ### Frontend (`frontend/.env.local`)
@@ -85,4 +86,14 @@ cd animal-shelter-native && npm run build && npx cap sync android && npx cap ope
 | 동물 목록 | 1시간 |
 | 시도/시군구 | 24시간 |
 
-Redis 없으면 in-memory 자동 폴백. APScheduler가 매 정시 캐시 워밍.
+Redis 없으면 in-memory 자동 폴백. APScheduler가 매 정시 캐시 워밍 + 신규 공고 알림 발송.
+
+## 알림 기능 (`backend/app/services/notification_service.py`)
+
+- Android 앱 전용 (웹에서는 벨 아이콘 미표시)
+- 헤더 우측 🔔 버튼 → 알림 설정 모달 (카테고리별 토글)
+- 카테고리: 햄스터, 설치류, 토끼, 고양이, 강아지, 거북이, 고슴도치, 새, 기타 (모두 선택 가능)
+- FCM 토큰 + 구독 카테고리를 Redis(또는 in-memory)에 저장
+- 매 정시 캐시 워밍 후 `happenDt > last_checked_at` 인 신규 공고 감지 → 구독자에게 FCM 발송
+- `last_checked_at` 미존재 시 현재 시각으로 초기화 (서버 재시작 후 오탐 방지)
+- 만료된 FCM 토큰은 발송 실패 시 자동 제거
