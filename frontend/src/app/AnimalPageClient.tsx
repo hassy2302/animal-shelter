@@ -162,12 +162,12 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       <Header featuredAnimals={marqueeAnimals} />
 
       {/* 신고 안내 배너 */}
-      <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] dark:bg-[#431407] border border-brand-200 dark:border-[#7C2D12] rounded-2xl text-center">
+      <div className="mb-4 px-5 py-3.5 bg-[#FFF1E6] dark:bg-[#2C1A0E] border border-brand-200 dark:border-[#6B3015] rounded-2xl text-center">
         <p className="text-base font-bold text-[#9A3412] dark:text-[#FB923C] mb-2.5">🐾 유기 동물을 발견하셨나요?</p>
         <div className="flex items-center justify-center gap-3">
           <a
             href="tel:1577-0954"
-            className="text-base font-bold text-brand-500 hover:text-brand-600 bg-white dark:bg-[#292524] border border-brand-200 dark:border-[#7C2D12] px-4 py-1.5 rounded-full transition-colors shadow-sm whitespace-nowrap"
+            className="text-base font-bold text-brand-500 hover:text-brand-600 bg-white dark:bg-[#1E1B18] border border-brand-200 dark:border-[#6B3015] px-4 py-1.5 rounded-full transition-colors shadow-sm whitespace-nowrap"
           >
             📞 1577-0954
           </a>

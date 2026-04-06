@@ -15,14 +15,14 @@
   }
 
   .dark {
-    --bg: #1C1917;
-    --card: #292524;
-    --border: #44403C;
+    --bg: #141210;
+    --card: #1E1B18;
+    --border: #3A3632;
     --text: #FAFAF8;
     --muted: #A8A29E;
     --brand: #C2410C;
-    --brand-bg: #431407;
-    --brand-border: #7C2D12;
+    --brand-bg: #2C1A0E;
+    --brand-border: #6B3015;
   }
 
   html { scroll-behavior: smooth; }
