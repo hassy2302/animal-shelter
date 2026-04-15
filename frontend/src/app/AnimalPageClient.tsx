@@ -18,6 +18,45 @@ import AnimalGrid from "@/components/animals/AnimalGrid";
 import Pagination from "@/components/pagination/Pagination";
 import ScrollToTop from "@/components/layout/ScrollToTop";
 
+const ADOPTION_STEPS = [
+  { icon: "🔍", title: "공고 찾기", desc: "마음에 드는 동물을 찾아요" },
+  { icon: "📞", title: "보호소 연락", desc: "공고의 전화번호로 문의해요" },
+  { icon: "📝", title: "입양 신청", desc: "보호소 방문 후 신청서 작성" },
+  { icon: "🏠", title: "입양 완료", desc: "새 가족이 됐어요!" },
+];
+
+function AdoptionGuide() {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mb-4 border border-[#D1E3FF] dark:border-[#1E3A5F] rounded-2xl overflow-hidden">
+      <button
+        onClick={() => setOpen((v) => !v)}
+        className="w-full flex items-center justify-between px-5 py-3 bg-[#EFF6FF] dark:bg-[#0F1E33] text-left"
+      >
+        <span className="text-sm font-bold text-[#1D4ED8] dark:text-[#93C5FD]">💡 입양은 어떻게 하나요?</span>
+        <span className="text-xs text-[#3B82F6] dark:text-[#60A5FA]">{open ? "접기 ▲" : "펼치기 ▼"}</span>
+      </button>
+      {open && (
+        <div className="px-5 py-4 bg-white dark:bg-[#111827]">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+            {ADOPTION_STEPS.map((step, i) => (
+              <div key={i} className="flex flex-col items-center text-center gap-1.5 p-3 bg-[#F8FAFF] dark:bg-[#1E2A3A] rounded-xl">
+                <span className="text-2xl">{step.icon}</span>
+                <span className="text-xs font-extrabold text-[var(--text)]">{i + 1}. {step.title}</span>
+                <span className="text-xs text-[var(--muted)]">{step.desc}</span>
+              </div>
+            ))}
+          </div>
+          <p className="mt-3 text-xs text-[var(--muted)] leading-relaxed">
+            보호소마다 입양 절차가 다를 수 있어요. 공고 상세에서 전화번호를 확인해 먼저 문의해보세요.
+            공고 마감일 이후에는 입양 절차가 시작되거나 보호가 종료될 수 있어요.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 interface Props {
   initialData: AnimalListResponse | null;
   initialFilters?: AnimalFilters;
@@ -181,6 +220,9 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
           </a>
         </div>
       </div>
+
+      {/* 입양 안내 배너 */}
+      <AdoptionGuide />
 
       {/* 종류 필터 */}
       <div className={`mb-3 transition-opacity ${(showFavoritesOnly || showRecentOnly) ? "opacity-40 pointer-events-none select-none" : ""}`}>
