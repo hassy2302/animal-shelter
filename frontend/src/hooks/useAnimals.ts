@@ -32,7 +32,7 @@ export function useAnimals(filters: AnimalFilters) {
       // 다음 정각까지 남은 시간 (백엔드 워밍 여유 30초 추가)
       const now = new Date();
       const nextHour = new Date(now);
-      nextHour.setHours(nextHour.getHours() + 1, 0, 30, 0);
+      nextHour.setHours(nextHour.getHours() + 1, 1, 30, 0);
       return nextHour.getTime() - now.getTime();
     },
   });
