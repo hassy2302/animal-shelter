@@ -86,32 +86,50 @@ async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], da
     return all_raw, datetime.now(KST)
 
 
-async def get_animals_by_notice_nos(cache: CacheManager, notice_nos: list[str]) -> list[Animal]:
-    key = CacheManager.animals_key("", "")
+_inflight: dict[str, "asyncio.Future[tuple[list[dict], datetime]]"] = {}
+
+
+async def _cached_or_fetch(
+    cache: CacheManager,
+    key: str,
+    sido_code: str,
+    sigungu_code: str,
+) -> tuple[list[dict], datetime]:
     cached = await cache.get(key)
     if cached:
-        all_raw = cached["items"]
-    else:
-        all_raw, fetched_at = await _load_fresh("", "")
+        return cached["items"], datetime.fromisoformat(cached["fetched_at"])
+
+    if key in _inflight:
+        return await asyncio.shield(_inflight[key])
+
+    future: asyncio.Future = asyncio.get_running_loop().create_future()
+    _inflight[key] = future
+    try:
+        all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
         await cache.set(key, {
             "items": all_raw,
             "fetched_at": fetched_at.isoformat(),
         }, settings.CACHE_TTL_ANIMALS)
+        future.set_result((all_raw, fetched_at))
+        return all_raw, fetched_at
+    except Exception as e:
+        if not future.done():
+            future.set_exception(e)
+        raise
+    finally:
+        _inflight.pop(key, None)
+
+
+async def get_animals_by_notice_nos(cache: CacheManager, notice_nos: list[str]) -> list[Animal]:
+    key = CacheManager.animals_key("", "")
+    all_raw, _ = await _cached_or_fetch(cache, key, "", "")
     nos = set(notice_nos)
     return [Animal(**a) for a in all_raw if a.get("noticeNo") in nos]
 
 
 async def get_animal_by_notice_no(cache: CacheManager, notice_no: str) -> Animal | None:
     key = CacheManager.animals_key("", "")
-    cached = await cache.get(key)
-    if cached:
-        all_raw = cached["items"]
-    else:
-        all_raw, fetched_at = await _load_fresh("", "")
-        await cache.set(key, {
-            "items": all_raw,
-            "fetched_at": fetched_at.isoformat(),
-        }, settings.CACHE_TTL_ANIMALS)
+    all_raw, _ = await _cached_or_fetch(cache, key, "", "")
     for a in all_raw:
         if a.get("noticeNo") == notice_no:
             return Animal(**a)
@@ -131,25 +149,15 @@ async def get_animals(
     force_refresh: bool = False,
 ) -> AnimalListResponse:
     key = CacheManager.animals_key(sido_code, sigungu_code)
-    fetched_at = datetime.now(KST)
 
-    if not force_refresh:
-        cached = await cache.get(key)
-        if cached:
-            all_raw: list[dict] = cached["items"]
-            fetched_at = datetime.fromisoformat(cached["fetched_at"])
-        else:
-            all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
-            await cache.set(key, {
-                "items": all_raw,
-                "fetched_at": fetched_at.isoformat(),
-            }, settings.CACHE_TTL_ANIMALS)
-    else:
+    if force_refresh:
         all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
         await cache.set(key, {
             "items": all_raw,
             "fetched_at": fetched_at.isoformat(),
         }, settings.CACHE_TTL_ANIMALS)
+    else:
+        all_raw, fetched_at = await _cached_or_fetch(cache, key, sido_code, sigungu_code)
 
     # 오버라이드 적용
     overrides = await cache.get_overrides()
