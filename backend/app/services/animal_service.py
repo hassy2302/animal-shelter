@@ -89,6 +89,25 @@ async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], da
 _inflight: dict[str, "asyncio.Future[tuple[list[dict], datetime]]"] = {}
 
 
+async def _fetch_deduped(key: str, sido_code: str, sigungu_code: str) -> tuple[list[dict], datetime]:
+    """중복 fetch 방지: 같은 key로 fetch 중이면 기다렸다가 결과 공유."""
+    if key in _inflight:
+        return await asyncio.shield(_inflight[key])
+
+    future: asyncio.Future = asyncio.get_running_loop().create_future()
+    _inflight[key] = future
+    try:
+        result = await _load_fresh(sido_code, sigungu_code)
+        future.set_result(result)
+        return result
+    except Exception as e:
+        if not future.done():
+            future.set_exception(e)
+        raise
+    finally:
+        _inflight.pop(key, None)
+
+
 async def _cached_or_fetch(
     cache: CacheManager,
     key: str,
@@ -99,25 +118,12 @@ async def _cached_or_fetch(
     if cached:
         return cached["items"], datetime.fromisoformat(cached["fetched_at"])
 
-    if key in _inflight:
-        return await asyncio.shield(_inflight[key])
-
-    future: asyncio.Future = asyncio.get_running_loop().create_future()
-    _inflight[key] = future
-    try:
-        all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
-        await cache.set(key, {
-            "items": all_raw,
-            "fetched_at": fetched_at.isoformat(),
-        }, settings.CACHE_TTL_ANIMALS)
-        future.set_result((all_raw, fetched_at))
-        return all_raw, fetched_at
-    except Exception as e:
-        if not future.done():
-            future.set_exception(e)
-        raise
-    finally:
-        _inflight.pop(key, None)
+    all_raw, fetched_at = await _fetch_deduped(key, sido_code, sigungu_code)
+    await cache.set(key, {
+        "items": all_raw,
+        "fetched_at": fetched_at.isoformat(),
+    }, settings.CACHE_TTL_ANIMALS)
+    return all_raw, fetched_at
 
 
 async def get_animals_by_notice_nos(cache: CacheManager, notice_nos: list[str]) -> list[Animal]:
@@ -151,7 +157,8 @@ async def get_animals(
     key = CacheManager.animals_key(sido_code, sigungu_code)
 
     if force_refresh:
-        all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
+        # force_refresh도 _fetch_deduped 경유 → 초기 워밍 중 유저 요청이 피기백 가능
+        all_raw, fetched_at = await _fetch_deduped(key, sido_code, sigungu_code)
         await cache.set(key, {
             "items": all_raw,
             "fetched_at": fetched_at.isoformat(),
