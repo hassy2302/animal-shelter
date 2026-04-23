@@ -22,7 +22,7 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
         value={filters.sido_code ?? ""}
         onChange={(e) => onChange({ sido_code: e.target.value, sigungu_code: "", page: 1 })}
         disabled={sidoLoading}
-        className="select-field flex-1 min-w-0 disabled:opacity-40"
+        className="select-field flex-[3] min-w-0 sm:max-w-[180px] disabled:opacity-40"
       >
         <option value="">{sidoLoading ? "로딩 중..." : "시도"}</option>
         {sido.map((s) => (
@@ -36,7 +36,7 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
         value={filters.sigungu_code ?? ""}
         onChange={(e) => onChange({ sigungu_code: e.target.value, page: 1 })}
         disabled={!filters.sido_code || sigunguLoading}
-        className="select-field flex-1 min-w-0 disabled:opacity-40"
+        className="select-field flex-[3] min-w-0 sm:max-w-[180px] disabled:opacity-40"
       >
         <option value="">{sigunguLoading ? "로딩 중..." : "시군구"}</option>
         {sigungu.map((s) => (
@@ -49,7 +49,7 @@ export default function FilterBar({ filters, onChange, onReset }: FilterBarProps
         aria-label="상태"
         value={filters.state ?? "protect"}
         onChange={(e) => onChange({ state: e.target.value as AnimalFilters["state"], page: 1 })}
-        className="select-field w-24 shrink-0"
+        className="select-field flex-[2] min-w-[88px] sm:max-w-[140px]"
       >
         {STATE_OPTIONS.map((opt) => (
           <option key={opt.value} value={opt.value}>{opt.label}</option>
