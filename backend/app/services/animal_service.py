@@ -10,16 +10,6 @@ from app import services
 
 logger = logging.getLogger(__name__)
 
-# 캐시 키별 락 — 동시에 같은 키에 대한 _load_fresh 중복 호출 방지
-_load_locks: dict[str, asyncio.Lock] = {}
-
-
-def _get_lock(key: str) -> asyncio.Lock:
-    if key not in _load_locks:
-        _load_locks[key] = asyncio.Lock()
-    return _load_locks[key]
-
-
 UPKIND_DOG = "417000"
 UPKIND_CAT = "422400"
 UPKIND_ETC = "429900"
@@ -96,32 +86,32 @@ async def _load_fresh(sido_code: str, sigungu_code: str) -> tuple[list[dict], da
     return all_raw, datetime.now(KST)
 
 
-async def _get_or_load(cache: CacheManager, key: str, sido_code: str, sigungu_code: str) -> list[dict]:
+async def get_animals_by_notice_nos(cache: CacheManager, notice_nos: list[str]) -> list[Animal]:
+    key = CacheManager.animals_key("", "")
     cached = await cache.get(key)
     if cached:
-        return cached["items"]
-    async with _get_lock(key):
-        cached = await cache.get(key)  # 락 획득 후 재확인
-        if cached:
-            return cached["items"]
-        all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
+        all_raw = cached["items"]
+    else:
+        all_raw, fetched_at = await _load_fresh("", "")
         await cache.set(key, {
             "items": all_raw,
             "fetched_at": fetched_at.isoformat(),
         }, settings.CACHE_TTL_ANIMALS)
-        return all_raw
-
-
-async def get_animals_by_notice_nos(cache: CacheManager, notice_nos: list[str]) -> list[Animal]:
-    key = CacheManager.animals_key("", "")
-    all_raw = await _get_or_load(cache, key, "", "")
     nos = set(notice_nos)
     return [Animal(**a) for a in all_raw if a.get("noticeNo") in nos]
 
 
 async def get_animal_by_notice_no(cache: CacheManager, notice_no: str) -> Animal | None:
     key = CacheManager.animals_key("", "")
-    all_raw = await _get_or_load(cache, key, "", "")
+    cached = await cache.get(key)
+    if cached:
+        all_raw = cached["items"]
+    else:
+        all_raw, fetched_at = await _load_fresh("", "")
+        await cache.set(key, {
+            "items": all_raw,
+            "fetched_at": fetched_at.isoformat(),
+        }, settings.CACHE_TTL_ANIMALS)
     for a in all_raw:
         if a.get("noticeNo") == notice_no:
             return Animal(**a)
@@ -149,17 +139,11 @@ async def get_animals(
             all_raw: list[dict] = cached["items"]
             fetched_at = datetime.fromisoformat(cached["fetched_at"])
         else:
-            async with _get_lock(key):
-                cached = await cache.get(key)  # 락 획득 후 재확인
-                if cached:
-                    all_raw = cached["items"]
-                    fetched_at = datetime.fromisoformat(cached["fetched_at"])
-                else:
-                    all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
-                    await cache.set(key, {
-                        "items": all_raw,
-                        "fetched_at": fetched_at.isoformat(),
-                    }, settings.CACHE_TTL_ANIMALS)
+            all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
+            await cache.set(key, {
+                "items": all_raw,
+                "fetched_at": fetched_at.isoformat(),
+            }, settings.CACHE_TTL_ANIMALS)
     else:
         all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
         await cache.set(key, {

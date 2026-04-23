@@ -59,7 +59,6 @@ async def fetch_upkind(
     upkind: str,
     sido_code: str = "",
     sigungu_code: str = "",
-    semaphore: asyncio.Semaphore | None = None,
 ) -> list[dict]:
     # 첫 페이지로 totalCount 파악
     body = await _fetch_page(client, upkind, sido_code, sigungu_code, 1)
@@ -71,10 +70,12 @@ async def fetch_upkind(
     total_pages = -(-total_count // 100)  # ceil division
 
     if total_pages > 1:
+        semaphore = asyncio.Semaphore(3)
+
         async def _fetch_limited(p: int) -> dict:
             async with semaphore:
                 result = await _fetch_page(client, upkind, sido_code, sigungu_code, p)
-                await asyncio.sleep(0.1)
+                await asyncio.sleep(0.2)
                 return result
 
         tasks = [_fetch_limited(p) for p in range(2, total_pages + 1)]
@@ -93,13 +94,12 @@ async def fetch_all(
     sido_code: str = "",
     sigungu_code: str = "",
 ) -> list[dict]:
-    """소동물 + 고양이 + 강아지 3종 병렬 fetch — 전체 동시 요청 수 semaphore(5)로 제한"""
-    semaphore = asyncio.Semaphore(5)
+    """소동물 + 고양이 + 강아지 3종 병렬 fetch"""
     async with httpx.AsyncClient() as client:
         results = await asyncio.gather(
-            fetch_upkind(client, UPKIND_ETC, sido_code, sigungu_code, semaphore),
-            fetch_upkind(client, UPKIND_CAT, sido_code, sigungu_code, semaphore),
-            fetch_upkind(client, UPKIND_DOG, sido_code, sigungu_code, semaphore),
+            fetch_upkind(client, UPKIND_ETC, sido_code, sigungu_code),
+            fetch_upkind(client, UPKIND_CAT, sido_code, sigungu_code),
+            fetch_upkind(client, UPKIND_DOG, sido_code, sigungu_code),
         )
     animals = []
     for items in results:
