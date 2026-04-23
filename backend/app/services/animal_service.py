@@ -130,13 +130,10 @@ async def get_animals(
     sort: str = "latest",
     force_refresh: bool = False,
 ) -> AnimalListResponse:
+    key = CacheManager.animals_key(sido_code, sigungu_code)
     fetched_at = datetime.now(KST)
 
-    # 시도/시군구 필터가 없는 전국 조회만 캐시 사용 (메모리 절약)
-    use_cache = not sido_code and not sigungu_code
-    key = CacheManager.animals_key("", "")
-
-    if use_cache and not force_refresh:
+    if not force_refresh:
         cached = await cache.get(key)
         if cached:
             all_raw: list[dict] = cached["items"]
@@ -147,15 +144,12 @@ async def get_animals(
                 "items": all_raw,
                 "fetched_at": fetched_at.isoformat(),
             }, settings.CACHE_TTL_ANIMALS)
-    elif use_cache and force_refresh:
+    else:
         all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
         await cache.set(key, {
             "items": all_raw,
             "fetched_at": fetched_at.isoformat(),
         }, settings.CACHE_TTL_ANIMALS)
-    else:
-        # 시도별 쿼리는 캐시 없이 직접 조회 (메모리 초과 방지)
-        all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
 
     # 오버라이드 적용
     overrides = await cache.get_overrides()
