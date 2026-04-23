@@ -168,7 +168,7 @@ animal-shelter/
 | 시군구 목록 | 24시간 | `sigungu:{sido}` |
 
 - Redis 우선, 연결 불가 시 in-memory 자동 폴백
-- APScheduler가 매 정시마다 전국/서울 캐시 선제 워밍
+- APScheduler가 매 정시마다 전국 + 전체 시도 조합 캐시 선제 워밍 (Redis 없으면 in-memory에 적재 — 512MB 플랜 주의)
 - 앱 시작 시 2초 후 초기 캐시 워밍 실행
 
 ---
