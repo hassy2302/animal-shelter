@@ -144,17 +144,22 @@ async def get_animals(
     fetched_at = datetime.now(KST)
 
     if not force_refresh:
-        async with _get_lock(key):
-            cached = await cache.get(key)
-            if cached:
-                all_raw: list[dict] = cached["items"]
-                fetched_at = datetime.fromisoformat(cached["fetched_at"])
-            else:
-                all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
-                await cache.set(key, {
-                    "items": all_raw,
-                    "fetched_at": fetched_at.isoformat(),
-                }, settings.CACHE_TTL_ANIMALS)
+        cached = await cache.get(key)
+        if cached:
+            all_raw: list[dict] = cached["items"]
+            fetched_at = datetime.fromisoformat(cached["fetched_at"])
+        else:
+            async with _get_lock(key):
+                cached = await cache.get(key)  # 락 획득 후 재확인
+                if cached:
+                    all_raw = cached["items"]
+                    fetched_at = datetime.fromisoformat(cached["fetched_at"])
+                else:
+                    all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
+                    await cache.set(key, {
+                        "items": all_raw,
+                        "fetched_at": fetched_at.isoformat(),
+                    }, settings.CACHE_TTL_ANIMALS)
     else:
         all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
         await cache.set(key, {
