@@ -89,12 +89,18 @@ cd animal-shelter-native && npm run build && npx cap sync android && npx cap ope
 
 Redis 없으면 in-memory 자동 폴백. APScheduler가 매 정시 캐시 워밍 + 신규 공고 알림 발송.
 
-### 캐시 안전장치 (`backend/app/services/animal_service.py`)
+### 캐시 안전장치 (`backend/app/services/animal_service.py`, `backend/app/cache/manager.py`)
 
 - **inflight dedup (`_fetch_deduped` / `_inflight`)**: 동일 캐시 키에 대해 fetch가 이미 진행 중이면 새 요청은 기다렸다가 결과를 공유 — 국가 API 중복 호출(thundering herd) 방지. `force_refresh=True` 경로(스타트업 워밍, 스케줄러)도 동일하게 처리되어 워밍 중 유저 요청이 결과를 피기백 가능.
 - **`_should_cache(items)`**: 결과가 10건 이하이면 캐시에 저장하지 않음 — 429 오류 등으로 빈 결과가 캐시에 기록되어 "동물 없음"이 표시되는 캐시 오염 방지.
+- **스케줄러 전국 단일 워밍**: `scheduler/jobs.py`는 전국(sido_code="") 단일 워밍만 수행. 시도별 18개 병렬 워밍은 Render 무료 플랜(512MB) OOM 유발로 제거됨.
+- **시도별 요청 캐시 미저장**: `sido_code` 있는 요청은 캐시에 저장하지 않고 직접 조회 — 메모리 절약.
+- **Redis+in-memory 이중 쓰기**: `CacheManager.set`은 Redis와 in-memory 모두에 저장. `CacheManager.get`은 Redis에 키가 없으면 in-memory로 폴백 — Redis setex 실패 시에도 캐시 동작 보장.
 
-> ⚠️ **메모리 주의:** Redis 없이 운영 시, 매 정시 스케줄러가 전국+시도 18개 조합을 동시에 인메모리에 올려 Render 무료 플랜(512MB) 초과 위험. 재발 시 `scheduler/jobs.py`를 전국 단일 워밍으로 수정하고 `animal_service.py`에서 sido_code 있는 요청은 캐시 저장 없이 직접 조회하도록 변경.
+> ⚠️ **과거 버그 기록 (수정 완료):**
+> 1. `CacheManager.set`이 Redis 저장 후 `return`으로 in-memory를 건너뜀 → Redis 장애 시 항상 캐시 MISS
+> 2. `CacheManager.get`이 Redis 연결 상태에서 키 없을 때 in-memory를 확인하지 않고 `None` 반환 → Redis에 키 없으면 in-memory 무시
+> 3. 스케줄러가 18개 시도 병렬 워밍 → OOM → 서버 반복 재시작 → 캐시 무효화 악순환
 
 ## 알림 기능 (`backend/app/services/notification_service.py`)
 
