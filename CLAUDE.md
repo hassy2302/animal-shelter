@@ -25,7 +25,7 @@ animal-shelter-native/   ← 별도 디렉토리 (Android 앱)
 - 커밋과 git push는 사용자가 직접 함 — 명령어만 알려줄 것
 - Vercel 배포는 main 브랜치 push 시 자동
 - Android 앱 업데이트 시 `android/app/build.gradle`의 `versionCode`를 1 증가 후 Android Studio에서 AAB 빌드
-- 현재 versionCode: 7, versionName: 1.3
+- 현재 versionCode: 8, versionName: 1.3
 
 ### 코드 작업 범위
 - 웹(`frontend/`)과 앱(`animal-shelter-native/`)은 별개 코드베이스
@@ -106,6 +106,12 @@ Redis 없으면 in-memory 자동 폴백. APScheduler가 매 정시 캐시 워밍
 - `last_checked_at` 미존재 시 현재 시각으로 초기화 (서버 재시작 후 오탐 방지)
 - 만료된 FCM 토큰은 발송 실패 시 자동 제거
 - 현재 FCM 우선순위 `normal` → 추후 `high`로 변경 예정 (Android Doze 모드 대응)
+
+## 헤더 마퀴 (`frontend/src/components/layout/Header.tsx`)
+
+- 전체 소동물(고양이·강아지 제외) 중 랜덤 선별된 사진이 가로로 흐름
+- 속도: `tailwind.config.ts`의 `animation.marquee` duration 값으로 조정 (현재 `45s`)
+- 클릭 시 해당 동물 상세 공고 확인
 
 ## 앱 이름
 
