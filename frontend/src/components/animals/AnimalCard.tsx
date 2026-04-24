@@ -35,6 +35,14 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const [imgError, setImgError] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showShare, setShowShare] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function copyNoticeNo(e: React.MouseEvent) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(noticeNo);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
   const { isFavorite, toggle } = useFavorites();
   const { addRecentlyViewed } = useRecentlyViewed();
   const isNew = isNewAnimal(happenDt);
@@ -98,7 +106,12 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
             </div>
             {/* 라벨형 정보 rows */}
             <div className="flex flex-col gap-0.5">
-              <InfoRow label="공고 번호" value={noticeNo} />
+              <div className="flex gap-1.5 text-xs" onClick={copyNoticeNo} title="클릭하여 복사">
+                <span className="shrink-0 w-14 text-[#B8B4AF] dark:text-[#78716C]">공고 번호</span>
+                <span className="flex-1 truncate text-[var(--text)] cursor-pointer hover:text-brand-500 transition-colors select-none">
+                  {copied ? "복사됨 ✓" : noticeNo}
+                </span>
+              </div>
               <InfoRow label="보호 기관" value={careNm} />
               {happenPlace && <InfoRow label="발견 장소" value={happenPlace} />}
               {happenDt && <InfoRow label="구조일" value={formatDate(happenDt)} />}
@@ -108,7 +121,13 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
 
           {/* 데스크탑 전용 풀 정보 */}
           <div className="hidden md:flex flex-col flex-1 p-3">
-            <p className="text-xs text-[#B8B4AF] dark:text-[#78716C] mb-1">📋 {noticeNo}</p>
+            <p
+              onClick={copyNoticeNo}
+              title="클릭하여 복사"
+              className="text-xs text-[#B8B4AF] dark:text-[#78716C] mb-1 cursor-pointer hover:text-brand-500 transition-colors select-none"
+            >
+              📋 {copied ? "복사됨 ✓" : noticeNo}
+            </p>
 
             {/* 제목 */}
             <div className="flex items-center gap-1.5 flex-wrap mb-2">

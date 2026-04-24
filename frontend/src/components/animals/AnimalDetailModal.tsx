@@ -28,6 +28,13 @@ function InfoChip({ label, value }: { label: string; value: string }) {
 export default function AnimalDetailModal({ animal, onClose }: Props) {
   const [showShare, setShowShare] = useState(false);
   const [imgError, setImgError] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  function copyNoticeNo() {
+    navigator.clipboard.writeText(noticeNo);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 1500);
+  }
   const { isFavorite, toggle } = useFavorites();
   const {
     noticeNo, kindNm, upkind, sexCd, age, colorCd, weight,
@@ -118,7 +125,13 @@ export default function AnimalDetailModal({ animal, onClose }: Props) {
 
           <div className="p-5 space-y-4">
             {/* 공고번호 */}
-            <p className="text-xs text-[#B8B4AF] dark:text-[#78716C]">📋 {noticeNo}</p>
+            <p
+              onClick={copyNoticeNo}
+              title="클릭하여 복사"
+              className="text-xs text-[#B8B4AF] dark:text-[#78716C] cursor-pointer hover:text-brand-500 transition-colors select-none w-fit"
+            >
+              📋 {copied ? "복사됨 ✓" : noticeNo}
+            </p>
 
             {/* 기본 정보 칩 */}
             <div className="grid grid-cols-2 gap-2">
