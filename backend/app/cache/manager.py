@@ -68,7 +68,9 @@ class CacheManager:
         if self._redis:
             try:
                 raw = await self._redis.get(key)
-                return json.loads(raw) if raw else None
+                if raw:
+                    return json.loads(raw)
+                # Redis에 키 없음 → in-memory로 폴백 (setex 실패 등 대비)
             except Exception:
                 pass
         return await self._fallback.get(key)
