@@ -120,7 +120,9 @@ async def _cached_or_fetch(
 ) -> tuple[list[dict], datetime]:
     cached = await cache.get(key)
     if cached:
+        logger.info(f"캐시 HIT: {key} items={len(cached.get('items', []))}")
         return cached["items"], datetime.fromisoformat(cached["fetched_at"])
+    logger.info(f"캐시 MISS: {key}")
 
     all_raw, fetched_at = await _fetch_deduped(key, sido_code, sigungu_code)
     if _should_cache(all_raw):
