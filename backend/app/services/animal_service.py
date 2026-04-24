@@ -90,34 +90,57 @@ def _should_cache(items: list[dict]) -> bool:
     return len(items) > 10
 
 
-async def get_animals_by_notice_nos(cache: CacheManager, notice_nos: list[str]) -> list[Animal]:
-    key = CacheManager.animals_key("", "")
+_inflight: dict[str, "asyncio.Future[tuple[list[dict], datetime]]"] = {}
+
+
+async def _fetch_deduped(key: str, sido_code: str, sigungu_code: str) -> tuple[list[dict], datetime]:
+    """진행 중인 fetch가 있으면 기다렸다가 결과 공유 — 중복 API 호출 방지."""
+    if key in _inflight:
+        return await asyncio.shield(_inflight[key])
+
+    future: asyncio.Future = asyncio.get_running_loop().create_future()
+    _inflight[key] = future
+    try:
+        result = await _load_fresh(sido_code, sigungu_code)
+        future.set_result(result)
+        return result
+    except Exception as e:
+        if not future.done():
+            future.set_exception(e)
+        raise
+    finally:
+        _inflight.pop(key, None)
+
+
+async def _cached_or_fetch(
+    cache: CacheManager,
+    key: str,
+    sido_code: str,
+    sigungu_code: str,
+) -> tuple[list[dict], datetime]:
     cached = await cache.get(key)
     if cached:
-        all_raw = cached["items"]
-    else:
-        all_raw, fetched_at = await _load_fresh("", "")
-        if _should_cache(all_raw):
-            await cache.set(key, {
-                "items": all_raw,
-                "fetched_at": fetched_at.isoformat(),
-            }, settings.CACHE_TTL_ANIMALS)
+        return cached["items"], datetime.fromisoformat(cached["fetched_at"])
+
+    all_raw, fetched_at = await _fetch_deduped(key, sido_code, sigungu_code)
+    if _should_cache(all_raw):
+        await cache.set(key, {
+            "items": all_raw,
+            "fetched_at": fetched_at.isoformat(),
+        }, settings.CACHE_TTL_ANIMALS)
+    return all_raw, fetched_at
+
+
+async def get_animals_by_notice_nos(cache: CacheManager, notice_nos: list[str]) -> list[Animal]:
+    key = CacheManager.animals_key("", "")
+    all_raw, _ = await _cached_or_fetch(cache, key, "", "")
     nos = set(notice_nos)
     return [Animal(**a) for a in all_raw if a.get("noticeNo") in nos]
 
 
 async def get_animal_by_notice_no(cache: CacheManager, notice_no: str) -> Animal | None:
     key = CacheManager.animals_key("", "")
-    cached = await cache.get(key)
-    if cached:
-        all_raw = cached["items"]
-    else:
-        all_raw, fetched_at = await _load_fresh("", "")
-        if _should_cache(all_raw):
-            await cache.set(key, {
-                "items": all_raw,
-                "fetched_at": fetched_at.isoformat(),
-            }, settings.CACHE_TTL_ANIMALS)
+    all_raw, _ = await _cached_or_fetch(cache, key, "", "")
     for a in all_raw:
         if a.get("noticeNo") == notice_no:
             return Animal(**a)
@@ -137,27 +160,17 @@ async def get_animals(
     force_refresh: bool = False,
 ) -> AnimalListResponse:
     key = CacheManager.animals_key(sido_code, sigungu_code)
-    fetched_at = datetime.now(KST)
 
-    if not force_refresh:
-        cached = await cache.get(key)
-        if cached:
-            all_raw: list[dict] = cached["items"]
-            fetched_at = datetime.fromisoformat(cached["fetched_at"])
-        else:
-            all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
-            if _should_cache(all_raw):
-                await cache.set(key, {
-                    "items": all_raw,
-                    "fetched_at": fetched_at.isoformat(),
-                }, settings.CACHE_TTL_ANIMALS)
-    else:
-        all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
+    if force_refresh:
+        # force_refresh도 _fetch_deduped 경유 → 워밍 중 유저 요청이 피기백 가능
+        all_raw, fetched_at = await _fetch_deduped(key, sido_code, sigungu_code)
         if _should_cache(all_raw):
             await cache.set(key, {
                 "items": all_raw,
                 "fetched_at": fetched_at.isoformat(),
             }, settings.CACHE_TTL_ANIMALS)
+    else:
+        all_raw, fetched_at = await _cached_or_fetch(cache, key, sido_code, sigungu_code)
 
     # 오버라이드 적용
     overrides = await cache.get_overrides()
