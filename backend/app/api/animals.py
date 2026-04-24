@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, Query, Response, HTTPException
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from app.models.animal import Animal, AnimalListResponse
 from app.services import animal_service
 from app.dependencies import get_cache
@@ -9,7 +9,7 @@ router = APIRouter(prefix="/animals", tags=["animals"])
 
 
 class BatchRequest(BaseModel):
-    notice_nos: list[str]
+    notice_nos: list[str] = Field(..., max_length=200)
 
 
 @router.post("/batch", response_model=list[Animal])

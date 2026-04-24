@@ -1,3 +1,4 @@
+import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
@@ -7,7 +8,7 @@ import { getAnimalEmoji, formatDate } from "@/lib/utils";
 import { BASE_URL } from "@/lib/constants";
 import ShareButton from "@/components/animals/ShareButton";
 
-async function getAnimal(noticeNo: string): Promise<Animal | null> {
+const getAnimal = cache(async (noticeNo: string): Promise<Animal | null> => {
   const apiBase = process.env.API_BASE_URL;
   try {
     const res = await fetch(
@@ -19,7 +20,7 @@ async function getAnimal(noticeNo: string): Promise<Animal | null> {
   } catch {
     return null;
   }
-}
+});
 
 const SEX_LABEL: Record<string, string> = { M: "수컷", F: "암컷", Q: "미상" };
 

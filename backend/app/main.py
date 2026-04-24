@@ -78,4 +78,7 @@ app.include_router(router, prefix="/api")
 
 @app.api_route("/health", methods=["GET", "HEAD"])
 async def health():
-    return {"status": "ok"}
+    from app.dependencies import get_cache
+    cache = get_cache()
+    redis_ok = await cache.ping()
+    return {"status": "ok", "redis": redis_ok}

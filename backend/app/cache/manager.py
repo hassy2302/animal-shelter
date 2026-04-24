@@ -64,6 +64,15 @@ class CacheManager:
         if self._redis:
             await self._redis.close()
 
+    async def ping(self) -> bool:
+        if self._redis:
+            try:
+                await self._redis.ping()
+                return True
+            except Exception:
+                return False
+        return True  # 인메모리는 항상 정상
+
     async def get(self, key: str) -> Any | None:
         if self._redis:
             try:
