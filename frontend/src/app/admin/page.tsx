@@ -1,9 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
+const SESSION_KEY = "admin_session";
+const SESSION_TTL = 10 * 60 * 1000; // 10분
+
+function saveSession(k: string) {
+  sessionStorage.setItem(SESSION_KEY, JSON.stringify({ key: k, expiresAt: Date.now() + SESSION_TTL }));
+}
+
+function loadSession(): string | null {
+  try {
+    const raw = sessionStorage.getItem(SESSION_KEY);
+    if (!raw) return null;
+    const { key: k, expiresAt } = JSON.parse(raw);
+    if (Date.now() > expiresAt) { sessionStorage.removeItem(SESSION_KEY); return null; }
+    return k;
+  } catch { return null; }
+}
 
 export default function AdminPage() {
   const [key, setKey] = useState("");
@@ -17,6 +33,16 @@ export default function AdminPage() {
 
   const [overrides, setOverrides] = useState<Record<string, string> | null>(null);
   const [copied, setCopied] = useState<string | null>(null);
+
+  useEffect(() => {
+    const saved = loadSession();
+    if (!saved) return;
+    setKey(saved);
+    fetch(`${API_BASE}/api/admin/overrides`, { headers: { "Content-Type": "application/json", "X-Admin-Key": saved } })
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => { if (data) { setOverrides(data); setAuthed(true); } else { sessionStorage.removeItem(SESSION_KEY); } })
+      .catch(() => sessionStorage.removeItem(SESSION_KEY));
+  }, []);
 
   function copyNoticeNo(no: string) {
     navigator.clipboard.writeText(no);
@@ -32,6 +58,7 @@ export default function AdminPage() {
       const res = await fetch(`${API_BASE}/api/admin/overrides`, { headers });
       if (res.ok) {
         const data = await res.json();
+        saveSession(key);
         setOverrides(data);
         setAuthed(true);
       } else if (res.status === 429) {
