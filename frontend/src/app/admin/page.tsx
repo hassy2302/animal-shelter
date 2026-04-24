@@ -16,6 +16,13 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
 
   const [overrides, setOverrides] = useState<Record<string, string> | null>(null);
+  const [copied, setCopied] = useState<string | null>(null);
+
+  function copyNoticeNo(no: string) {
+    navigator.clipboard.writeText(no);
+    setCopied(no);
+    setTimeout(() => setCopied(null), 1500);
+  }
 
   const headers = { "Content-Type": "application/json", "X-Admin-Key": key };
 
@@ -161,7 +168,13 @@ export default function AdminPage() {
           {overrides && Object.entries(overrides).map(([no, ps]) => (
             <div key={no} className="flex items-center justify-between gap-2 bg-[#F8F7F5] dark:bg-[#3D3935] rounded-xl px-4 py-2.5">
               <div>
-                <span className="text-xs font-mono text-[var(--text)]">{no}</span>
+                <span
+                  onClick={() => copyNoticeNo(no)}
+                  title="클릭하여 복사"
+                  className="text-xs font-mono cursor-pointer select-none transition-colors text-[var(--text)] hover:text-brand-500"
+                >
+                  {copied === no ? "복사됨 ✓" : no}
+                </span>
                 <span className="ml-2 text-xs font-bold text-brand-500">{ps}</span>
               </div>
               <button
