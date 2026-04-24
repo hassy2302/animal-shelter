@@ -8,7 +8,7 @@ const API_BASE = process.env.NEXT_PUBLIC_API_BASE_URL ?? "";
 export default function AdminPage() {
   const [key, setKey] = useState("");
   const [authed, setAuthed] = useState(false);
-  const [authError, setAuthError] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const [noticeNo, setNoticeNo] = useState("");
   const [state, setState] = useState("입양완료");
@@ -27,18 +27,20 @@ export default function AdminPage() {
   const headers = { "Content-Type": "application/json", "X-Admin-Key": key };
 
   async function handleLogin() {
-    setAuthError(false);
+    setAuthError(null);
     try {
       const res = await fetch(`${API_BASE}/api/admin/overrides`, { headers });
       if (res.ok) {
         const data = await res.json();
         setOverrides(data);
         setAuthed(true);
+      } else if (res.status === 429) {
+        setAuthError("너무 많은 실패 시도입니다. 10분 후 다시 시도해주세요.");
       } else {
-        setAuthError(true);
+        setAuthError("키가 올바르지 않습니다.");
       }
     } catch {
-      setAuthError(true);
+      setAuthError("서버에 연결할 수 없어요.");
     }
   }
 
@@ -102,7 +104,7 @@ export default function AdminPage() {
             onKeyDown={(e) => e.key === "Enter" && handleLogin()}
             className="w-full border border-[var(--border)] rounded-xl px-4 py-2.5 text-sm bg-[var(--bg)] text-[var(--text)] outline-none focus:border-brand-400 mb-3"
           />
-          {authError && <p className="text-xs text-red-500 mb-3">키가 올바르지 않습니다</p>}
+          {authError && <p className="text-xs text-red-500 mb-3">{authError}</p>}
           <button
             onClick={handleLogin}
             className="w-full py-2.5 rounded-xl bg-brand-500 text-white font-bold text-sm hover:bg-brand-600 transition-colors"
