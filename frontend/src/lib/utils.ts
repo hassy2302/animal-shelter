@@ -23,7 +23,7 @@ export function getAnimalEmoji(kindNm: string, upkind: string): string {
 }
 
 export function formatDate(yyyymmdd: string): string {
-  if (yyyymmdd.length !== 8 || !/^\d{8}$/.test(yyyymmdd) || yyyymmdd === "00000000") return "-";
+  if (yyyymmdd.length !== 8) return yyyymmdd;
   return `${yyyymmdd.slice(0, 4)}-${yyyymmdd.slice(4, 6)}-${yyyymmdd.slice(6)}`;
 }
 

@@ -6,27 +6,33 @@ from datetime import datetime, timezone, timedelta
 
 from app.cache.manager import CacheManager
 from app.config import settings
-from app.services.animal_service import (
-    SPECIES_KEYWORDS, RODENT_KEYWORDS, KNOWN_KEYWORDS,
-    UPKIND_DOG, UPKIND_CAT, UPKIND_ETC,
-)
 
 KST = timezone(timedelta(hours=9))
 logger = logging.getLogger(__name__)
 
 _firebase_initialized = False
-_firebase_init_failed = False
+
+RODENT_KEYWORDS = ["쥐", "래트", "레트", "rat", "팬시마우스", "팬더마우스", "팬마", "기니피그", "데구", "친칠라"]
+SPECIES_KEYWORDS = {
+    "🐹 햄스터": ["햄스터"],
+    "🐰 토끼": ["토끼"],
+    "🐢 거북이": ["거북"],
+    "🦔 고슴도치": ["고슴도치"],
+    "🐦 새": ["앵무", "잉꼬", "금조", "사랑새", "카나리아", "문조", "십자매", "비둘기", "코카티엘", "왕관앵무", "모란앵무", "코뉴어", "마코", "핀치", "구관조", "조류", "소형조", "중형조", "대형조"],
+}
+KNOWN_KEYWORDS = [kw for kws in SPECIES_KEYWORDS.values() for kw in kws]
+UPKIND_DOG = "417000"
+UPKIND_CAT = "422400"
+UPKIND_ETC = "429900"
 
 TOKENS_KEY = "notifications:tokens"
 LAST_CHECKED_KEY = "notifications:last_checked_at"
 
 
 def _init_firebase() -> bool:
-    global _firebase_initialized, _firebase_init_failed
+    global _firebase_initialized
     if _firebase_initialized:
         return True
-    if _firebase_init_failed:
-        return False
     if not settings.FCM_SERVICE_ACCOUNT_JSON:
         return False
     try:
@@ -41,7 +47,6 @@ def _init_firebase() -> bool:
         return True
     except Exception as e:
         logger.error(f"Firebase 초기화 실패: {e}")
-        _firebase_init_failed = True
         return False
 
 

@@ -74,36 +74,27 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
   const { data, animals, total, totalPages, fetchedAt, isLoading, error } = useAnimals(filters);
   const { favorites, count: favCount, cleanup } = useFavorites();
   const { recentlyViewed, count: recentCount } = useRecentlyViewed();
-  const favCacheRef = useRef<{ nos: string; animals: Animal[] } | null>(null);
+  const cleanupDone = useRef(false);
 
-  // 마운트 시 1회: stale 찜 정리 + 데이터 미리 캐시
+  // 페이지 로드 시 찜 목록 자동 정리 (종료된 공고 제거)
   useEffect(() => {
-    if (favorites.size === 0) return;
+    if (cleanupDone.current || favorites.size === 0) return;
+    cleanupDone.current = true;
     fetchAnimalsBatch([...favorites])
-      .then((result) => {
-        const nosKey = [...favorites].sort().join(",");
-        favCacheRef.current = { nos: nosKey, animals: result };
-        cleanup(result.map((a: Animal) => a.noticeNo));
-      })
+      .then((result) => cleanup(result.map((a: Animal) => a.noticeNo)))
       .catch(() => {});
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [favorites, cleanup]);
 
   useEffect(() => {
     if (!showFavoritesOnly || favorites.size === 0) {
-      if (!showFavoritesOnly) setFavoriteAnimals([]);
+      setFavoriteAnimals([]);
       setFavoriteError(false);
-      return;
-    }
-    const nosKey = [...favorites].sort().join(",");
-    if (favCacheRef.current?.nos === nosKey) {
-      setFavoriteAnimals(favCacheRef.current.animals);
       return;
     }
     setFavoriteLoading(true);
     setFavoriteError(false);
     fetchAnimalsBatch([...favorites])
       .then((result) => {
-        favCacheRef.current = { nos: nosKey, animals: result };
         setFavoriteAnimals(result);
         cleanup(result.map((a: Animal) => a.noticeNo));
       })
