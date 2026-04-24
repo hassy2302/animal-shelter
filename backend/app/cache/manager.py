@@ -77,7 +77,6 @@ class CacheManager:
         if self._redis:
             try:
                 await self._redis.setex(key, ttl, json.dumps(value, default=str))
-                return
             except Exception:
                 pass
         await self._fallback.set(key, value, ttl)
