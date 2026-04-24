@@ -89,6 +89,11 @@ cd animal-shelter-native && npm run build && npx cap sync android && npx cap ope
 
 Redis 없으면 in-memory 자동 폴백. APScheduler가 매 정시 캐시 워밍 + 신규 공고 알림 발송.
 
+### 캐시 안전장치 (`backend/app/services/animal_service.py`)
+
+- **inflight dedup (`_fetch_deduped` / `_inflight`)**: 동일 캐시 키에 대해 fetch가 이미 진행 중이면 새 요청은 기다렸다가 결과를 공유 — 국가 API 중복 호출(thundering herd) 방지. `force_refresh=True` 경로(스타트업 워밍, 스케줄러)도 동일하게 처리되어 워밍 중 유저 요청이 결과를 피기백 가능.
+- **`_should_cache(items)`**: 결과가 10건 이하이면 캐시에 저장하지 않음 — 429 오류 등으로 빈 결과가 캐시에 기록되어 "동물 없음"이 표시되는 캐시 오염 방지.
+
 > ⚠️ **메모리 주의:** Redis 없이 운영 시, 매 정시 스케줄러가 전국+시도 18개 조합을 동시에 인메모리에 올려 Render 무료 플랜(512MB) 초과 위험. 재발 시 `scheduler/jobs.py`를 전국 단일 워밍으로 수정하고 `animal_service.py`에서 sido_code 있는 요청은 캐시 저장 없이 직접 조회하도록 변경.
 
 ## 알림 기능 (`backend/app/services/notification_service.py`)
