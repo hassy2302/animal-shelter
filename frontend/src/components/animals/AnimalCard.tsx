@@ -33,6 +33,7 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
   const emoji = getAnimalEmoji(kindNm, upkind);
   const kindLabel = kindFullNm || kindNm;
   const [imgError, setImgError] = useState(false);
+  const [imgLoaded, setImgLoaded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showShare, setShowShare] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -59,15 +60,21 @@ export default function AnimalCard({ animal }: { animal: Animal }) {
         {/* ── 이미지 영역 ── */}
         <div className="relative shrink-0 w-28 aspect-[3/4] md:w-full md:aspect-[4/3] bg-gradient-to-br from-brand-100 to-[#FFE8D6] dark:from-[#3D1A08] dark:to-[#431407]">
           {imgSrc && !imgError ? (
-            <Image
-              src={imgSrc}
-              alt={`${kindNm} - ${careNm} 보호 중`}
-              fill
-              className="object-cover"
-              sizes="(max-width: 768px) 112px, (max-width: 1024px) 33vw, 25vw"
-              unoptimized
-              onError={() => setImgError(true)}
-            />
+            <>
+              {!imgLoaded && (
+                <div className="absolute inset-0 animate-pulse bg-gradient-to-br from-brand-100 to-[#FFE8D6] dark:from-[#3D1A08] dark:to-[#431407]" />
+              )}
+              <Image
+                src={imgSrc}
+                alt={`${kindNm} - ${careNm} 보호 중`}
+                fill
+                className={`object-cover transition-opacity duration-300 ${imgLoaded ? "opacity-100" : "opacity-0"}`}
+                sizes="(max-width: 768px) 112px, (max-width: 1024px) 33vw, 25vw"
+                unoptimized
+                onLoad={() => setImgLoaded(true)}
+                onError={() => setImgError(true)}
+              />
+            </>
           ) : (
             <div className="w-full h-full flex flex-col items-center justify-center gap-2">
               <span className="text-4xl md:text-6xl">{emoji}</span>

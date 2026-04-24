@@ -334,14 +334,7 @@ export default function AnimalPageClient({ initialData, initialFilters }: Props)
       {error && !displayLoading && (
         <div className="flex flex-col items-center justify-center py-20 text-center">
           <p className="text-4xl mb-4">😿</p>
-          <p className="text-base font-semibold text-[var(--text)] mb-1">
-            {error.message === "서버 응답 시간이 초과됐어요"
-              ? "서버에 연결할 수 없어요"
-              : "데이터를 불러오지 못했어요"}
-          </p>
-          <p className="text-sm text-[var(--muted)]">{error.message === "서버 응답 시간이 초과됐어요"
-            ? "서버가 응답하지 않습니다. 잠시 후 다시 시도해주세요."
-            : "잠시 후 다시 시도해주세요."}</p>
+          <p className="text-sm text-[var(--muted)]">{error.message}</p>
         </div>
       )}
 

@@ -57,10 +57,10 @@ export default function AdminPage() {
         setNoticeNo("");
         await refreshList();
       } else {
-        setMsg({ type: "err", text: "처리 실패" });
+        setMsg({ type: "err", text: res.status >= 500 ? "서버 오류가 발생했어요. 잠시 후 다시 시도해주세요." : res.status === 401 ? "인증 키가 올바르지 않아요." : `처리 실패 (${res.status})` });
       }
     } catch {
-      setMsg({ type: "err", text: "네트워크 오류" });
+      setMsg({ type: "err", text: navigator.onLine ? "서버에 연결할 수 없어요." : "인터넷 연결을 확인해주세요." });
     }
     setLoading(false);
   }
@@ -76,10 +76,10 @@ export default function AdminPage() {
         setMsg({ type: "ok", text: `${no} 오버라이드 제거됨` });
         await refreshList();
       } else {
-        setMsg({ type: "err", text: "제거 실패" });
+        setMsg({ type: "err", text: res.status >= 500 ? "서버 오류가 발생했어요. 잠시 후 다시 시도해주세요." : `제거 실패 (${res.status})` });
       }
     } catch {
-      setMsg({ type: "err", text: "네트워크 오류" });
+      setMsg({ type: "err", text: navigator.onLine ? "서버에 연결할 수 없어요." : "인터넷 연결을 확인해주세요." });
     }
     setLoading(false);
   }

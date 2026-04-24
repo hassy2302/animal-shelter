@@ -9,12 +9,19 @@ const fetcher = (url: string) => {
   const timer = setTimeout(() => controller.abort(), 10_000);
   return fetch(url, { signal: controller.signal })
     .then((r) => {
-      if (!r.ok) throw new Error("데이터 로드 실패");
+      if (!r.ok) {
+        if (r.status === 429) throw new Error("요청이 너무 많아요. 잠시 후 다시 시도해주세요.");
+        if (r.status >= 500) throw new Error("서버에 일시적인 문제가 있어요. 잠시 후 다시 시도해주세요.");
+        throw new Error("데이터를 불러오지 못했어요. 잠시 후 다시 시도해주세요.");
+      }
       return r.json() as Promise<AnimalListResponse>;
     })
     .catch((e: unknown) => {
       if (e instanceof Error && e.name === "AbortError") {
-        throw new Error("서버 응답 시간이 초과됐어요");
+        throw new Error("응답이 너무 오래 걸려요. 잠시 후 다시 시도해주세요.");
+      }
+      if (typeof navigator !== "undefined" && !navigator.onLine) {
+        throw new Error("인터넷 연결을 확인해주세요.");
       }
       throw e;
     })
