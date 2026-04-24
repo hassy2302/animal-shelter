@@ -161,7 +161,10 @@ async def get_animals(
 ) -> AnimalListResponse:
     key = CacheManager.animals_key(sido_code, sigungu_code)
 
-    if force_refresh:
+    # sido_code가 있는 요청은 캐시 저장 없이 직접 조회 — 메모리 절약
+    if sido_code:
+        all_raw, fetched_at = await _load_fresh(sido_code, sigungu_code)
+    elif force_refresh:
         # force_refresh도 _fetch_deduped 경유 → 워밍 중 유저 요청이 피기백 가능
         all_raw, fetched_at = await _fetch_deduped(key, sido_code, sigungu_code)
         if _should_cache(all_raw):
