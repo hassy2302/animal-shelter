@@ -6,7 +6,7 @@ export default function PrivacyPage() {
   return (
     <main style={{ fontFamily: "sans-serif", maxWidth: 720, margin: "0 auto", padding: "40px 24px", color: "#1c1917", lineHeight: 1.8 }}>
       <h1 style={{ fontSize: "1.6rem", fontWeight: 800, marginBottom: 8 }}>개인정보처리방침</h1>
-      <p style={{ fontSize: "0.85rem", color: "#78716c", marginBottom: 32 }}>시행일: 2026년 3월 29일</p>
+      <p style={{ fontSize: "0.85rem", color: "#78716c", marginBottom: 32 }}>시행일: 2026년 4월 27일</p>
 
       <p style={{ fontSize: "0.95rem", color: "#44403c" }}>
         햄소토 - 유기동물입양(이하 &quot;앱&quot;)은 농림축산식품부 동물보호관리시스템에서 제공하는
