@@ -19,7 +19,6 @@ export default function PrivacyPage() {
         <li>앱 이름: 햄소토 (유기동물입양 - 햄소토)</li>
         <li>개발자: hamsoto</li>
         <li>이메일: <a href="mailto:hassy2302@gmail.com" style={{ color: "#C2410C" }}>hassy2302@gmail.com</a></li>
-        <li>앱 ID: app.animalshelter.kr</li>
       </ul>
 
       <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginTop: 32, marginBottom: 8 }}>1. 수집하는 개인정보</h2>
