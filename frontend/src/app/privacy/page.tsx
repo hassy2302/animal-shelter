@@ -9,14 +9,13 @@ export default function PrivacyPage() {
       <p style={{ fontSize: "0.85rem", color: "#78716c", marginBottom: 32 }}>시행일: 2026년 4월 27일</p>
 
       <p style={{ fontSize: "0.95rem", color: "#44403c" }}>
-        햄소토 - 유기동물입양(이하 &quot;앱&quot;)은 농림축산식품부 동물보호관리시스템에서 제공하는
-        유기 동물 공고 데이터를 조회하는 서비스입니다. 본 앱은 Google Play 스토어에서
-        &quot;유기동물입양 - 햄소토&quot;라는 이름으로 배포됩니다.
+        유기동물입양 - 햄소토(이하 &quot;앱&quot;)는 농림축산식품부 동물보호관리시스템에서 제공하는
+        유기 동물 공고 데이터를 조회하는 서비스입니다.
       </p>
 
       <h2 style={{ fontSize: "1.1rem", fontWeight: 700, marginTop: 32, marginBottom: 8 }}>앱 정보</h2>
       <ul style={{ fontSize: "0.95rem", color: "#44403c" }}>
-        <li>앱 이름: 햄소토 (유기동물입양 - 햄소토)</li>
+        <li>앱 이름: 유기동물입양 - 햄소토</li>
         <li>개발자: hamsoto</li>
         <li>이메일: <a href="mailto:hassy2302@gmail.com" style={{ color: "#C2410C" }}>hassy2302@gmail.com</a></li>
       </ul>
