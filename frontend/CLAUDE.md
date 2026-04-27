@@ -10,17 +10,30 @@ Android 앱(`animal-shelter-native`)의 WebView 소스이기도 함.
 - **개발자:** hamsoto
 - **개인정보처리방침:** https://hamsoto.kr/privacy
 
+## 아키텍처
+
+브라우저 → Next.js API Routes (Vercel) → 백엔드 (Render)
+
+- 백엔드 URL(`animal-shelter-x6nk.onrender.com`)은 브라우저에 노출되지 않음
+- `src/app/api/` 하위 Route Handler가 백엔드를 프록시
+- 초기 렌더링은 SSR(`page.tsx`), 이후 필터/페이지 변경은 클라이언트에서 `/api/*` 호출
+
 ## 연관 레포
 
 - Android 앱: `animal-shelter-native` (Capacitor WebView 래핑)
 - 백엔드: `animal-shelter/backend` (Render 호스팅)
-- 백엔드 API: https://animal-shelter-x6nk.onrender.com
+- 백엔드 API: https://animal-shelter-x6nk.onrender.com (서버 사이드 전용, `.env`의 `API_BASE_URL`)
 
-## 환경 변수 (`.env.local`)
+## 환경 변수
 
+`.env.local` (클라이언트 노출용):
 ```
-NEXT_PUBLIC_API_BASE_URL=https://animal-shelter-x6nk.onrender.com
 NEXT_PUBLIC_KAKAO_JS_KEY=...
+```
+
+`.env.local` (서버 사이드 전용):
+```
+API_BASE_URL=https://animal-shelter-x6nk.onrender.com
 ```
 
 ## 주요 페이지
