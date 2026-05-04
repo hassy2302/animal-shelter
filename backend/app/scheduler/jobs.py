@@ -2,7 +2,6 @@ import asyncio
 import logging
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from app.services import animal_service
-from app.services import notification_service
 from app.cache.manager import CacheManager
 
 logger = logging.getLogger(__name__)
@@ -33,10 +32,3 @@ def setup_scheduler(cache) -> None:
         else:
             logger.error("캐시 워밍 최종 실패: 재시도 소진")
 
-        # 신규 공고 알림 발송 (전국 캐시 기준)
-        try:
-            global_cached = await cache.get(CacheManager.animals_key("", ""))
-            if global_cached:
-                await notification_service.send_new_animal_notifications(cache, global_cached["items"])
-        except Exception as e:
-            logger.error(f"알림 발송 실패: {e}")
