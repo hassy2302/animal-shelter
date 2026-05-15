@@ -63,3 +63,9 @@ npm run build   # 빌드
 
 개인정보처리방침(`src/app/privacy/page.tsx`)에 앱 이름(햄소토)과 개발자(hamsoto) 명시 필수.
 Play Console에 등록된 URL: https://hamsoto.kr/privacy
+
+## SEO
+
+- `src/app/page.tsx` — canonical 태그 `https://hamsoto.kr` 고정 (필터 파라미터 URL 중복 색인 방지)
+- `public/robots.txt` — 필터 파라미터 URL 크롤링 차단, sitemap 위치 안내
+- Google Search Console "사용자가 선택한 표준이 없는 중복 페이지" 문제 수정 완료 (2026-05-15)
