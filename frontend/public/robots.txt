@@ -1,0 +1,17 @@
+User-agent: *
+Allow: /
+
+Disallow: /admin
+Disallow: /sentry-example-page
+
+# 필터 파라미터 URL 크롤링 제외
+Disallow: /*?*sido_code=*
+Disallow: /*?*sigungu_code=*
+Disallow: /*?*species=*
+Disallow: /*?*state=*
+Disallow: /*?*search=*
+Disallow: /*?*page=*
+Disallow: /*?*per_page=*
+Disallow: /*?*sort=*
+
+Sitemap: https://hamsoto.kr/sitemap.xml

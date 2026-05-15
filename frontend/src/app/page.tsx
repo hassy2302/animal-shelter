@@ -1,6 +1,13 @@
 import { fetchAnimals } from "@/lib/api";
 import type { AnimalFilters } from "@/types/animal";
+import type { Metadata } from "next";
 import AnimalPageClient from "./AnimalPageClient";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "https://hamsoto.kr",
+  },
+};
 
 type SearchParams = Promise<Record<string, string | string[] | undefined>>;
 
